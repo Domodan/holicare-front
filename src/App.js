@@ -1,23 +1,17 @@
-import logo from './logo.svg';
+import React from 'react';
+import Home from './Pages/Home'
 import './App.css';
+import { Route, BrowserRouter as Router, Routes as Switch} from 'react-router-dom'
 
-function App() {
+const App = ()=> {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcome to HoliCare
-        </p>
-        <a
-          className="App-link"
-          href="https://github.com/Domodan/holicare-front"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Findout more Here
-        </a>
-      </header>
+      <Router forceRefresh={false}>
+  <Switch>
+    <Route path="/" element={<Home/>}/>
+    
+  </Switch>
+  </Router>
     </div>
   );
 }
