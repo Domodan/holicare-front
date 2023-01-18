@@ -7,7 +7,7 @@ const Header = () => {
     <div className="container d-flex align-items-center justify-content-between">
 
       <div className="logo">
-        <h1><a href="index.html">Holicare</a></h1>
+        <h1><a href="index.html">HoliCare</a></h1>
         
       </div>
 
