@@ -29,7 +29,7 @@ const Dashboard = () => {
         <Box m="20px">
             {/* HEADER */}
             <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Header title="DASHBOARD" subtitle="Welcome to Holicare" />
+                <Header title="DASHBOARD FOR THE TESTING" subtitle="Welcome to Holicare FRONTEND" />
         
                 <Box>
                     <Button
