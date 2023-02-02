@@ -18,7 +18,13 @@ import { ColorModeContext, tokens } from '../../../theme';
 const Topbar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const colorMode = useContext(ColorModeContext);  
+    const colorMode = useContext(ColorModeContext);
+    
+    const handleClick = () => {
+        localStorage.setItem("landing", true);
+        window.location.replace("/");
+
+    }
 
     return (
         <Box display="flex" justifyContent="space-between" p={2}>
@@ -49,7 +55,7 @@ const Topbar = () => {
                 <IconButton>
                     <SettingsOutlined />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={handleClick}>
                     <PersonOutlined />
                 </IconButton>
             </Box>

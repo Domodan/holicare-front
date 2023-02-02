@@ -11,8 +11,16 @@ import {
     ContactsOutlined,
     ReceiptOutlined,
     PersonOutlined,
-    CalendarTodayOutlined
+    CalendarTodayOutlined,
+    PeopleOutline,
+    HelpOutlineOutlined,
+    BarChartOutlined,
+    PieChartOutlined,
+    TimelineOutlined,
+    CalendarMonthOutlined
 } from '@mui/icons-material';
+
+import logo from '../../../assets/img/hlogo.png';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -68,7 +76,7 @@ const Sidebar = () => {
                         alt='user-profile'
                         width={"70x"}
                         height={"50px"}
-                        src={`../../assets/hlogo.png`}
+                        src={ logo }
                         style={{cursor: "pointer", borderRadius: "50%"}}
                     />
                     <MenuItem
@@ -86,8 +94,12 @@ const Sidebar = () => {
                                 alignItems="center"
                                 ml="15px"
                             >
-                                <Typography variant="h3" color={colors.grey[100]}>
-                                    DOCTOR
+                                <Typography
+                                    fontWeight="bold"
+                                    variant="h3"
+                                    color={colors.grey[100]}
+                                >
+                                    HoliCare
                                 </Typography>
                                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                                     <MenuOutlined />
@@ -105,103 +117,117 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
 
-                    {/* <Typography
-                        variant="h6"
-                        color={colors.grey[300]}
-                        sx={{ m: "15px 0 5px 20px" }}
-                    >
-                        Data
-                    </Typography> */}
+                        <Item
+                            title="Admins"
+                            to="/admin"
+                            icon={<PeopleOutline />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
 
-                    <Item
-                        title="Patients"
-                        to="/patient"
-                        icon={<PeopleOutlined />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Tests"
-                        to="/contacts"
-                        icon={<ContactsOutlined />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Analytics"
-                        to="/invoices"
-                        icon={<ReceiptOutlined />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
+                        <Item
+                            title="Doctors"
+                            to="/doctor"
+                            icon={<ReceiptOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
 
+                        <Item
+                            title="Patients"
+                            to="/patient"
+                            icon={<PeopleOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
 
-                    {/* <Typography
-                        variant="h6"
-                        color={colors.grey[300]}
-                        sx={{ m: "15px 0 5px 20px" }}
-                    >
-                        Pages
-                    </Typography> */}
+                        <Item
+                            title="Health Centres"
+                            to="/hospital"
+                            icon={<ContactsOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
 
-                    <Item
-                        title="Messages"
-                        to="/form"
-                        icon={<PersonOutlined />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="User Profile"
-                        to="/calendar"
-                        icon={<CalendarTodayOutlined />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
+                        <Item
+                            title="Districts"
+                            to="/district"
+                            icon={<PieChartOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
 
-                    {/* <Item
-                        title="FAQ Page"
-                        to="/faq"
-                        icon={<HelpOutlineOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    /> */}
+                        <Item
+                            title="Laboratory"
+                            to="/lab"
+                            icon={<HelpOutlineOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
 
-                    {/* <Typography
-                        variant="h6"
-                        color={colors.grey[300]}
-                        sx={{ m: "15px 0 5px 20px" }}
-                    >
-                        Charts
-                    </Typography>
-                    <Item
-                        title="Bar Chart"
-                        to="/bar"
-                        icon={<BarChartOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Pie Chart"
-                        to="/pie"
-                        icon={<PieChartOutlineOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Line Chart"
-                        to="/line"
-                        icon={<TimelineOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                    <Item
-                        title="Geography Chart"
-                        to="/geography"
-                        icon={<MapOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    /> */}
+                        <Item
+                            title="Tests"
+                            to="/test"
+                            icon={<ContactsOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
+                        <Item
+                            title="Risk Factors"
+                            to="/risk-factor"
+                            icon={<CalendarTodayOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
+                        <Item
+                            title="Infections"
+                            to="/infection"
+                            icon={<BarChartOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
+                        <Item
+                            title="Analytics"
+                            to="/analytic"
+                            icon={<ReceiptOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
+                        <Item
+                            title="Messages"
+                            to="/message"
+                            icon={<PersonOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        
+                        <Item
+                            title="User Profile"
+                            to="/user-profile"
+                            icon={<CalendarTodayOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
+                        <Item
+                            title="Calendar"
+                            to="/calendar"
+                            icon={<CalendarMonthOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
+                        <Item
+                            title="Settings"
+                            to="/setting"
+                            icon={<TimelineOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
                     </Box>
                 </Menu>
             </ProSidebar>
