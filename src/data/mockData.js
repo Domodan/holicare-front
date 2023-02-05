@@ -123,210 +123,167 @@ export const mockDataTeam = [
 export const mockDataContacts = [
   {
     id: 1,
-    name: "Jon Snow",
-    email: "jonsnow@gmail.com",
-    age: 35,
-    phone: "(665)121-5454",
-    address: "0912 Won Street, Alabama, SY 10001",
-    city: "New York",
-    zipCode: "10001",
-    registrarId: 123512,
+    hospital: "Mulago",
+    location: "Kampala, Kawempe division",
+    description: "A general hospital with multiple departments.",
+    contact: "07000000",
   },
   {
     id: 2,
-    name: "Cersei Lannister",
-    email: "cerseilannister@gmail.com",
-    age: 42,
-    phone: "(421)314-2288",
-    address: "1234 Main Street, New York, NY 10001",
-    city: "New York",
-    zipCode: "13151",
-    registrarId: 123512,
+    hospital: "Doctors Hospital",
+    location: "Sseguku, Entebbe road",
+    description: "A private hospital with the best doctors.",
+    contact: "070899000",
   },
   {
     id: 3,
-    name: "Jaime Lannister",
-    email: "jaimelannister@gmail.com",
-    age: 45,
-    phone: "(422)982-6739",
-    address: "3333 Want Blvd, Estanza, NAY 42125",
-    city: "New York",
-    zipCode: "87281",
-    registrarId: 4132513,
+    hospital: "Kawaala Health Care Centre 4",
+    location: "Kasubi - Kawaala road",
+    description: "A government health care centre for the people",
+    contact: "0705626187",
+  },
+  
+];
+export const mockDataDistricts = [
+  {
+    
+      id: 1,
+      district: "Kampala",
+      population: "50,000",
+      physical_features: "Swamps",
+      economic_activities: "Trading, Transportation",
+    
   },
   {
-    id: 4,
-    name: "Anya Stark",
-    email: "anyastark@gmail.com",
-    age: 16,
-    phone: "(921)425-6742",
-    address: "1514 Main Street, New York, NY 22298",
-    city: "New York",
-    zipCode: "15551",
-    registrarId: 123512,
+    
+    id: 2,
+    district: "Jinja",
+    population: "20,000",
+    physical_features: "River Nile, Lake Victoria",
+    economic_activities: "Fishing, Breweries, Agriculture",
+  
   },
   {
-    id: 5,
-    name: "Daenerys Targaryen",
-    email: "daenerystargaryen@gmail.com",
-    age: 31,
-    phone: "(421)445-1189",
-    address: "11122 Welping Ave, Tenting, CD 21321",
-    city: "Tenting",
-    zipCode: "14215",
-    registrarId: 123512,
+    
+    id: 3,
+    district: "Buikwe",
+    population: "6,000",
+    physical_features: "Mabira Forest",
+    economic_activities: "Agriculture, Lumbering",
+  
+  },
+];
+export const mockDataLaboratories = [
+  {
+    
+      id: 1,
+      lab: "M700",
+      hospital: "Mulago Hospital",
+      lab_attendant: "Mercy Nalwoga",
+      specialty: "LRTIs",
+    
   },
   {
-    id: 6,
-    name: "Ever Melisandre",
-    email: "evermelisandre@gmail.com",
-    age: 150,
-    phone: "(232)545-6483",
-    address: "1234 Canvile Street, Esvazark, NY 10001",
-    city: "Esvazark",
-    zipCode: "10001",
-    registrarId: 123512,
+    
+    id: 2,
+    lab: "J701",
+    hospital: "Jinja Referral Hospital",
+    lab_attendant: "Ivan Batte",
+    specialty: "LRTIs",
+  
+},
+];
+
+export const mockDataTests = [
+  {
+    
+      id: 1,
+      test: "COV-SARS",
+      parameters: "BMI, Sputum, Blood Pressure, Blood Sugar",
+      results: "positive",
+    
+  },
+
+];
+export const mockDataRiskFactors = [
+  {
+    
+      id: 1,
+      risk_factor: "smoking",
+      category: "Behavioral",
+    
   },
   {
-    id: 7,
-    name: "Ferrara Clifford",
-    email: "ferraraclifford@gmail.com",
-    age: 44,
-    phone: "(543)124-0123",
-    address: "22215 Super Street, Everting, ZO 515234",
-    city: "Evertin",
-    zipCode: "51523",
-    registrarId: 123512,
-  },
+    
+    id: 2,
+    risk_factor: "diabetes",
+    category: "Medical",
+  
+},
+{
+    
+  id: 3,
+  risk_factor: "climate",
+  category: "Physical / Environmental",
+
+},
+
+];
+
+export const mockDataInfections = [
   {
-    id: 8,
-    name: "Rossini Frances",
-    email: "rossinifrances@gmail.com",
-    age: 36,
-    phone: "(222)444-5555",
-    address: "4123 Ever Blvd, Wentington, AD 142213",
-    city: "Esteras",
-    zipCode: "44215",
-    registrarId: 512315,
-  },
-  {
-    id: 9,
-    name: "Harvey Roxie",
-    email: "harveyroxie@gmail.com",
-    age: 65,
-    phone: "(444)555-6239",
-    address: "51234 Avery Street, Cantory, ND 212412",
-    city: "Colunza",
-    zipCode: "111234",
-    registrarId: 928397,
-  },
-  {
-    id: 10,
-    name: "Enteri Redack",
-    email: "enteriredack@gmail.com",
-    age: 42,
-    phone: "(222)444-5555",
-    address: "4123 Easer Blvd, Wentington, AD 142213",
-    city: "Esteras",
-    zipCode: "44215",
-    registrarId: 533215,
-  },
-  {
-    id: 11,
-    name: "Steve Goodman",
-    email: "stevegoodmane@gmail.com",
-    age: 11,
-    phone: "(444)555-6239",
-    address: "51234 Fiveton Street, CunFory, ND 212412",
-    city: "Colunza",
-    zipCode: "1234",
-    registrarId: 92197,
+    id: 1,
+    infection: "COVID-19",
+    symptoms: "Fever, Cough, Shortness of breath",
+    risk_factors: "smoking, diabetes, climate",
+    patient: "12",
   },
 ];
 
 export const mockDataInvoices = [
   {
     id: 1,
-    name: "Jon Snow",
-    email: "jonsnow@gmail.com",
-    cost: "21.24",
+    name: "Ssenabulya Johnson",
+    hospital: "Mulago Hospital",
+    specialty: "Children",
     phone: "(665)121-5454",
-    date: "03/12/2022",
+    email: "ssenajohn@gmail.com",
   },
   {
     id: 2,
-    name: "Cersei Lannister",
-    email: "cerseilannister@gmail.com",
-    cost: "1.24",
-    phone: "(421)314-2288",
-    date: "06/15/2021",
+    name: "Akello Silver",
+    hospital: "Seguku Doctors Hospital",
+    specialty: "Elderly",
+    phone: "(256)720-0054",
+    email: "akellosilver@gmail.com",
   },
   {
     id: 3,
-    name: "Jaime Lannister",
-    email: "jaimelannister@gmail.com",
-    cost: "11.24",
-    phone: "(422)982-6739",
-    date: "05/02/2022",
+    name: "Racheal Mwesigye",
+    hospital: "Kawaala Health Care Centre 4",
+    specialty: "Maternity",
+    phone: "(256)721-5454",
+    email: "rachmwesigye@gmail.com",
   },
-  {
-    id: 4,
-    name: "Anya Stark",
-    email: "anyastark@gmail.com",
-    cost: "80.55",
-    phone: "(921)425-6742",
-    date: "03/21/2022",
-  },
-  {
-    id: 5,
-    name: "Daenerys Targaryen",
-    email: "daenerystargaryen@gmail.com",
-    cost: "1.24",
-    phone: "(421)445-1189",
-    date: "01/12/2021",
-  },
-  {
-    id: 6,
-    name: "Ever Melisandre",
-    email: "evermelisandre@gmail.com",
-    cost: "63.12",
-    phone: "(232)545-6483",
-    date: "11/02/2022",
-  },
-  {
-    id: 7,
-    name: "Ferrara Clifford",
-    email: "ferraraclifford@gmail.com",
-    cost: "52.42",
-    phone: "(543)124-0123",
-    date: "02/11/2022",
-  },
-  {
-    id: 8,
-    name: "Rossini Frances",
-    email: "rossinifrances@gmail.com",
-    cost: "21.24",
-    phone: "(222)444-5555",
-    date: "05/02/2021",
-  },
+  
 ];
 
 export const mockTransactions = [
   {
-    txId: "01e4dsa",
-    user: "johndoe",
+    txId: "COPD",
+    user: "Mulago hospital",
     date: "2021-09-01",
     cost: "43.95",
   },
   {
-    txId: "0315dsaa",
-    user: "jackdower",
+    txId: "Bronchitis",
+    user: "Mengo hospital",
     date: "2022-04-01",
     cost: "133.45",
   },
   {
-    txId: "01e4dsa",
-    user: "aberdohnny",
+    txId: "TB",
+    user: "Kayunga HCC 1",
     date: "2021-09-01",
     cost: "43.95",
   },

@@ -20,7 +20,7 @@ import {
     CalendarMonthOutlined
 } from '@mui/icons-material';
 
-import logo from '../../../assets/img/hlogo.png';
+import logo from '../../../assets/img/hc_logo.png';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -72,13 +72,13 @@ const Sidebar = () => {
         >
             <ProSidebar collapsed={isCollapsed}>
                 <Menu iconShape="square">
-                    <img
+                    {/* <img
                         alt='user-profile'
-                        width={"70x"}
-                        height={"50px"}
+                        width={"45px"}
+                        height={"35px"}
                         src={ logo }
-                        style={{cursor: "pointer", borderRadius: "50%"}}
-                    />
+                        style={{cursor: "pointer", borderRadius: "0%", marginLeft: "40px"}}
+                    /> */}
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
                         icon={isCollapsed ? <MenuOutlined /> : undefined}

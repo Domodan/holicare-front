@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
+import {Link} from "react-router-dom"
 import { DataGrid } from '@mui/x-data-grid';
 import { tokens } from "../../../theme";
-import { mockDataInvoices } from "../../../data/mockData";
+import { mockDataRiskFactors } from "../../../data/mockData";
 import Header from '../../includes/Header';
+import {AddOutlined} from "@mui/icons-material";
 
 const RiskFactor = () => {
     const theme = useTheme();
@@ -12,41 +14,41 @@ const RiskFactor = () => {
     const columns = [
         { field: "id", headerName: "ID" },
         {
-            field: "name",
-            headerName: "Name",
+            field: "risk_factor",
+            headerName: "Risk Factor",
             flex: 1,
             cellClassName: "name-column--cell",
         },
         {
-            field: "phone",
-            headerName: "Phone Number",
+            field: "category",
+            headerName: "Category",
             flex: 1,
         },
-        {
-            field: "email",
-            headerName: "Email",
-            flex: 1,
-        },
-        {
-            field: "cost",
-            headerName: "Cost",
-            flex: 1,
-            renderCell: (params) => (
-            <Typography color={colors.greenAccent[500]}>
-                ${params.row.cost}
-            </Typography>
-            ),
-        },
-        {
-            field: "date",
-            headerName: "Date",
-            flex: 1,
-        },
+        
     ];
 
     return (
         <Box m="20px">
-            <Header title="RISK FACTORS" subtitle="Known Risk Factors" />
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header title="RISK FACTORS" subtitle="Known Risk Factors" />
+            <Box>
+                    <Link to={'/add-patient'}>
+                        <Button
+                            sx={{
+                            backgroundColor: colors.blueAccent[700],
+                            color: colors.grey[100],
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                            marginTop: "40px",
+                        }}>
+                            <AddOutlined sx={{ mr: "10px" }} />
+                            New Risk Factor
+                        </Button>
+                    </Link>
+                </Box>
+            </Box>
+           
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -76,7 +78,7 @@ const RiskFactor = () => {
                 },
                 }}
             >
-                <DataGrid checkboxSelection rows={mockDataInvoices} columns={columns} />
+                <DataGrid checkboxSelection rows={mockDataRiskFactors} columns={columns} />
             </Box>
         </Box>
     )
