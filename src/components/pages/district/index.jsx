@@ -1,23 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { Box, Button, useTheme } from '@mui/material';
 import { tokens } from '../../../theme';
 import Header from '../../includes/Header';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { mockDataDistricts } from '../../../data/mockData';
 import { Link } from 'react-router-dom';
 import { AddOutlined } from '@mui/icons-material';
+import { globalVariables } from '../../../utils/GlobalVariables';
+import { getData } from '../../../utils/ApiCalls';
 
 const District = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    const [districts, setDistricts] = useState([]);
+    const mounted = useRef();
+
+    useEffect(() => {
+        mounted.current = true;
+        const api_endpoint = globalVariables.END_POINT_DISTRICT;
+        getData(api_endpoint)
+        .then((data) => {
+            console.log("Data:", data)
+            if (mounted) {
+                if (data.length > 0) {
+                    setDistricts(data);
+                }
+            }
+        })
+        .catch((error) => {
+            console.log('====================================');
+            console.log("Error:", error);
+            console.log('====================================');
+        });
+        return () => mounted.current = false;
+    }, []);
   
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
         {
-            field: "district",
-            headerName: "District",
+            field: "district_name",
+            headerName: "Name",
             flex: 1,
             cellClassName: "name-column--cell",
+        },
+        {
+            field: "region",
+            headerName: "Region",
+            flex: 1,
         },
         {
             field: "population",
@@ -25,13 +54,13 @@ const District = () => {
             flex: 1,
         },
         {
-            field: "physical_features",
-            headerName: "Physical Features",
+            field: "created_at",
+            headerName: "Date Created",
             flex: 1,
         },
         {
-            field: "economic_activities",
-            headerName: "Economic Activities",
+            field: "updated_at",
+            headerName: "Date Updated",
             flex: 1,
         },
     ];
@@ -44,7 +73,7 @@ const District = () => {
                 subtitle="Different Districts within the study area"
             />
             <Box>
-                    <Link to={'/add-patient'}>
+                    <Link to={'/add-district'}>
                         <Button
                             sx={{
                             backgroundColor: colors.blueAccent[700],
@@ -93,8 +122,8 @@ const District = () => {
                 }}
             >
                 <DataGrid
-                    rows={mockDataDistricts}
-                    columns={columns}
+                    rows={ districts }
+                    columns={ columns }
                     components={{ Toolbar: GridToolbar }}
                 />
             </Box>

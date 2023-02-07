@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Button, useTheme } from '@mui/material';
 import {Link} from "react-router-dom";
-import BarChart from '../../includes/BarChart';
 import { tokens } from '../../../theme';
 import { DataGrid } from '@mui/x-data-grid';
 import Header from '../../includes/Header';
