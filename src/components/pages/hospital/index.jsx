@@ -1,42 +1,93 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, useTheme } from '@mui/material';
 import {Link} from "react-router-dom"
 import {AddOutlined} from "@mui/icons-material";
 import { tokens } from '../../../theme';
 import Header from '../../includes/Header';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { mockDataContacts } from '../../../data/mockData';
+import { useRef } from 'react';
+import { getData } from '../../../utils/ApiCalls';
+import { globalVariables } from '../../../utils/GlobalVariables';
 
 const Hospital = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    const [hospitals, setHospitals] = useState([]);
+    const mounted = useRef();
+
+    useEffect(() => {
+        mounted.current = true;
+        const api_endpoint = globalVariables.END_POINT_HOSPITAL;
+        getData(api_endpoint)
+        .then((data) => {
+            console.log("Data:", data)
+            if (mounted) {
+                if (data.length > 0) {
+                    setHospitals(data);
+                }
+            }
+        })
+        .catch((error) => {
+            console.log('====================================');
+            console.log("Error:", error);
+            console.log('====================================');
+        });
+        return () => mounted.current = false;
+    }, []);
   
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
         {
-            field: "hospital",
-            headerName: "Hospital",
-            flex: 1,
+            field: "hospital_name",
+            headerName: "Name",
+            flex: 2,
             cellClassName: "name-column--cell",
         },
         {
-            field: "location",
-            headerName: "Location",
+            field: "hospital_type",
+            headerName: "Type",
             flex: 1,
         },
         {
-            field: "description",
-            headerName: "Description",
-            flex: 2,
+            field: "ownership",
+            headerName: "Ownership",
+            flex: 1,
         },
         {
-            field: "contact",
-            headerName: "Contact",
+            field: "authority",
+            headerName: "Authority",
+            flex: 0.8,
+        },
+        {
+            field: "region",
+            headerName: "Region",
+            flex: 0.8,
+        },
+        {
+            field: "district",
+            headerName: "District",
+            flex: 1,
+        },
+        {
+            field: "sub_county",
+            headerName: "SubCounty",
+            flex: 1,
+        },
+        {
+            field: "longitude",
+            headerName: "Longitude",
+            flex: 1,
+        },
+        {
+            field: "latitude",
+            headerName: "Latitude",
             flex: 1,
         },
 
         
     ];
+    
     
     return (
         <Box m="20px">
@@ -47,7 +98,7 @@ const Hospital = () => {
             />
 
             <Box>
-                    <Link to={'/add-patient'}>
+                    <Link to={'/add-hospital'}>
                         <Button
                             sx={{
                             backgroundColor: colors.blueAccent[700],
@@ -111,7 +162,7 @@ const Hospital = () => {
                 }}
             >
                 <DataGrid
-                    rows={mockDataContacts}
+                    rows={ hospitals }
                     columns={columns}
                     components={{ Toolbar: GridToolbar }}
                 />
