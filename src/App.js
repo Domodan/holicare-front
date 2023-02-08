@@ -11,7 +11,9 @@ import Home from "./components/pages/home";
 import Team from "./components/pages/admin";
 import Doctor from "./components/pages/doctor";
 import Hospital from "./components/pages/hospital";
+import AddHospital from "./components/pages/hospital/AddHospital";
 import District from "./components/pages/district";
+import AddDistrict from "./components/pages/district/AddDistrict";
 import Laboratory from "./components/pages/laboratory";
 import Infection from "./components/pages/infection";
 import RiskFactor from "./components/pages/riskfactors";
@@ -58,7 +60,9 @@ function App() {
                                 <Route path="/patient" element={<Patient />} />
                                 <Route path="/add-patient" element={<AddPatient />} />
                                 <Route path="/hospital" element={<Hospital />} />
+                                <Route path="/add-hospital" element={<AddHospital />} />
                                 <Route path="/district" element={<District />} />
+                                <Route path="/add-district" element={<AddDistrict />} />
                                 <Route path="/lab" element={<Laboratory />} />
                                 <Route path="/infection" element={<Infection />} />
                                 <Route path="/risk-factor" element={<RiskFactor />} />

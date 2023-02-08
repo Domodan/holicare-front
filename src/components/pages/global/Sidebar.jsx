@@ -20,7 +20,7 @@ import {
     CalendarMonthOutlined
 } from '@mui/icons-material';
 
-import logo from '../../../assets/img/hlogo.png';
+// import logo from '../../../assets/img/hc_logo.png';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -53,6 +53,7 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
+                height: "100%",
                 "& .pro-sidebar-inner": {
                   background: `${colors.primary[400]} !important`,
                 },
@@ -67,18 +68,13 @@ const Sidebar = () => {
                 },
                 "& .pro-menu-item.active": {
                   color: "#6870fa !important",
+                  background: "rgba(0, 0, 0, .1)",
+                  borderLeft: "6 !important"
                 },
             }}
         >
             <ProSidebar collapsed={isCollapsed}>
                 <Menu iconShape="square">
-                    <img
-                        alt='user-profile'
-                        width={"70x"}
-                        height={"50px"}
-                        src={ logo }
-                        style={{cursor: "pointer", borderRadius: "50%"}}
-                    />
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
                         icon={isCollapsed ? <MenuOutlined /> : undefined}
@@ -94,6 +90,15 @@ const Sidebar = () => {
                                 alignItems="center"
                                 ml="15px"
                             >
+                                <Box display="flex" justifyContent="center" alignItems="center">
+                                    <img
+                                        alt="holicare-logo"
+                                        width="25px"
+                                        height="25px"
+                                        src={ logo }
+                                        style={{ cursor: "pointer", borderRadius: "25%" }}
+                                    />
+                                </Box>
                                 <Typography
                                     fontWeight="bold"
                                     variant="h3"

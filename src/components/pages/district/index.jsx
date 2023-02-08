@@ -1,63 +1,94 @@
-import React from 'react';
-import { Box, useTheme } from '@mui/material';
+import React, { useState, useEffect, useRef} from 'react';
+import { Box, Button, useTheme } from '@mui/material';
 import { tokens } from '../../../theme';
 import Header from '../../includes/Header';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { mockDataContacts } from '../../../data/mockData';
+import { Link } from 'react-router-dom';
+import { AddOutlined } from '@mui/icons-material';
+import { globalVariables } from '../../../utils/GlobalVariables';
+import { getData } from '../../../utils/ApiCalls';
 
 const District = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    const [districts, setDistricts] = useState([]);
+    const mounted = useRef();
+
+    useEffect(() => {
+        mounted.current = true;
+        const api_endpoint = globalVariables.END_POINT_DISTRICT;
+        getData(api_endpoint)
+        .then((data) => {
+            console.log("Data:", data)
+            if (mounted) {
+                if (data.length > 0) {
+                    setDistricts(data);
+                }
+            }
+        })
+        .catch((error) => {
+            console.log('====================================');
+            console.log("Error:", error);
+            console.log('====================================');
+        });
+        return () => mounted.current = false;
+    }, []);
   
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
-        { field: "registrarId", headerName: "Registrar ID" },
         {
-            field: "name",
+            field: "district_name",
             headerName: "Name",
             flex: 1,
             cellClassName: "name-column--cell",
         },
         {
-            field: "age",
-            headerName: "Age",
-            type: "number",
-            headerAlign: "left",
-            align: "left",
-        },
-        {
-            field: "phone",
-            headerName: "Phone Number",
+            field: "region",
+            headerName: "Region",
             flex: 1,
         },
         {
-            field: "email",
-            headerName: "Email",
+            field: "population",
+            headerName: "Population Density",
             flex: 1,
         },
         {
-            field: "address",
-            headerName: "Address",
+            field: "created_at",
+            headerName: "Date Created",
             flex: 1,
         },
         {
-            field: "city",
-            headerName: "City",
-            flex: 1,
-        },
-        {
-            field: "zipCode",
-            headerName: "Zip Code",
+            field: "updated_at",
+            headerName: "Date Updated",
             flex: 1,
         },
     ];
 
     return (
         <Box m="20px">
-            <Header
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header
                 title="DISTRICTS"
                 subtitle="Different Districts within the study area"
             />
+            <Box>
+                    <Link to={'/add-district'}>
+                        <Button
+                            sx={{
+                            backgroundColor: colors.blueAccent[700],
+                            color: colors.grey[100],
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}>
+                            <AddOutlined sx={{ mr: "10px" }} />
+                            New District
+                        </Button>
+                    </Link>
+                </Box>
+        </Box>
+            
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -72,7 +103,7 @@ const District = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.blueAccent[800],
                     borderBottom: "none",
                 },
                 "& .MuiDataGrid-virtualScroller": {
@@ -91,8 +122,8 @@ const District = () => {
                 }}
             >
                 <DataGrid
-                    rows={mockDataContacts}
-                    columns={columns}
+                    rows={ districts }
+                    columns={ columns }
                     components={{ Toolbar: GridToolbar }}
                 />
             </Box>

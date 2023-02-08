@@ -66,7 +66,21 @@ const Patient = () => {
                             Add Patient
                         </Button>
                     </Link>
+                    <Link to={''}>
+                        <Button
+                            sx={{
+                            backgroundColor: colors.blueAccent[700],
+                            color: colors.grey[100],
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}>
+                            <AddOutlined sx={{ mr: "10px" }} />
+                            Upload Data
+                        </Button>
+                    </Link>
                 </Box>
+              
             </Box>
 
             <Box

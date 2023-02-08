@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Button, useTheme } from '@mui/material';
+import {Link} from "react-router-dom"
 import { DataGrid } from '@mui/x-data-grid';
 import { tokens } from "../../../theme";
 import { mockDataInvoices } from "../../../data/mockData";
 import Header from '../../includes/Header';
+import { AddOutlined } from '@mui/icons-material';
 
 const Doctor = () => {
     const theme = useTheme();
@@ -13,9 +15,19 @@ const Doctor = () => {
         { field: "id", headerName: "ID" },
         {
             field: "name",
-            headerName: "Name",
+            headerName: "Full Name",
             flex: 1,
             cellClassName: "name-column--cell",
+        },
+        {
+            field: "hospital",
+            headerName: "Hospital",
+            flex: 1,
+        },
+        {
+            field: "specialty",
+            headerName: "Specialty",
+            flex: 1,
         },
         {
             field: "phone",
@@ -27,26 +39,32 @@ const Doctor = () => {
             headerName: "Email",
             flex: 1,
         },
-        {
-            field: "cost",
-            headerName: "Cost",
-            flex: 1,
-            renderCell: (params) => (
-            <Typography color={colors.greenAccent[500]}>
-                ${params.row.cost}
-            </Typography>
-            ),
-        },
-        {
-            field: "date",
-            headerName: "Date",
-            flex: 1,
-        },
+       
+        
     ];
 
     return (
         <Box m="20px">
-            <Header title="DOCTOR" subtitle="Subscribed Doctors Available" />
+         <Box display="flex" justifyContent="space-between" alignItems="center">
+         <Header title="DOCTOR" subtitle="Subscribed Doctors Available" />
+            <Box>
+                    <Link to={'/add-patient'}>
+                        <Button
+                            sx={{
+                            backgroundColor: colors.blueAccent[700],
+                            color: colors.grey[100],
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}>
+                            <AddOutlined sx={{ mr: "10px" }} />
+                            New Doctor
+                        </Button>
+                    </Link>
+                </Box>
+         </Box>
+            
+
             <Box
                 m="40px 0 0 0"
                 height="75vh"
