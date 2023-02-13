@@ -1,7 +1,7 @@
 import { globalVariables } from "./GlobalVariables";
 
 const baseURL = globalVariables.BASE_URL;
-// const baseURL2 = globalVariables.BASE_URL_2;
+// const baseURL = globalVariables.BASE_URL_2;
 
 // Post data
 export async function postData(url, data) {
