@@ -20,7 +20,7 @@ import {
     CalendarMonthOutlined
 } from '@mui/icons-material';
 
-// import logo from '../../../assets/img/hc_logo.png';
+import logo from '../../../assets/img/hc_logo.png';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
