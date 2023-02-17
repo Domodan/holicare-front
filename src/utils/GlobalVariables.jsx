@@ -1,7 +1,8 @@
 export const globalVariables = {
     // Request URLs
     BASE_URL: "https://holicare.herokuapp.com/api/v1/",
-    BASE_URL_2: "http://196.43.134.157:8000/",
+    BASE_URL_2: "http://196.43.134.157:8000/api/v1/",
+    BASE_URL_3: "http://196.43.134.157:8000/",
 
     // Request Headers
     CONTENT_TYPE: "application/json",
@@ -22,4 +23,10 @@ export const globalVariables = {
     // Districts API End-points
     END_POINT_DISTRICT: "district/",
     END_POINT_DISTRICT_ID: "district/",
+
+    // Risk Factors API End-points
+    END_POINT_RISK_FACTOR: "riskfactor/",
+
+    // Infections API End-points
+    END_POINT_INFECTION: "infection/",
 }

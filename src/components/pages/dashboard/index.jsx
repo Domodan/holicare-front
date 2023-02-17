@@ -10,9 +10,10 @@ import { tokens } from '../../../theme';
 import Header from '../../includes/Header';
 import {
     DownloadOutlined,
-    Email,
-    PersonAdd,
-    Traffic,
+    AdminPanelSettingsOutlined,
+    CoronavirusOutlined,
+    Diversity3,
+    MarkUnreadChatAltOutlined
 } from '@mui/icons-material';
 import StatBox from '../../includes/StatBox';
 import LineChart from '../../includes/LineChart';
@@ -55,6 +56,8 @@ const Dashboard = () => {
                 gap="20px"
             >
                 {/* ROW 1 */}
+                
+                {/* Total Patients */}
                 <Box
                     gridColumn="span 3"
                     backgroundColor={colors.primary[400]}
@@ -68,12 +71,14 @@ const Dashboard = () => {
                     // progress="0.30"
                     // increase="+5%"
                     icon={
-                        <PersonAdd
+                        <Diversity3
                             sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                         />
                     }
                 />
                 </Box>
+
+                {/* Total staff */}
                 <Box
                     gridColumn="span 3"
                     backgroundColor={colors.primary[400]}
@@ -87,12 +92,35 @@ const Dashboard = () => {
                     // progress="0.80"
                     // increase="+43%"
                     icon={
-                        <Traffic
+                        <AdminPanelSettingsOutlined
                             sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                         />
                     }
                 />
                 </Box>
+
+                {/* Total Infections */}
+                <Box
+                    gridColumn="span 3"
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                <StatBox
+                    title="15"
+                    subtitle="Total Infections"
+                    // progress="0.75"
+                    // increase="+14%"
+                    icon={
+                    <CoronavirusOutlined
+                        sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+                    />
+                    }
+                />
+                </Box>
+
+                {/* Messages */}
                 <Box
                     gridColumn="span 3"
                     backgroundColor={colors.primary[400]}
@@ -106,7 +134,7 @@ const Dashboard = () => {
                     // progress="0.75"
                     // increase="+14%"
                     icon={
-                    <Email
+                    <MarkUnreadChatAltOutlined
                         sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                     />
                     }

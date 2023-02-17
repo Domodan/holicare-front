@@ -137,7 +137,7 @@ export const mockDataContacts = [
   },
   {
     id: 3,
-    hospital: "Kawaala Health Care Centre 4",
+    hospital: "Kawaala Health Jule Centre 4",
     location: "Kasubi - Kawaala road",
     description: "A government health care centre for the people",
     contact: "0705626187",
@@ -434,163 +434,163 @@ export const mockPieData = [
 
 export const mockLineData = [
   {
-    id: "japan",
+    id: "Influenza",
     color: tokens("dark").greenAccent[500],
     data: [
       {
-        x: "plane",
+        x: "Jan",
         y: 101,
       },
       {
-        x: "helicopter",
+        x: "Feb",
         y: 75,
       },
       {
-        x: "boat",
+        x: "Mar",
         y: 36,
       },
       {
-        x: "train",
+        x: "Apr",
         y: 216,
       },
       {
-        x: "subway",
+        x: "May",
         y: 35,
       },
       {
-        x: "bus",
+        x: "Jun",
         y: 236,
       },
       {
-        x: "car",
+        x: "Jul",
         y: 88,
       },
       {
-        x: "moto",
+        x: "Aug",
         y: 232,
       },
       {
-        x: "bicycle",
+        x: "Sep",
         y: 281,
       },
       {
-        x: "horse",
+        x: "Oct",
         y: 1,
       },
       {
-        x: "skateboard",
+        x: "Nov",
         y: 35,
       },
       {
-        x: "others",
+        x: "Dec",
         y: 14,
       },
     ],
   },
   {
-    id: "france",
+    id: "Corona",
     color: tokens("dark").blueAccent[300],
     data: [
       {
-        x: "plane",
+        x: "Jan",
         y: 212,
       },
       {
-        x: "helicopter",
+        x: "Feb",
         y: 190,
       },
       {
-        x: "boat",
+        x: "Mar",
         y: 270,
       },
       {
-        x: "train",
+        x: "Apr",
         y: 9,
       },
       {
-        x: "subway",
+        x: "May",
         y: 75,
       },
       {
-        x: "bus",
+        x: "Jun",
         y: 175,
       },
       {
-        x: "car",
+        x: "Jul",
         y: 33,
       },
       {
-        x: "moto",
+        x: "Aug",
         y: 189,
       },
       {
-        x: "bicycle",
+        x: "Sep",
         y: 97,
       },
       {
-        x: "horse",
+        x: "Oct",
         y: 87,
       },
       {
-        x: "skateboard",
+        x: "Nov",
         y: 299,
       },
       {
-        x: "others",
+        x: "Dec",
         y: 251,
       },
     ],
   },
   {
-    id: "us",
+    id: "Ebola",
     color: tokens("dark").redAccent[200],
     data: [
       {
-        x: "plane",
+        x: "Jan",
         y: 191,
       },
       {
-        x: "helicopter",
+        x: "Feb",
         y: 136,
       },
       {
-        x: "boat",
+        x: "Mar",
         y: 91,
       },
       {
-        x: "train",
+        x: "Apr",
         y: 190,
       },
       {
-        x: "subway",
+        x: "May",
         y: 211,
       },
       {
-        x: "bus",
+        x: "Jun",
         y: 152,
       },
       {
-        x: "car",
+        x: "Jul",
         y: 189,
       },
       {
-        x: "moto",
+        x: "Aug",
         y: 152,
       },
       {
-        x: "bicycle",
+        x: "Sep",
         y: 8,
       },
       {
-        x: "horse",
+        x: "Oct",
         y: 197,
       },
       {
-        x: "skateboard",
+        x: "Nov",
         y: 107,
       },
       {
-        x: "others",
+        x: "Dec",
         y: 170,
       },
     ],
