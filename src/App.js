@@ -23,6 +23,8 @@ import Analytic from "./components/pages/analytics";
 import Calendar from "./components/pages/calendar";
 import Setting from "./components/pages/setting";
 import UserProfile from "./components/pages/userprofile";
+import  {Login} from "./components/pages/Login";
+import  {signUp}  from "./components/pages/signUP/signUp";
 
 
 function App() {
@@ -46,6 +48,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
             </Routes>:
+        
             <ColorModeContext.Provider value={ colorMode }>
                 <ThemeProvider theme={ theme }>
                     <CssBaseline />
@@ -72,7 +75,10 @@ function App() {
                                 <Route path="/calendar" element={<Calendar />} />
                                 <Route path="/setting" element={<Setting />} />
                                 <Route path="/user-profile" element={<UserProfile />} />
+                                <Route path="/Login" element={<Login/>}/>
+                                <Route path="/signUp" element={<signUp/>}/>
                             </Routes>
+                        
                         </main>
                     </div>
                 </ThemeProvider>
