@@ -6,6 +6,7 @@ const Hero = () => {
 
     const handleClick = () => {
         localStorage.setItem("landing", false);
+        
         window.location.reload();
     }
 

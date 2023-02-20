@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Sidebar from "./components/pages/global/Sidebar";
@@ -24,21 +24,32 @@ import Calendar from "./components/pages/calendar";
 import Setting from "./components/pages/setting";
 import UserProfile from "./components/pages/userprofile";
 import  {Login} from "./components/pages/Login";
-import  {signUp}  from "./components/pages/signUP/signUp";
+import {SignUp}  from "./components/pages/signUp";
 
 
 function App() {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
     const [landing, setLanding] = useState(true);
+    const [login, setLogin] = useState(true);
+    const location = useLocation();
+    console.log("From:", location.state?.from?.pathname);
+
 
     useEffect(() => {
         const landingState = localStorage.getItem("landing");
+        const loginState  = localStorage.getItem("login");
         if (landingState === "false") {
             setLanding(false);
         }
         else {
             setLanding(true);
+        }
+        if (loginState === "false") {
+            setLogin(false);
+        }
+        else {
+            setLogin(true);
         }
     }, []);
     
@@ -47,6 +58,10 @@ function App() {
             {landing ?
             <Routes>
                 <Route path="/" element={<Home />} />
+            </Routes>:
+            login?
+            <Routes>
+                <Route path="/Login" element={<Login />} />
             </Routes>:
         
             <ColorModeContext.Provider value={ colorMode }>
@@ -57,7 +72,7 @@ function App() {
                         <main className="content">
                             <Topbar setIsSidebar={setIsSidebar} />
                             <Routes>
-                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/admin" element={<Team />} />
                                 <Route path="/doctor" element={<Doctor />} />
                                 <Route path="/patient" element={<Patient />} />
@@ -76,7 +91,9 @@ function App() {
                                 <Route path="/setting" element={<Setting />} />
                                 <Route path="/user-profile" element={<UserProfile />} />
                                 <Route path="/Login" element={<Login/>}/>
-                                <Route path="/signUp" element={<signUp/>}/>
+                                <Route path="/SignUp" element={<SignUp/>}/>
+
+                               
                             </Routes>
                         
                         </main>
