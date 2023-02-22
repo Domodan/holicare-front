@@ -25,6 +25,7 @@ import Setting from "./components/pages/setting";
 import UserProfile from "./components/pages/userprofile";
 import  {Login} from "./components/pages/Login";
 import {SignUp}  from "./components/pages/signUp";
+import OtpForm from "./components/pages/otpForm";
 
 
 function App() {
@@ -62,7 +63,11 @@ function App() {
             login?
             <Routes>
                 <Route path="/Login" element={<Login />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/otpForm" element={<OtpForm/>}/>
+
             </Routes>:
+
         
             <ColorModeContext.Provider value={ colorMode }>
                 <ThemeProvider theme={ theme }>
@@ -91,7 +96,9 @@ function App() {
                                 <Route path="/setting" element={<Setting />} />
                                 <Route path="/user-profile" element={<UserProfile />} />
                                 <Route path="/Login" element={<Login/>}/>
-                                <Route path="/SignUp" element={<SignUp/>}/>
+                                <Route path="/signUp" element={<SignUp/>}/>
+                                <Route path="/signUp" element={<SignUp/>}/>
+                                <Route path="/otpForm" element={<OtpForm/>}/>
 
                                
                             </Routes>
