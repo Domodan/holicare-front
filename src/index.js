@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDom from "react-dom/client";
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from './auth/context/AuthProvider';
 
 import "./index.css";
 
@@ -11,8 +12,12 @@ const root = ReactDom.createRoot(document.getElementById("root"));
 
 root.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <Router>
+            <AuthProvider>
+                <Routes >
+                    <Route path="/*" element={<App />} />
+                </Routes>
+            </AuthProvider>
+        </Router>
     </React.StrictMode>
 )

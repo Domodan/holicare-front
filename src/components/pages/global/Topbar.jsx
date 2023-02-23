@@ -14,15 +14,19 @@ import {
     useTheme
 } from '@mui/material';
 import { ColorModeContext, tokens } from '../../../theme';
+import useAuth from '../../../auth/useAuth/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const Topbar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
+    const { setAuthed } = useAuth();
+    const navigate = useNavigate();
     
     const handleClick = () => {
-        localStorage.setItem("landing", true);
-        window.location.replace("/");
+        setAuthed(false);
+        navigate("/", { replace: true });
 
     }
 

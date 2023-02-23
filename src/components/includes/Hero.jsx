@@ -1,12 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import doctor from '../../assets/img/test.png';
 
 const Hero = () => {
+    const navigate = useNavigate();
 
     const handleClick = () => {
-        localStorage.setItem("landing", false);
-        window.location.reload();
+        navigate("/dashboard", { replace: true })
     }
 
     return (
