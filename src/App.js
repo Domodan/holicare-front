@@ -25,12 +25,18 @@ import Analytic from "./components/pages/analytics";
 import Calendar from "./components/pages/calendar";
 import Setting from "./components/pages/setting";
 import UserProfile from "./components/pages/userprofile";
+<<<<<<< HEAD
 import Layout from "./components/pages/layout/Layout";
 import RequireAuth from "./auth/requireAuth/RequireAuth";
 import SignIn from "./components/pages/auth/SignIn";
 import SignUp from "./components/pages/auth/SignUp";
 import OTPVerification from "./components/pages/auth/OTPVerification";
 import useAuth from "./auth/useAuth/useAuth";
+=======
+import  {Login} from "./components/pages/Login";
+import {SignUp}  from "./components/pages/signUp";
+import OtpForm from "./components/pages/otpForm";
+>>>>>>> hapi
 
 const routes = [ "/", "/sign_in", "/sign_up", "/otp" ];
 
@@ -38,6 +44,7 @@ function App() {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
     const [landing, setLanding] = useState(true);
+<<<<<<< HEAD
     const { authed } = useAuth();
     const location = useLocation();
     const pathname = location.pathname;
@@ -94,6 +101,83 @@ function App() {
                         </div>
                     </ThemeProvider>
                 </ColorModeContext.Provider>
+=======
+    const [login, setLogin] = useState(true);
+    const location = useLocation();
+    console.log("From:", location.state?.from?.pathname);
+
+
+    useEffect(() => {
+        const landingState = localStorage.getItem("landing");
+        const loginState  = localStorage.getItem("login");
+        if (landingState === "false") {
+            setLanding(false);
+        }
+        else {
+            setLanding(true);
+        }
+        if (loginState === "false") {
+            setLogin(false);
+        }
+        else {
+            setLogin(true);
+        }
+    }, []);
+    
+    return (
+        <>
+            {landing ?
+            <Routes>
+                <Route path="/" element={<Home />} />
+            </Routes>:
+            login?
+            <Routes>
+                <Route path="/Login" element={<Login />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/otpForm" element={<OtpForm/>}/>
+
+            </Routes>:
+
+        
+            <ColorModeContext.Provider value={ colorMode }>
+                <ThemeProvider theme={ theme }>
+                    <CssBaseline />
+                    <div className="app">
+                        <Sidebar isSidebar={isSidebar} />
+                        <main className="content">
+                            <Topbar setIsSidebar={setIsSidebar} />
+                            <Routes>
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/admin" element={<Team />} />
+                                <Route path="/doctor" element={<Doctor />} />
+                                <Route path="/patient" element={<Patient />} />
+                                <Route path="/add-patient" element={<AddPatient />} />
+                                <Route path="/hospital" element={<Hospital />} />
+                                <Route path="/add-hospital" element={<AddHospital />} />
+                                <Route path="/district" element={<District />} />
+                                <Route path="/add-district" element={<AddDistrict />} />
+                                <Route path="/lab" element={<Laboratory />} />
+                                <Route path="/infection" element={<Infection />} />
+                                <Route path="/risk-factor" element={<RiskFactor />} />
+                                <Route path="/message" element={<Message />} />
+                                <Route path="/test" element={<Tests />} />
+                                <Route path="/analytic" element={<Analytic />} />
+                                <Route path="/calendar" element={<Calendar />} />
+                                <Route path="/setting" element={<Setting />} />
+                                <Route path="/user-profile" element={<UserProfile />} />
+                                <Route path="/Login" element={<Login/>}/>
+                                <Route path="/signUp" element={<SignUp/>}/>
+                                <Route path="/signUp" element={<SignUp/>}/>
+                                <Route path="/otpForm" element={<OtpForm/>}/>
+
+                               
+                            </Routes>
+                        
+                        </main>
+                    </div>
+                </ThemeProvider>
+            </ColorModeContext.Provider>
+>>>>>>> hapi
             }
         </>
     )
