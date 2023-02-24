@@ -1,67 +1,82 @@
-import React, { useState, useRef } from 'react';
-import './OTPForm.css';
+import React, { useState } from "react";
+import "./OTPForm.css";
 
-function OtpForm() {
-  const [otpValues, setOTPValues] = useState(['', '', '', '', '', '']);
+const OtpForm = () => {
+  const [isVerified, setIsVerified] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
-  const handleOTPChange = (index, value) => {
-    setOTPValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = value;
-      return newValues;
-    });
+  const handleOtpChange = (index, value) => {
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
   };
 
-  const handleConfirmClick = () => {
-    const otpCode = otpValues.join('');
-    console.log('OTP code entered:', otpCode);
+  const handleConfirm = () => {
+    const verificationCode = otp.join("");
+    // Check if the verification code is correct
+    if (verificationCode === "123456") {
+      setIsVerified(true);
+    } else {
+      alert("Incorrect verification code. Please try again.");
+      setOtp(["", "", "", "", "", ""]);
+    }
   };
 
-  const OTPInput = ({ index, value }) => {
-    const inputRef = useRef(null);
-
-    const handleFocus = () => {
-      inputRef.current.select();
-    };
-
-    const handleChange = (event) => {
-      const newValue = event.target.value;
-      if (newValue.length > 1) {
-        return;
-      }
-      handleOTPChange(index, newValue);
-      if (newValue && index < 5) {
-        inputRef.current.nextSibling.focus();
-      }
-    };
-
+  const renderSuccessMessage = () => {
     return (
-      <input
-        ref={inputRef}
-        type="text"
-        maxLength={1}
-        value={value}
-        onFocus={handleFocus}
-        onChange={handleChange}
-      />
+      <div className="OTPForm__success">
+        <p>Verification Successful!</p>
+      </div>
+    );
+  };
+
+  const renderOtpInputs = () => {
+    return (
+      <div className="OTPForm__input">
+        {otp.map((digit, index) => (
+          <input
+            key={index}
+            type="text"
+            maxLength="1"
+            value={digit}
+            onChange={(e) => handleOtpChange(index, e.target.value)}
+          />
+        ))}
+      </div>
     );
   };
 
   return (
-    <div className="OTPForm">
-      <div className="OTPForm__input">
-        <OTPInput index={0} value={otpValues[0]} />
-        <OTPInput index={1} value={otpValues[1]} />
-        <OTPInput index={2} value={otpValues[2]} />
-        <OTPInput index={3} value={otpValues[3]} />
-        <OTPInput index={4} value={otpValues[4]} />
-        <OTPInput index={5} value={otpValues[5]} />
+    <div className="OTPForm__container">
+      <div className="OTPForm">
+        <div className="OTPForm__logo"></div>
+        <div className="OTPForm__rectangle">
+          <div className="mt-3">
+            <h1>OTP Verification</h1>
+          </div>
+          <div className="mt-3">
+            <p>Enter verification code</p>
+          </div>
+          {isVerified ? (
+            renderSuccessMessage()
+          ) : (
+            <>
+              {renderOtpInputs()}
+              <div className="mt-5">
+                <button
+                  className="OTPForm__confirm"
+                  type="button"
+                  onClick={handleConfirm}
+                >
+                  Confirm
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-      <button className="OTPForm__confirm" onClick={handleConfirmClick}>
-        Confirm
-      </button>
     </div>
   );
-}
+};
 
 export default OtpForm;
