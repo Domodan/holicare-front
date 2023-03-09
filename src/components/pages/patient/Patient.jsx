@@ -66,7 +66,7 @@ const Patient = () => {
                             Add Patient
                         </Button>
                     </Link>
-                    <Link to={''}>
+                    <Link to={'/upload-patient'}>
                         <Button
                             sx={{
                             backgroundColor: colors.blueAccent[700],

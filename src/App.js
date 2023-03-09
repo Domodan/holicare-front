@@ -7,6 +7,7 @@ import Topbar from "./components/pages/global/Topbar";
 import Dashboard from "./components/pages/dashboard";
 import Patient from "./components/pages/patient/Patient";
 import AddPatient from "./components/pages/patient/AddPatient";
+import AddPatient2 from "./components/pages/patient/AddPatient2";
 import Home from "./components/pages/home";
 import Team from "./components/pages/admin";
 import Doctor from "./components/pages/doctor";
@@ -25,6 +26,7 @@ import Analytic from "./components/pages/analytics";
 import Calendar from "./components/pages/calendar";
 import Setting from "./components/pages/setting";
 import UserProfile from "./components/pages/userprofile";
+import UploadPatient from "./components/pages/patient/UploadPatient";
 
 
 function App() {
@@ -61,6 +63,8 @@ function App() {
                                 <Route path="/doctor" element={<Doctor />} />
                                 <Route path="/patient" element={<Patient />} />
                                 <Route path="/add-patient" element={<AddPatient />} />
+                                <Route path="/add-patient2" element={<AddPatient2 />} />
+                                <Route path="/upload-patient" element={<UploadPatient />} />
                                 <Route path="/hospital" element={<Hospital />} />
                                 <Route path="/add-hospital" element={<AddHospital />} />
                                 <Route path="/district" element={<District />} />
