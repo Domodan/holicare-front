@@ -7,13 +7,7 @@ const Hero = () => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-<<<<<<< HEAD
         navigate("/dashboard", { replace: true })
-=======
-        localStorage.setItem("landing", false);
-        
-        window.location.reload();
->>>>>>> hapi
     }
 
     return (
