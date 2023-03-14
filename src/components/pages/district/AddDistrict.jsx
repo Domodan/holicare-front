@@ -18,12 +18,10 @@ const AddDistrict = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/district";
-
-    console.log("From:", from);
     
     const handleFormSubmit = (data) => {
-        console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_DISTRICT_ID;
+        const url = globalVariables.END_POINT_DISTRICT_ID;
+        console.log("Form Data:", data, "URL:", url);
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);

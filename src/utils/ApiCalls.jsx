@@ -5,7 +5,8 @@ const baseURL = globalVariables.BASE_URL;
 // const baseURL = globalVariables.BASE_URL_3;
 
 // Post data
-export async function postData(url, data) {
+export async function postData(api_endpoint, data) {
+    const url = baseURL + api_endpoint;
     const response = await fetch(url, {
         method: globalVariables.METHOD_POST,
         headers: {
