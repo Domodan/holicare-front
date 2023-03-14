@@ -18,12 +18,10 @@ const AddHospital = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/hospital";
-
-    console.log("From:", from);
     
     const handleFormSubmit = (data) => {
-        console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_HOSPITAL_ID;
+        const url = globalVariables.END_POINT_HOSPITAL_ID;
+        console.log("Form Data:", data, "URL:", url);
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);

@@ -4,14 +4,14 @@ const Footer = () => {
     const [year, setYear] = useState();
   
     useEffect(() => {
-      return () => {
-        const date = new Date();
-        setYear(date.getFullYear());
-      }
+        return () => {
+            const date = new Date();
+            setYear(date.getFullYear());
+        }
     }, []);
     
     return (
-        <div className="page-wrapper">
+        <div className="page-wrapper mt-3">
             <footer id="footer">
                 <div className="container">
                     <div className="row d-flex align-items-center">

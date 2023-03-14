@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Sidebar from "./components/pages/global/Sidebar";
@@ -25,62 +25,75 @@ import Analytic from "./components/pages/analytics";
 import Calendar from "./components/pages/calendar";
 import Setting from "./components/pages/setting";
 import UserProfile from "./components/pages/userprofile";
+import Layout from "./components/pages/layout/Layout";
+import RequireAuth from "./auth/requireAuth/RequireAuth";
+import SignIn from "./components/pages/auth/SignIn";
+import SignUp from "./components/pages/auth/SignUp";
+import OTPVerification from "./components/pages/auth/OTPVerification";
+import useAuth from "./auth/useAuth/useAuth";
 
+const routes = [ "/", "/sign_in", "/sign_up", "/otp" ];
 
 function App() {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
     const [landing, setLanding] = useState(true);
+    const { authed } = useAuth();
+    const location = useLocation();
+    const pathname = location.pathname;
 
     useEffect(() => {
-        const landingState = localStorage.getItem("landing");
-        if (landingState === "false") {
-            setLanding(false);
-        }
-        else {
-            setLanding(true);
-        }
-    }, []);
+        if (authed) setLanding(false);
+        else setLanding(true);
+    }, [authed]);
     
     return (
-        <>
-            {landing ?
-            <Routes>
-                <Route path="/" element={<Home />} />
-            </Routes>:
-            <ColorModeContext.Provider value={ colorMode }>
-                <ThemeProvider theme={ theme }>
-                    <CssBaseline />
-                    <div className="app">
-                        <Sidebar isSidebar={isSidebar} />
-                        <main className="content">
-                            <Topbar setIsSidebar={setIsSidebar} />
-                            <Routes>
-                                <Route path="/" element={<Dashboard />} />
-                                <Route path="/admin" element={<Team />} />
-                                <Route path="/doctor" element={<Doctor />} />
-                                <Route path="/patient" element={<Patient />} />
-                                <Route path="/add-patient" element={<AddPatient />} />
-                                <Route path="/hospital" element={<Hospital />} />
-                                <Route path="/add-hospital" element={<AddHospital />} />
-                                <Route path="/district" element={<District />} />
-                                <Route path="/add-district" element={<AddDistrict />} />
-                                <Route path="/lab" element={<Laboratory />} />
-                                <Route path="/infection" element={<Infection />} />
-                                <Route path="/add-infection" element={<AddInfection />} />
-                                <Route path="/risk-factor" element={<RiskFactor />} />
-                                <Route path="/add-riskfactor" element={<AddRiskfactor />} />
-                                <Route path="/message" element={<Message />} />
-                                <Route path="/test" element={<Tests />} />
-                                <Route path="/analytic" element={<Analytic />} />
-                                <Route path="/calendar" element={<Calendar />} />
-                                <Route path="/setting" element={<Setting />} />
-                                <Route path="/user-profile" element={<UserProfile />} />
-                            </Routes>
-                        </main>
-                    </div>
-                </ThemeProvider>
-            </ColorModeContext.Provider>
+        <>{(landing && routes.includes(pathname))
+            ?
+                <Routes>
+                    <Route path="/" element={<Layout />}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/sign_in" element={<SignIn />} />
+                        <Route path="/sign_up" element={<SignUp />} />
+                        <Route path="/otp" element={<OTPVerification />} />
+                    </Route>
+                </Routes>
+            :
+                <ColorModeContext.Provider value={ colorMode }>
+                    <ThemeProvider theme={ theme }>
+                        <CssBaseline />
+                        <div className="app">
+                            <Sidebar isSidebar={isSidebar} />
+                            <main className="content">
+                                <Topbar setIsSidebar={setIsSidebar} />
+                                <Routes>
+                                        <Route element={<RequireAuth />}>
+                                            <Route path="/dashboard" element={<Dashboard />} />
+                                            <Route path="/admin" element={<Team />} />
+                                            <Route path="/doctor" element={<Doctor />} />
+                                            <Route path="/patient" element={<Patient />} />
+                                            <Route path="/add-patient" element={<AddPatient />} />
+                                            <Route path="/hospital" element={<Hospital />} />
+                                            <Route path="/add-hospital" element={<AddHospital />} />
+                                            <Route path="/district" element={<District />} />
+                                            <Route path="/add-district" element={<AddDistrict />} />
+                                            <Route path="/lab" element={<Laboratory />} />
+                                            <Route path="/infection" element={<Infection />} />
+                                            <Route path="/add-infection" element={<AddInfection />} />
+                                            <Route path="/risk-factor" element={<RiskFactor />} />
+                                            <Route path="/add-riskfactor" element={<AddRiskfactor />} />
+                                            <Route path="/message" element={<Message />} />
+                                            <Route path="/test" element={<Tests />} />
+                                            <Route path="/analytic" element={<Analytic />} />
+                                            <Route path="/calendar" element={<Calendar />} />
+                                            <Route path="/setting" element={<Setting />} />
+                                            <Route path="/user-profile" element={<UserProfile />} />
+                                        </Route>
+                                </Routes>
+                            </main>
+                        </div>
+                    </ThemeProvider>
+                </ColorModeContext.Provider>
             }
         </>
     )

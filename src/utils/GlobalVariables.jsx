@@ -29,4 +29,13 @@ export const globalVariables = {
 
     // Infections API End-points
     END_POINT_INFECTION: "infection/",
+
+    // Authentication API End-points
+    END_POINT_SIGN_IN: "auth/login/",
+    END_POINT_SIGN_UP: "auth/register/",
+    END_POINT_SIGN_OUT: "auth/logout/",
+    END_POINT_VERIFY_EMAIL: "auth/email-verify/",
+    END_POINT_REFRESH_TOKEN: "auth/token/refresh/",
+    END_POINT_RESET_PASSWORD: "auth/password-reset-complete",
+    END_POINT_RESET_EMAIL: "auth/request-reset-email/",
 }

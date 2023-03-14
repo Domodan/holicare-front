@@ -18,12 +18,10 @@ const AddRiskfactor = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/risk-factor";
-
-    console.log("From:", from);
     
     const handleFormSubmit = (data) => {
-        console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_RISK_FACTOR;
+        const url = globalVariables.END_POINT_RISK_FACTOR;
+        console.log("Riskfactor Data:", data, "URL:", url);
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);

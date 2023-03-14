@@ -11,12 +11,13 @@ import germs1 from '../../../assets/img/gm1.png';
 import germs2 from '../../../assets/img/gm2.png';
 import germs3 from '../../../assets/img/gm3.png';
 import child from '../../../assets/img/child.png';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+    const navigate = useNavigate();
 
     const handleClick = () => {
-        localStorage.setItem("landing", false);
-        window.location.reload();
+        navigate("/dashboard", { replace: true })
     }
 
     return (
