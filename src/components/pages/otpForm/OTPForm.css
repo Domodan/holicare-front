@@ -1,0 +1,76 @@
+body {
+  background-image: url("https://media.gettyimages.com/id/592647720/photo/vigilantly-monitoring-his-patients-vitals.jpg?s=612x612&w=0&k=20&c=cKQ6XPw8X98Z-9XQDR0DqnpTdvFsiHiXzYptGbKdD40=");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+.OTPForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.OTPForm__container {
+  width: 600px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  margin: 100px auto;
+}
+
+.OTPForm__input {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.OTPForm__input input {
+  width: 50px;
+  height: 50px;
+  margin: 0 10px;
+  padding: 10px;
+  text-align: center;
+  font-size: 24px;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  outline: none;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.OTPForm__confirm {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00cc66;
+  color: #ffffff;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+.OTPForm__success {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #00cc66;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 999;
+  text-align: center;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+
