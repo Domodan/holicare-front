@@ -1,16 +1,10 @@
-import React from "react";
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import {
+    Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox,
+    Paper, Box, Grid, Typography, Stack, Alert, AlertTitle
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from "../../includes/Footer";
 import useAuth from "../../../auth/useAuth/useAuth";
@@ -24,12 +18,12 @@ const SignIn = () => {
     const { setAuthed, setAuth } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const [errorMsg, setErrorMsg] = useState([]);
 
     const from = location.state?.from?.pathname || "/dashboard";
-    console.log("From:", from);
 
     const handleFormSubmit = (data) => {
-        const url = globalVariables.BASE_URL_2 + globalVariables.END_POINT_SIGN_IN;
+        const url = globalVariables.END_POINT_SIGN_IN;
         console.log("Data:", data, "URL:", url);
         postData(url, data)
         .then((data) => {
@@ -40,6 +34,11 @@ const SignIn = () => {
                 const email = data.email;
                 const username = data.username;
 
+                localStorage.setItem("refresh_token", refresh_token);
+                localStorage.setItem("access_token", access_token);
+                localStorage.setItem("email", email);
+                localStorage.setItem("username", username);
+                
                 setAuthed(true);
                 setAuth({
                     email: email,
@@ -50,18 +49,20 @@ const SignIn = () => {
                 navigate(from, {replace: true});
             }
             else if (data.detail) {
-                console.log("Error Detail:", data.detail);
+                setErrorMsg(data.detail)
             }
             else {
-                console.log("Field Error:", data);
+                const newData = Object.entries(data).map((d, i) => {
+                    const key0 = d[0][0].toUpperCase() + d[0].slice(1) + ': ';
+                    console.log("Key0:", key0);
+                    return key0 + d[1]
+                });
+                setErrorMsg(newData);
             }
         })
         .catch((error) => {
             console.log("Error:", error);
         });
-
-        // setAuthed(true);
-        // navigate(from, {replace: true});
     };
 
     return (
@@ -84,6 +85,27 @@ const SignIn = () => {
                         <Typography component="h1" variant="h5">
                             Login
                         </Typography>
+                        {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                            <>
+                                {typeof errorMsg === 'object' ?
+                                    Object.entries(errorMsg).map(([key, value]) => {
+                                        return <Stack sx={{ width: '100%' }} key={ key }>
+                                            <Alert severity="error"  sx={{ mt: 1}}>
+                                                <AlertTitle>Error</AlertTitle>
+                                                <strong>{ value }</strong>
+                                            </Alert>
+                                        </Stack>
+                                    })
+                                :
+                                    <Stack sx={{ width: '100%' }} spacing={2}>
+                                        <Alert severity="error"  sx={{ mt: 1}}>
+                                            <AlertTitle>Error</AlertTitle>
+                                            <strong>{ errorMsg }</strong>
+                                        </Alert>
+                                    </Stack>
+                                }
+                            </>
+                        :''}
                         <Formik
                             onSubmit={handleFormSubmit}
                             initialValues={initialValues}

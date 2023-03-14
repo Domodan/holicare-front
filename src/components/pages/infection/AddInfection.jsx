@@ -18,12 +18,10 @@ const AddInfection = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/infection";
-
-    console.log("From:", from);
     
     const handleFormSubmit = (data) => {
-        console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_INFECTION;
+        const url = globalVariables.END_POINT_INFECTION;
+        console.log("Infection Data:", data, "URL:", url);
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);
