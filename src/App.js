@@ -33,8 +33,8 @@ import SignIn from "./components/pages/auth/SignIn";
 import SignUp from "./components/pages/auth/SignUp";
 import OTPVerification from "./components/pages/auth/OTPVerification";
 import useAuth from "./auth/useAuth/useAuth";
-
-const routes = [ "/", "/sign_in", "/sign_up", "/otp" ];
+import {VerifyMail} from "./components/pages/verifyMail";
+const routes = [ "/", "/sign_in", "/sign_up", "/otp", "/verify"];
 
 function App() {
     const [theme, colorMode] = useMode();
@@ -58,6 +58,8 @@ function App() {
                         <Route path="/sign_in" element={<SignIn />} />
                         <Route path="/sign_up" element={<SignUp />} />
                         <Route path="/otp" element={<OTPVerification />} />
+                        <Route path="/verify" element={<VerifyMail />} />
+
                     </Route>
                 </Routes>
             :
