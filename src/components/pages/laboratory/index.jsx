@@ -45,7 +45,7 @@ const Laboratory = () => {
                 subtitle="Different Labs within partnering hospitals"
             />
             <Box>
-                    <Link to={'/add-patient'}>
+                    <Link to={'/add-lab'}>
                         <Button
                             sx={{
                             backgroundColor: colors.blueAccent[700],

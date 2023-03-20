@@ -17,13 +17,13 @@ const AddRiskfactor = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/risk-factor";
+    const from = location.state?.from?.pathname || "/lab";
 
     console.log("From:", from);
     
     const handleFormSubmit = (data) => {
         console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_RISK_FACTOR;
+        const url = globalVariables.BASE_URL + globalVariables.END_POINT_LAB;
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);
@@ -38,7 +38,7 @@ const AddRiskfactor = () => {
 
     return (
         <Box m="20px">
-            <Header title="" subtitle="Adding untracked current Risk Factor" />
+            <Header title="" subtitle="Adding lab profile" />
         
             <Formik
                 onSubmit={handleFormSubmit}
@@ -67,13 +67,13 @@ const AddRiskfactor = () => {
                                 variant="outlined"
                                 size="small"
                                 type="text"
-                                label="Risk Factor"
+                                label="Laboratory"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.name}
-                                name="name"
-                                error={!!touched.name && !!errors.name}
-                                helperText={touched.name && errors.name}
+                                value={values.lab}
+                                name="lab"
+                                error={!!touched.lab && !!errors.lab}
+                                helperText={touched.lab && errors.lab}
                                 sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
@@ -81,19 +81,47 @@ const AddRiskfactor = () => {
                                 variant="outlined"
                                 size="small"
                                 type="text"
-                                label="Category"
+                                label="Hospital"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.category}
-                                name="category"
-                                error={!!touched.category && !!errors.category}
-                                helperText={touched.category && errors.category}
+                                value={values.hospital}
+                                name="hospital"
+                                error={!!touched.hospital && !!errors.hospital}
+                                helperText={touched.hospital && errors.hospital}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Lab Attendant"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.labattendant}
+                                name="labattendant"
+                                error={!!touched.labattendant && !!errors.labattendant}
+                                helperText={touched.labattendant && errors.labattendant}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Specialty"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.specialty}
+                                name="specialty"
+                                error={!!touched.specialty && !!errors.specialty}
+                                helperText={touched.specialty && errors.specialty}
                                 sx={{ gridColumn: "span 2" }}
                             />
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">
                             <Button type="submit" color="secondary" variant="contained">
-                                Add Risk Factor
+                                Add Lab
                             </Button>
                         </Box>
                     </form>

@@ -18,10 +18,12 @@ const AddHospital = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/hospital";
+
+    console.log("From:", from);
     
     const handleFormSubmit = (data) => {
-        const url = globalVariables.END_POINT_HOSPITAL_ID;
-        console.log("Form Data:", data, "URL:", url);
+        console.log("Form Data:", data);
+        const url = globalVariables.BASE_URL + globalVariables.END_POINT_HOSPITAL_ID;
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);
@@ -36,7 +38,7 @@ const AddHospital = () => {
 
     return (
         <Box m="20px">
-            <Header title="ADD NEW Hospital" subtitle="Create a New Hospital Profile" />
+            <Header title="" subtitle="Create a New Hospital Profile" />
         
             <Formik
                 onSubmit={handleFormSubmit}
@@ -62,7 +64,8 @@ const AddHospital = () => {
                         >
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
                                 label="Hospital Name"
                                 onBlur={handleBlur}
@@ -71,11 +74,12 @@ const AddHospital = () => {
                                 name="hospital_name"
                                 error={!!touched.hospital_name && !!errors.hospital_name}
                                 helperText={touched.hospital_name && errors.hospital_name}
-                                sx={{ gridColumn: "span 4" }}
+                                sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
                                 label="Hospital Type"
                                 onBlur={handleBlur}
@@ -88,7 +92,8 @@ const AddHospital = () => {
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
                                 label="Ownership"
                                 onBlur={handleBlur}
@@ -101,7 +106,8 @@ const AddHospital = () => {
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
                                 label="Authority"
                                 onBlur={handleBlur}
@@ -110,11 +116,12 @@ const AddHospital = () => {
                                 name="authority"
                                 error={!!touched.authority && !!errors.authority}
                                 helperText={touched.authority && errors.authority}
-                                sx={{ gridColumn: "span 4" }}
+                                sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
                                 label="Region"
                                 onBlur={handleBlur}
@@ -127,7 +134,8 @@ const AddHospital = () => {
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
                                 label="District"
                                 onBlur={handleBlur}
@@ -140,7 +148,8 @@ const AddHospital = () => {
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
                                 label="Sub County"
                                 onBlur={handleBlur}
@@ -149,33 +158,35 @@ const AddHospital = () => {
                                 name="sub_county"
                                 error={!!touched.sub_county && !!errors.sub_county}
                                 helperText={touched.sub_county && errors.sub_county}
-                                sx={{ gridColumn: "span 4" }}
+                                sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
-                                label="Longitude"
+                                label="LNG"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 value={values.longitude}
                                 name="longitude"
                                 error={!!touched.longitude && !!errors.longitude}
                                 helperText={touched.longitude && errors.longitude}
-                                sx={{ gridColumn: "span 2" }}
+                                sx={{ gridColumn: "span 1" }}
                             />
                             <TextField
                                 fullWidth
-                                variant="filled"
+                                variant="outlined"
+                                size="small"
                                 type="text"
-                                label="Latitude"
+                                label="LAT"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 value={values.latitude}
                                 name="latitude"
                                 error={!!touched.latitude && !!errors.latitude}
                                 helperText={touched.latitude && errors.latitude}
-                                sx={{ gridColumn: "span 2" }}
+                                sx={{ gridColumn: "span 1" }}
                             />
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">

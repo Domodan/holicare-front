@@ -199,8 +199,14 @@ export const mockDataTests = [
     
       id: 1,
       test: "COV-SARS",
+      patient_id:"13",
+      forwaded_by: "Dr.Johnson",
+      test_to_run: "x-ray",
+      sample: "Image",
       parameters: "BMI, Sputum, Blood Pressure, Blood Sugar",
       results: "positive",
+      action: "",
+      
     
   },
 

@@ -21,7 +21,7 @@ import FormLabel from '@mui/material/FormLabel';
 import { Link } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 
-const AddPatient = () => {
+const AddPatient2 = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -32,7 +32,7 @@ const AddPatient = () => {
 
     return (
         <Box m="20px">
-            <Header title="Vitals" subtitle="Patient form" />
+            <Header title="" subtitle="Vitals" />
         
             <Formik
                 onSubmit={handleFormSubmit}
@@ -283,4 +283,4 @@ const initialValues = {
     address2: "",
 };
 
-export default AddPatient
+export default AddPatient2

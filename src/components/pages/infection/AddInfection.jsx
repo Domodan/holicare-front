@@ -18,10 +18,12 @@ const AddInfection = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/infection";
+
+    console.log("From:", from);
     
     const handleFormSubmit = (data) => {
-        const url = globalVariables.END_POINT_INFECTION;
-        console.log("Infection Data:", data, "URL:", url);
+        console.log("Form Data:", data);
+        const url = globalVariables.BASE_URL + globalVariables.END_POINT_INFECTION;
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);
@@ -36,7 +38,7 @@ const AddInfection = () => {
 
     return (
         <Box m="20px">
-            <Header title="ADD NEW District" subtitle="Create a New District Profile" />
+            <Header title="" subtitle="Create a New Infection Profile" />
         
             <Formik
                 onSubmit={handleFormSubmit}
@@ -62,20 +64,22 @@ const AddInfection = () => {
                         >
                         <TextField
                             fullWidth
-                            variant="filled"
+                            variant="outlined"
+                            size="small"
                             type="text"
-                            label="Infections"
+                            label="Infection"
                             onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.name}
                             name="name"
                             error={!!touched.name && !!errors.name}
                             helperText={touched.name && errors.name}
-                            sx={{ gridColumn: "span 4" }}
+                            sx={{ gridColumn: "span 2" }}
                         />
                         <TextField
                             fullWidth
-                            variant="filled"
+                            variant="outlined"
+                            size="small"
                             type="text"
                             label="Symptoms"
                             onBlur={handleBlur}
@@ -84,11 +88,12 @@ const AddInfection = () => {
                             name="symptom"
                             error={!!touched.symptom && !!errors.symptom}
                             helperText={touched.symptom && errors.symptom}
-                            sx={{ gridColumn: "span 4" }}
+                            sx={{ gridColumn: "span 2" }}
                         />
                         <TextField
                             fullWidth
-                            variant="filled"
+                            variant="outlined"
+                            size="small"
                             type="text"
                             label="Risk Factors"
                             onBlur={handleBlur}
@@ -97,7 +102,7 @@ const AddInfection = () => {
                             name="risk_factor"
                             error={!!touched.risk_factor && !!errors.risk_factor}
                             helperText={touched.risk_factor && errors.risk_factor}
-                            sx={{ gridColumn: "span 4" }}
+                            sx={{ gridColumn: "span 2" }}
                         />
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">

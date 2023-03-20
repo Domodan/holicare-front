@@ -16,6 +16,7 @@ import AddHospital from "./components/pages/hospital/AddHospital";
 import District from "./components/pages/district";
 import AddDistrict from "./components/pages/district/AddDistrict";
 import Laboratory from "./components/pages/laboratory";
+import AddLab from "./components/pages/laboratory/AddLab";
 import Infection from "./components/pages/infection";
 import AddInfection from "./components/pages/infection/AddInfection";
 import RiskFactor from "./components/pages/riskfactors";
@@ -84,6 +85,7 @@ function App() {
                                             <Route path="/district" element={<District />} />
                                             <Route path="/add-district" element={<AddDistrict />} />
                                             <Route path="/lab" element={<Laboratory />} />
+                                            <Route path="/add-lab" element={<AddLab />} />
                                             <Route path="/infection" element={<Infection />} />
                                             <Route path="/add-infection" element={<AddInfection />} />
                                             <Route path="/risk-factor" element={<RiskFactor />} />

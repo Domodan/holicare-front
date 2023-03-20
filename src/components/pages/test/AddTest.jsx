@@ -12,12 +12,12 @@ import { globalVariables } from '../../../utils/GlobalVariables';
 import { postData } from '../../../utils/ApiCalls';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const AddDistrict = () => {
+const AddTest = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/district";
+    const from = location.state?.from?.pathname || "/test";
 
     console.log("From:", from);
     
@@ -38,7 +38,7 @@ const AddDistrict = () => {
 
     return (
         <Box m="20px">
-            <Header title="" subtitle="Create a New District Profile" />
+            <Header title="" subtitle="Create a New Test" />
         
             <Formik
                 onSubmit={handleFormSubmit}
@@ -67,13 +67,13 @@ const AddDistrict = () => {
                             variant="outlined"
                             size="small"
                             type="text"
-                            label="District Name"
+                            label="Test"
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value={values.district_name}
-                            name="district_name"
-                            error={!!touched.district_name && !!errors.district_name}
-                            helperText={touched.district_name && errors.district_name}
+                            value={values.test}
+                            name="test"
+                            error={!!touched.test && !!errors.test}
+                            helperText={touched.test && errors.test}
                             sx={{ gridColumn: "span 2" }}
                         />
                         <TextField
@@ -81,27 +81,27 @@ const AddDistrict = () => {
                             variant="outlined"
                             size="small"
                             type="text"
-                            label="Region"
+                            label="Parameters"
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value={values.region}
-                            name="region"
-                            error={!!touched.region && !!errors.region}
-                            helperText={touched.region && errors.region}
+                            value={values.parameters}
+                            name="parameters"
+                            error={!!touched.parameters && !!errors.parameters}
+                            helperText={touched.parameters && errors.parameters}
                             sx={{ gridColumn: "span 2" }}
                         />
                         <TextField
                             fullWidth
                             variant="outlined"
                             size="small"
-                            type="number"
-                            label="Population"
+                            type="text"
+                            label="Results"
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value={values.population}
-                            name="population"
-                            error={!!touched.population && !!errors.population}
-                            helperText={touched.population && errors.population}
+                            value={values.results}
+                            name="results"
+                            error={!!touched.results && !!errors.results}
+                            helperText={touched.results && errors.results}
                             sx={{ gridColumn: "span 2" }}
                         />
                         </Box>
@@ -118,15 +118,15 @@ const AddDistrict = () => {
 }
 
 const checkoutSchema = yup.object().shape({
-    district_name: yup.string().required("required"),
-    region: yup.string().required("required"),
-    population: yup.number().required("required")
+    test: yup.string().required("required"),
+    parameters: yup.string().required("required"),
+    results: yup.number().required("required")
 });
 
 const initialValues = {
-    district_name: "",
-    region: "",
-    population: "",
+    test: "",
+    parameters: "",
+    results: "",
 };
 
-export default AddDistrict
+export default AddTest
