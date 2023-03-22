@@ -123,7 +123,7 @@ const Sidebar = () => {
                         />
 
                         <Item
-                            title="Admins"
+                            title="Admin"
                             to="/admin"
                             icon={<PeopleOutline />}
                             selected={selected}

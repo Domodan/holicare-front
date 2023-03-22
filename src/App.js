@@ -12,6 +12,7 @@ import PatientDocuments from "./components/pages/patient/PatientDocuments";
 import Home from "./components/pages/home";
 import Team from "./components/pages/admin";
 import Doctor from "./components/pages/doctor";
+import AddDoctor from "./components/pages/doctor/AddDoctor";
 import Hospital from "./components/pages/hospital";
 import AddHospital from "./components/pages/hospital/AddHospital";
 import District from "./components/pages/district";
@@ -74,6 +75,7 @@ function App() {
                                             <Route path="/" element={<Dashboard />} />
                                             <Route path="/admin" element={<Team />} />
                                             <Route path="/doctor" element={<Doctor />} />
+                                            <Route path="/add-doctor" element={<AddDoctor />} />
                                             <Route path="/patient" element={<Patient />} />
                                             <Route path="/add-patient" element={<AddPatient />} />
                                             <Route path="/add-patient2" element={<AddPatient2 />} />

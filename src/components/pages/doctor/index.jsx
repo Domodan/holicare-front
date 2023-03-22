@@ -48,7 +48,7 @@ const Doctor = () => {
          <Box display="flex" justifyContent="space-between" alignItems="center">
          <Header title="DOCTOR" subtitle="Subscribed Doctors Available" />
             <Box>
-                    <Link to={'/add-patient'}>
+                    <Link to={'/add-doctor'}>
                     <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Doctor
