@@ -22,11 +22,8 @@ import Infection from "./components/pages/infection";
 import AddInfection from "./components/pages/infection/AddInfection";
 import RiskFactor from "./components/pages/riskfactors";
 import AddRiskfactor from "./components/pages/riskfactors/AddRiskfactor";
-import Message from "./components/pages/message";
 import Tests from "./components/pages/test";
-import Analytic from "./components/pages/analytics";
-import Calendar from "./components/pages/calendar";
-import Setting from "./components/pages/setting";
+import AddTest from "./components/pages/test/AddTest";
 import UserProfile from "./components/pages/userprofile";
 import UploadPatient from "./components/pages/patient/UploadPatient";
 import Layout from "./components/pages/layout/Layout";
@@ -74,7 +71,7 @@ function App() {
                                 <Topbar setIsSidebar={setIsSidebar} />
                                 <Routes>
                                         <Route element={<RequireAuth />}>
-                                            <Route path="/dashboard" element={<Dashboard />} />
+                                            <Route path="/" element={<Dashboard />} />
                                             <Route path="/admin" element={<Team />} />
                                             <Route path="/doctor" element={<Doctor />} />
                                             <Route path="/patient" element={<Patient />} />
@@ -93,6 +90,7 @@ function App() {
                                             <Route path="/risk-factor" element={<RiskFactor />} />
                                             <Route path="/add-riskfactor" element={<AddRiskfactor />} />
                                             <Route path="/test" element={<Tests />} />
+                                            <Route path="/add-test" element={<AddTest />} />
                                             <Route path="/user-profile" element={<UserProfile />} />
                                         </Route>
                                 </Routes>
