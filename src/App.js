@@ -8,6 +8,7 @@ import Dashboard from "./components/pages/dashboard";
 import Patient from "./components/pages/patient/Patient";
 import AddPatient from "./components/pages/patient/AddPatient";
 import AddPatient2 from "./components/pages/patient/AddPatient2";
+import PatientDocuments from "./components/pages/patient/PatientDocuments";
 import Home from "./components/pages/home";
 import Team from "./components/pages/admin";
 import Doctor from "./components/pages/doctor";
@@ -80,6 +81,7 @@ function App() {
                                             <Route path="/add-patient" element={<AddPatient />} />
                                             <Route path="/add-patient2" element={<AddPatient2 />} />
                                             <Route path="/upload-patient" element={<UploadPatient />} />
+                                            <Route path="/patient-documents" element={<PatientDocuments />} />
                                             <Route path="/hospital" element={<Hospital />} />
                                             <Route path="/add-hospital" element={<AddHospital />} />
                                             <Route path="/district" element={<District />} />
@@ -90,11 +92,7 @@ function App() {
                                             <Route path="/add-infection" element={<AddInfection />} />
                                             <Route path="/risk-factor" element={<RiskFactor />} />
                                             <Route path="/add-riskfactor" element={<AddRiskfactor />} />
-                                            <Route path="/message" element={<Message />} />
                                             <Route path="/test" element={<Tests />} />
-                                            <Route path="/analytic" element={<Analytic />} />
-                                            <Route path="/calendar" element={<Calendar />} />
-                                            <Route path="/setting" element={<Setting />} />
                                             <Route path="/user-profile" element={<UserProfile />} />
                                         </Route>
                                 </Routes>

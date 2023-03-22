@@ -26,15 +26,7 @@ const PatientDocuments = () => {
                 each of your visits with us in this section. " />
 
                 <Box>
-                
-                    
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                        }}>
+                <Button variant="contained" component="label">
                             
                             Last 30 days
                         </Button>

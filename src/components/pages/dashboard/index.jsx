@@ -30,13 +30,13 @@ const Dashboard = () => {
         <Box m="20px">
             {/* HEADER */}
             <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Header title="DASHBOARD" subtitle="Welcome to Holicare" />
+                <Header title="DASHBOARD" subtitle="Welcome to Holicare" sx={{color: colors.blueAccent[800]}} />
         
                 <Box>
                     <Button
                         sx={{
-                        backgroundColor: colors.blueAccent[700],
-                        color: colors.grey[100],
+                        backgroundColor: colors.primary[500],
+                        color: "#fff",
                         fontSize: "14px",
                         fontWeight: "bold",
                         padding: "10px 20px",
@@ -60,27 +60,24 @@ const Dashboard = () => {
                 {/* Total Patients */}
                 <Box
                     gridColumn="span 3"
+                    height="100px"
                     backgroundColor={colors.primary[400]}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                 >
+                
                 <StatBox
                     title="32,441"
-                    subtitle="Total Patients"
-                    // progress="0.30"
-                    // increase="+5%"
-                    icon={
-                        <Diversity3
-                            sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                        />
-                    }
+                    subtitle="Health Centers"
+  
                 />
                 </Box>
 
                 {/* Total staff */}
                 <Box
                     gridColumn="span 3"
+                    height="100px"
                     backgroundColor={colors.primary[400]}
                     display="flex"
                     alignItems="center"
@@ -88,41 +85,31 @@ const Dashboard = () => {
                 >
                 <StatBox
                     title="1,325"
-                    subtitle="Total staff"
-                    // progress="0.80"
-                    // increase="+43%"
-                    icon={
-                        <AdminPanelSettingsOutlined
-                            sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                        />
-                    }
+                    subtitle="Doctors"
                 />
                 </Box>
 
                 {/* Total Infections */}
                 <Box
                     gridColumn="span 3"
+                    height="100px"
                     backgroundColor={colors.primary[400]}
+                    color={colors.grey[100]} 
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                 >
                 <StatBox
                     title="15"
-                    subtitle="Total Infections"
-                    // progress="0.75"
-                    // increase="+14%"
-                    icon={
-                    <CoronavirusOutlined
-                        sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                    />
-                    }
+                    subtitle="Patients"
+                     
                 />
                 </Box>
 
                 {/* Messages */}
                 <Box
                     gridColumn="span 3"
+                    height="100px"
                     backgroundColor={colors.primary[400]}
                     display="flex"
                     alignItems="center"
@@ -130,17 +117,11 @@ const Dashboard = () => {
                 >
                 <StatBox
                     title="15"
-                    subtitle="Messages"
-                    // progress="0.75"
-                    // increase="+14%"
-                    icon={
-                    <MarkUnreadChatAltOutlined
-                        sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                    />
-                    }
+                    subtitle="Laboratories"
+                    
                 />
                 </Box>
-        
+              
                 {/* ROW 2 */}
                 <Box
                     gridColumn="span 8"
@@ -167,7 +148,7 @@ const Dashboard = () => {
                         <Box>
                             <IconButton>
                                 <DownloadOutlined
-                                    sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
+                                    sx={{ fontSize: "26px", color: colors.blueAccent[500] }}
                                 />
                             </IconButton>
                         </Box>
@@ -187,7 +168,7 @@ const Dashboard = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
-                        borderBottom={`4px solid ${colors.primary[500]}`}
+                        borderBottom={`2px solid ${colors.primary[500]}`}
                         colors={colors.grey[100]}
                         p="15px"
                     >
@@ -201,12 +182,12 @@ const Dashboard = () => {
                             display="flex"
                             justifyContent="space-between"
                             alignItems="center"
-                            borderBottom={`4px solid ${colors.primary[500]}`}
+                            borderBottom={`2px  ${colors.primary[400]}`}
                             p="15px"
                         >
                             <Box>
                                 <Typography
-                                    color={colors.greenAccent[500]}
+                                    color={colors.blueAccent[500]}
                                     variant="h5"
                                     fontWeight="600"
                                 >
@@ -218,7 +199,8 @@ const Dashboard = () => {
                             </Box>
                             <Box color={colors.grey[100]}>{transaction.date}</Box>
                             <Box
-                                backgroundColor={colors.greenAccent[500]}
+                                backgroundColor={colors.primary[600]}
+                                color={colors.grey[900]}
                                 p="5px 10px"
                                 borderRadius="4px"
                             >
@@ -247,7 +229,7 @@ const Dashboard = () => {
                         <ProgressCircle size="125" />
                         <Typography
                             variant="h5"
-                            color={colors.greenAccent[500]}
+                            color={colors.blueAccent[400]}
                             sx={{ mt: "15px" }}
                         >
                             $48,352 revenue generated

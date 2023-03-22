@@ -71,15 +71,7 @@ const Tests = () => {
            
             <Box>
                     <Link to={'/add-test'}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                            marginTop: "40px",
-                        }}>
+                    <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Test
                         </Button>
@@ -102,21 +94,19 @@ const Tests = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.primary[200],
                     borderBottom: "none",
+                    color: colors.grey[900],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
                 },
                 "& .MuiDataGrid-footerContainer": {
                     borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.grey[900],
                 },
                 "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                    color: `${colors.grey[100]} !important`,
+                    color: `${colors.primary[200]} !important`,
                 },
                 }}
             >
