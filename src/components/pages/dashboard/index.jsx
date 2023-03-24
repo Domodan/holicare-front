@@ -8,13 +8,7 @@ import {
 } from '@mui/material';
 import { tokens } from '../../../theme';
 import Header from '../../includes/Header';
-import {
-    DownloadOutlined,
-    AdminPanelSettingsOutlined,
-    CoronavirusOutlined,
-    Diversity3,
-    MarkUnreadChatAltOutlined
-} from '@mui/icons-material';
+import { DownloadOutlined } from '@mui/icons-material';
 import StatBox from '../../includes/StatBox';
 import LineChart from '../../includes/LineChart';
 import { mockTransactions } from '../../../data/mockData';

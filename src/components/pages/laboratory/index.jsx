@@ -39,22 +39,22 @@ const Laboratory = () => {
 
     return (
         <Box m="20px">
-         <Box display="flex" justifyContent="space-between" alignItems="center">
-         <Header
-                title="LABORATORIES"
-                subtitle="Different Labs within partnering hospitals"
-            />
-            <Box>
-                    <Link to={'/add-lab'}>
-                    <Button variant="contained" component="label">
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Header
+                    title="LABORATORIES"
+                    subtitle="Different Labs within partnering hospitals"
+                />
+                <Box>
+                    <Link to={'/add_lab'}>
+                        <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Lab
                         </Button>
                     </Link>
                 </Box>
-         </Box>
-            
-         <Box
+            </Box>
+                
+            <Box
                 m="40px 0 0 0"
                 height="75vh"
                 sx={{

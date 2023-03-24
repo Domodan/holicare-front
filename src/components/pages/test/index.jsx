@@ -1,7 +1,5 @@
-import { DownloadOutlined } from '@mui/icons-material'
-import { Box, Button, IconButton, Typography, useTheme } from '@mui/material'
+import { Box, Button, useTheme } from '@mui/material'
 import React from 'react'
-import LineChart from '../../includes/LineChart'
 import { mockDataTests } from '../../../data/mockData'
 import { tokens } from '../../../theme'
 import Header from '../../includes/Header'
@@ -66,18 +64,15 @@ const Tests = () => {
          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Header title={"TESTS"} subtitle={"Diagnosis tests reports"} />
            
-
-
-           
             <Box>
-                    <Link to={'/add-test'}>
-                    <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New Test
-                        </Button>
-                    </Link>
-                </Box>
+                <Link to={'/add_test'}>
+                <Button variant="contained" component="label">
+                    <AddOutlined sx={{ mr: "10px" }} />
+                    New Test
+                </Button>
+                </Link>
             </Box>
+        </Box>
             
             
             <Box

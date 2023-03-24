@@ -10,14 +10,11 @@ import {
     PeopleOutlined,
     ContactsOutlined,
     ReceiptOutlined,
-    PersonOutlined,
     CalendarTodayOutlined,
     PeopleOutline,
     HelpOutlineOutlined,
     BarChartOutlined,
-    PieChartOutlined,
-    TimelineOutlined,
-    CalendarMonthOutlined
+    PieChartOutlined
 } from '@mui/icons-material';
 
 import logo from '../../../assets/img/hc_logo.png';
@@ -148,7 +145,7 @@ const Sidebar = () => {
 
                         <Item
                             title="Patient Documents"
-                            to="/patient-documents"
+                            to="/patient_documents"
                             icon={<PeopleOutlined />}
                             selected={selected}
                             setSelected={setSelected}
@@ -189,7 +186,7 @@ const Sidebar = () => {
 
                         <Item
                             title="Risk Factors"
-                            to="/risk-factor"
+                            to="/risk_factor"
                             icon={<CalendarTodayOutlined />}
                             selected={selected}
                             setSelected={setSelected}
@@ -206,7 +203,7 @@ const Sidebar = () => {
 
                         <Item
                             title="User Profile"
-                            to="/user-profile"
+                            to="/user_profile"
                             icon={<CalendarTodayOutlined />}
                             selected={selected}
                             setSelected={setSelected}

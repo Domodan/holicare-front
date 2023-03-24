@@ -66,7 +66,7 @@ const RiskFactor = () => {
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="RISK FACTORS" subtitle="Known Risk Factors" />
                 <Box>
-                    <Link to={'/add-riskfactor'}>
+                    <Link to={'/add_riskfactor'}>
                     <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Risk Factor

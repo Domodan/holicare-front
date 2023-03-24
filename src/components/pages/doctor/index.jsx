@@ -45,20 +45,19 @@ const Doctor = () => {
 
     return (
         <Box m="20px">
-         <Box display="flex" justifyContent="space-between" alignItems="center">
-         <Header title="DOCTOR" subtitle="Subscribed Doctors Available" />
-            <Box>
-                    <Link to={'/add-doctor'}>
-                    <Button variant="contained" component="label">
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Header title="DOCTOR" subtitle="Subscribed Doctors Available" />
+                <Box>
+                    <Link to={'/add_doctor'}>
+                        <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Doctor
                         </Button>
                     </Link>
                 </Box>
-         </Box>
+            </Box>
             
-
-         <Box
+            <Box
                 m="40px 0 0 0"
                 height="75vh"
                 sx={{

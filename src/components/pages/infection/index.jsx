@@ -71,7 +71,7 @@ const Infection = () => {
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="INFECTIONS" subtitle="Known Infections" />
                 <Box>
-                    <Link to={'/add-infection'}>
+                    <Link to={'/add_infection'}>
                     <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Infection

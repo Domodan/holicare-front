@@ -27,7 +27,7 @@ const SignUp = () => {
             postData(url, data)
             .then((data) => {
                 if (data.username && (typeof data.username === 'string')) {
-                    navigate("/verify", {replace: true});
+                    navigate("/verify_email", {replace: true});
                 }
                 else if ((typeof data.first_name === 'object') ||
                     (typeof data.last_name === 'object') ||

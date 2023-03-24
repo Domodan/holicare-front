@@ -53,7 +53,7 @@ const Patient = () => {
                 <Header title="PATIENTS" subtitle="Manage Patients " />
 
                 <Box>
-                    <Link to={'/add-patient'}>
+                    <Link to={'/add_patient'}>
                     <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             Add Patient

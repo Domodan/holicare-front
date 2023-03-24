@@ -67,22 +67,22 @@ const District = () => {
 
     return (
         <Box m="20px">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header
-                title="DISTRICTS"
-                subtitle="Different Districts within the study area"
-            />
-            <Box>
-                    <Link to={'/add-district'}>
-                    <Button variant="contained" component="label">
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Header
+                    title="DISTRICTS"
+                    subtitle="Different Districts within the study area"
+                />
+                <Box>
+                    <Link to={'/add_district'}>
+                        <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New District
                         </Button>
                     </Link>
                 </Box>
-        </Box>
-            
-        <Box
+            </Box>
+                
+            <Box
                 m="40px 0 0 0"
                 height="75vh"
                 sx={{

@@ -98,7 +98,7 @@ const Hospital = () => {
             />
 
             <Box>
-                    <Link to={'/add-hospital'}>
+                    <Link to={'/add_hospital'}>
                     <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Hospital
