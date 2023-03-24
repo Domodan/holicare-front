@@ -207,6 +207,11 @@ const SignUp = () => {
                                                 <MenuItem value="admin">Admin</MenuItem>
                                                 <MenuItem value="doctor">Doctor</MenuItem>
                                                 <MenuItem value="nurse">Nurse</MenuItem>
+                                                <MenuItem value="partner">Partner</MenuItem>
+                                                <MenuItem value="hospital_admin">Hospital Admin</MenuItem>
+                                                <MenuItem value="lab_attendant">Lab Attendant</MenuItem>
+                                                <MenuItem value="researcher">Researcher</MenuItem>
+                                                <MenuItem value="super_admin">Super Admin</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <TextField
