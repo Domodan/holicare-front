@@ -123,7 +123,7 @@ const Sidebar = () => {
                         />
 
                         <Item
-                            title="Admins"
+                            title="Admin"
                             to="/admin"
                             icon={<PeopleOutline />}
                             selected={selected}
@@ -145,6 +145,15 @@ const Sidebar = () => {
                             selected={selected}
                             setSelected={setSelected}
                         />
+
+                        <Item
+                            title="Patient Documents"
+                            to="/patient-documents"
+                            icon={<PeopleOutlined />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
 
                         <Item
                             title="Health Centres"
@@ -194,22 +203,7 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
 
-                        <Item
-                            title="Analytics"
-                            to="/analytic"
-                            icon={<ReceiptOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
 
-                        <Item
-                            title="Messages"
-                            to="/message"
-                            icon={<PersonOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        
                         <Item
                             title="User Profile"
                             to="/user-profile"
@@ -218,21 +212,6 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
 
-                        <Item
-                            title="Calendar"
-                            to="/calendar"
-                            icon={<CalendarMonthOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Settings"
-                            to="/setting"
-                            icon={<TimelineOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
                     </Box>
                 </Menu>
             </ProSidebar>

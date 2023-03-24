@@ -72,15 +72,7 @@ const Infection = () => {
                 <Header title="INFECTIONS" subtitle="Known Infections" />
                 <Box>
                     <Link to={'/add-infection'}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                            marginTop: "40px",
-                        }}>
+                    <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Infection
                         </Button>
@@ -102,18 +94,19 @@ const Infection = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.primary[200],
                     borderBottom: "none",
+                    color: colors.grey[900],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
                 },
                 "& .MuiDataGrid-footerContainer": {
                     borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.grey[900],
                 },
                 "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
+                    color: `${colors.primary[200]} !important`,
                 },
                 }}
             >

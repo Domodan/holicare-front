@@ -45,15 +45,8 @@ const Laboratory = () => {
                 subtitle="Different Labs within partnering hospitals"
             />
             <Box>
-                    <Link to={'/add-patient'}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                        }}>
+                    <Link to={'/add-lab'}>
+                    <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Lab
                         </Button>
@@ -61,7 +54,7 @@ const Laboratory = () => {
                 </Box>
          </Box>
             
-            <Box
+         <Box
                 m="40px 0 0 0"
                 height="75vh"
                 sx={{
@@ -75,21 +68,19 @@ const Laboratory = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.primary[200],
                     borderBottom: "none",
+                    color: colors.grey[900],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
                 },
                 "& .MuiDataGrid-footerContainer": {
                     borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.grey[900],
                 },
                 "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                    color: `${colors.grey[100]} !important`,
+                    color: `${colors.primary[200]} !important`,
                 },
                 }}
             >

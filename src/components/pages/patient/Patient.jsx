@@ -54,31 +54,16 @@ const Patient = () => {
 
                 <Box>
                     <Link to={'/add-patient'}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                        }}>
+                    <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             Add Patient
                         </Button>
-                    </Link>
-                    <Link to={''}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                        }}>
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            Upload Data
-                        </Button>
-                    </Link>
+                    </Link>&nbsp;&nbsp;&nbsp;
+
+                    <Button variant="contained" component="label">
+                        Upload data
+                        <input hidden accept="image/*" multiple type="file" />
+                    </Button>
                 </Box>
               
             </Box>
@@ -87,29 +72,30 @@ const Patient = () => {
                 m="40px 0 0 0"
                 height="75vh"
                 sx={{
-                    "& .MuiDataGrid-root": {
+                "& .MuiDataGrid-root": {
                     border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
+                },
+                "& .MuiDataGrid-cell": {
                     borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
+                },
+                "& .name-column--cell": {
                     color: colors.greenAccent[300],
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: colors.primary[200],
                     borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
+                    color: colors.grey[900],
+                },
+                "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer": {
+                },
+                "& .MuiDataGrid-footerContainer": {
                     borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
-                    },
-                    "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
-                    },
+                    backgroundColor: colors.grey[900],
+                },
+                "& .MuiCheckbox-root": {
+                    color: `${colors.primary[200]} !important`,
+                },
                 }}
             >
                 <DataGrid checkboxSelection rows={data} columns={patients} />

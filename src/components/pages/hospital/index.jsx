@@ -99,37 +99,16 @@ const Hospital = () => {
 
             <Box>
                     <Link to={'/add-hospital'}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                        }}>
+                    <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Hospital
                         </Button>
                     </Link>
                 </Box>
-                <Box>
-                    <Link to={''}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                        }}>
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            Upload Data
-                        </Button>
-                    </Link>
-                </Box>
+   
         </Box>
           
-            <Box
+        <Box
                 m="40px 0 0 0"
                 height="75vh"
                 sx={{
@@ -143,21 +122,19 @@ const Hospital = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.primary[200],
                     borderBottom: "none",
+                    color: colors.grey[900],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
                 },
                 "& .MuiDataGrid-footerContainer": {
                     borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.grey[900],
                 },
                 "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                    color: `${colors.grey[100]} !important`,
+                    color: `${colors.primary[200]} !important`,
                 },
                 }}
             >

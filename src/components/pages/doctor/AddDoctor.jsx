@@ -12,18 +12,18 @@ import { globalVariables } from '../../../utils/GlobalVariables';
 import { postData } from '../../../utils/ApiCalls';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const AddRiskfactor = () => {
+const AddDoctor = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/risk-factor";
+    const from = location.state?.from?.pathname || "/doctor";
 
     console.log("From:", from);
     
     const handleFormSubmit = (data) => {
         console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_RISK_FACTOR;
+        const url = globalVariables.BASE_URL + globalVariables.END_POINT_DOCTOR;
         postData(url, data)
         .then((data) => {
             console.log("Response Data:", data);
@@ -38,7 +38,7 @@ const AddRiskfactor = () => {
 
     return (
         <Box m="20px">
-            <Header title="" subtitle="Adding untracked current Risk Factor" />
+            <Header title="" subtitle="Create a New Doctor's Profile" />
         
             <Formik
                 onSubmit={handleFormSubmit}
@@ -67,7 +67,7 @@ const AddRiskfactor = () => {
                                 variant="outlined"
                                 size="small"
                                 type="text"
-                                label="Risk Factor"
+                                label="Full Name"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 value={values.name}
@@ -81,19 +81,35 @@ const AddRiskfactor = () => {
                                 variant="outlined"
                                 size="small"
                                 type="text"
-                                label="Category"
+                                label="Hospital"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.category}
-                                name="category"
-                                error={!!touched.category && !!errors.category}
-                                helperText={touched.category && errors.category}
+                                value={values.hospital}
+                                name="hospital"
+                                error={!!touched.hospital && !!errors.hospital}
+                                helperText={touched.hospital && errors.hospital}
                                 sx={{ gridColumn: "span 2" }}
                             />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Specialty"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.specialty}
+                                name="specialty"
+                                error={!!touched.specialty && !!errors.specialty}
+                                helperText={touched.specialty && errors.specialty}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                           
+                           
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">
                             <Button type="submit" color="secondary" variant="contained">
-                                Add Risk Factor
+                                Add New Doctor
                             </Button>
                         </Box>
                     </form>
@@ -105,12 +121,15 @@ const AddRiskfactor = () => {
 
 const checkoutSchema = yup.object().shape({
     name: yup.string().required("required"),
-    category: yup.string().required("required"),
+    hospital: yup.string().required("required"),
+    specialty: yup.string().required("required"),
 });
 
 const initialValues = {
     name: "",
-    category: "",
+    hospital: "",
+    specialty: "",
+
 };
 
-export default AddRiskfactor
+export default AddDoctor

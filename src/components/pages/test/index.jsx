@@ -22,6 +22,27 @@ const Tests = () => {
             cellClassName: "name-column--cell",
         },
         {
+            field: "patient_id",
+            headerName: "Patient ID",
+            flex: 1,
+        },
+        {
+            field: "forwaded_by",
+            headerName: "Forwaded by",
+            flex: 1,
+        },
+        {
+            field: "test_to_run",
+            headerName: "Test to run",
+            flex: 1,
+        },
+        {
+            field: "sample",
+            headerName: "Sample name",
+            flex: 1,
+        },
+
+        {
             field: "parameters",
             headerName: "Parameters",
             flex: 1,
@@ -31,56 +52,26 @@ const Tests = () => {
             headerName: "Results",
             flex: 1,
         },
+        {
+            field: "action",
+            headerName: "Action",
+            flex: 1,
+        },
         
     ];
 
     return (
         
         <Box m="20px">
+         <Box display="flex" justifyContent="space-between" alignItems="center">
             <Header title={"TESTS"} subtitle={"Diagnosis tests reports"} />
-            <Box backgroundColor={colors.primary[400]}>
-                <Box
-                    mt="25px"
-                    p="0 30px"
-                    display="flex "
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <Box>
-                        <Typography
-                            variant="h5"
-                            fontWeight="600"
-                            color={colors.grey[100]}
-                        >
-                            Diagnosis Test Chart and Report
-                        </Typography>
-                    </Box>
-                    <Box>
-                        <IconButton>
-                            <DownloadOutlined
-                                sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                            />
-                        </IconButton>
-                    </Box>
-                </Box>
-                <Box height="250px" m="-20px 0 0 0">
-                    <LineChart isDashboard={true} />
-                </Box>
-            </Box>
+           
 
 
-            <Box display="flex" justifyContent="space-between" alignItems="center">
+           
             <Box>
-                    <Link to={'/add-patient'}>
-                        <Button
-                            sx={{
-                            backgroundColor: colors.blueAccent[700],
-                            color: colors.grey[100],
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                            marginTop: "40px",
-                        }}>
+                    <Link to={'/add-test'}>
+                    <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Test
                         </Button>
@@ -103,21 +94,19 @@ const Tests = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.primary[200],
                     borderBottom: "none",
+                    color: colors.grey[900],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
                 },
                 "& .MuiDataGrid-footerContainer": {
                     borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
+                    backgroundColor: colors.grey[900],
                 },
                 "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                    color: `${colors.grey[100]} !important`,
+                    color: `${colors.primary[200]} !important`,
                 },
                 }}
             >
