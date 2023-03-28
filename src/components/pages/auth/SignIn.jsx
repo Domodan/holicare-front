@@ -33,6 +33,7 @@ const SignIn = () => {
                 const access_token = data.tokens.access;
                 const email = data.email;
                 const username = data.username;
+                const role = data.role;
 
                 localStorage.setItem("refresh_token", refresh_token);
                 localStorage.setItem("access_token", access_token);
@@ -45,6 +46,7 @@ const SignIn = () => {
                     username: username,
                     access_token: access_token,
                     refresh_token: refresh_token,
+                    role: role,
                 })
                 navigate(from, {replace: true});
             }
@@ -62,6 +64,21 @@ const SignIn = () => {
         })
         .catch((error) => {
             console.log("Error:", error);
+            if (!error?.response) {
+                setErrorMsg("No Server Response");
+            }
+            else if (error.response?.status === 500) {
+                setErrorMsg("Internal Server Error");
+            }
+            else if (error.response?.status === 400) {
+                setErrorMsg("Username or Password is missing");
+            }
+            else if (error.response?.status === 401) {
+                setErrorMsg("Unauthorized access");
+            }
+            else {
+                setErrorMsg("Login Failed");
+            }
         });
     };
 

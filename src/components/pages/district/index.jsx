@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import { AddOutlined } from '@mui/icons-material';
 import { globalVariables } from '../../../utils/GlobalVariables';
 import { getData } from '../../../utils/ApiCalls';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const SA = process.env.REACT_APP_ROLE_SA;
 
 const District = () => {
     const theme = useTheme();
@@ -14,6 +17,7 @@ const District = () => {
 
     const [districts, setDistricts] = useState([]);
     const mounted = useRef();
+    const { auth } = useAuth();
 
     useEffect(() => {
         mounted.current = true;
@@ -67,22 +71,24 @@ const District = () => {
 
     return (
         <Box m="20px">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header
-                title="DISTRICTS"
-                subtitle="Different Districts within the study area"
-            />
-            <Box>
-                    <Link to={'/add-district'}>
-                    <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New District
-                        </Button>
-                    </Link>
-                </Box>
-        </Box>
-            
-        <Box
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Header
+                    title="DISTRICTS"
+                    subtitle="Different Districts within the study area"
+                />
+                {auth.role === SA ?
+                    <Box>
+                        <Link to={'/add_district'}>
+                            <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                New District
+                            </Button>
+                        </Link>
+                    </Box>
+                :null}
+            </Box>
+                
+            <Box
                 m="40px 0 0 0"
                 height="75vh"
                 sx={{

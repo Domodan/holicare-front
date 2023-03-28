@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { tokens } from '../../theme';
-import ProgressCircle from './ProgressCircle';
 
 const StatBox = ({ title, subtitle, icon, progress, increase }) => {
     const theme = useTheme();
@@ -15,7 +14,7 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
                 </Typography>
                 <Typography
                     variant="h5"
-                    fonintStyle="italic"
+                    fontStyle={"italic"}
                     sx={{ color: colors.blueAccent[400] }}
                 >
                

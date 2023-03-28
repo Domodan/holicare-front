@@ -27,7 +27,7 @@ const SignUp = () => {
             postData(url, data)
             .then((data) => {
                 if (data.username && (typeof data.username === 'string')) {
-                    navigate("/verify", {replace: true});
+                    navigate("/verify_email", {replace: true});
                 }
                 else if ((typeof data.first_name === 'object') ||
                     (typeof data.last_name === 'object') ||
@@ -207,6 +207,11 @@ const SignUp = () => {
                                                 <MenuItem value="admin">Admin</MenuItem>
                                                 <MenuItem value="doctor">Doctor</MenuItem>
                                                 <MenuItem value="nurse">Nurse</MenuItem>
+                                                <MenuItem value="partner">Partner</MenuItem>
+                                                <MenuItem value="hospital_admin">Hospital Admin</MenuItem>
+                                                <MenuItem value="lab_attendant">Lab Attendant</MenuItem>
+                                                <MenuItem value="researcher">Researcher</MenuItem>
+                                                <MenuItem value="super_admin">Super Admin</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <TextField
