@@ -16,8 +16,19 @@ import {
     BarChartOutlined,
     PieChartOutlined
 } from '@mui/icons-material';
+import useAuth from '../../../auth/useAuth/useAuth';
 
 import logo from '../../../assets/img/hc_logo.png';
+
+const A = process.env.REACT_APP_ROLE_A;
+const R = process.env.REACT_APP_ROLE_R;
+const D = process.env.REACT_APP_ROLE_D;
+const P = process.env.REACT_APP_ROLE_P;
+const HA = process.env.REACT_APP_ROLE_HA;
+const N = process.env.REACT_APP_ROLE_N;
+const LA = process.env.REACT_APP_ROLE_LA;
+const PR = process.env.REACT_APP_ROLE_PR;
+const SA = process.env.REACT_APP_ROLE_SA;
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -40,9 +51,14 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     )
 }
 
+const cat = [ A, SA, HA, D, N, PR, R, LA ];
+const cat1 = [ A, SA, HA, D, N, LA ];
+const cat2 = [ A, SA, HA, D, N, PR, P, R, LA ];
+
 const Sidebar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const { auth } = useAuth();
 
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
@@ -111,104 +127,100 @@ const Sidebar = () => {
                     </MenuItem>
 
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-                        <Item
-                            title="Dashboard"
-                            to="/"
-                            icon={<HomeOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Admin"
-                            to="/admin"
-                            icon={<PeopleOutline />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Doctors"
-                            to="/doctor"
-                            icon={<ReceiptOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Patients"
-                            to="/patient"
-                            icon={<PeopleOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Patient Documents"
-                            to="/patient_documents"
-                            icon={<PeopleOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-
-                        <Item
-                            title="Health Centres"
-                            to="/hospital"
-                            icon={<ContactsOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Districts"
-                            to="/district"
-                            icon={<PieChartOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Laboratory"
-                            to="/lab"
-                            icon={<HelpOutlineOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Tests"
-                            to="/test"
-                            icon={<ContactsOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Risk Factors"
-                            to="/risk_factor"
-                            icon={<CalendarTodayOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-                        <Item
-                            title="Infections"
-                            to="/infection"
-                            icon={<BarChartOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
-
-                        <Item
-                            title="User Profile"
-                            to="/user_profile"
-                            icon={<CalendarTodayOutlined />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
+                        {cat.includes(auth.role) ?
+                        <>
+                            <Item
+                                title="Dashboard"
+                                to="/dashboard"
+                                icon={<HomeOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Admin"
+                                to="/admin"
+                                icon={<PeopleOutline />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Doctors"
+                                to="/doctor"
+                                icon={<ReceiptOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Health Centres"
+                                to="/hospital"
+                                icon={<ContactsOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Districts"
+                                to="/district"
+                                icon={<PieChartOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Risk Factors"
+                                to="/risk_factor"
+                                icon={<CalendarTodayOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Infections"
+                                to="/infection"
+                                icon={<BarChartOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="User Profile"
+                                to="/user_profile"
+                                icon={<CalendarTodayOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                        </> : null}
+                        {cat1.includes(auth.role) ?
+                        <>
+                            <Item
+                                title="Laboratory"
+                                to="/lab"
+                                icon={<HelpOutlineOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Tests"
+                                to="/test"
+                                icon={<ContactsOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                        </>: null}
+                        {cat2.includes(auth.role) ?
+                        <>
+                            <Item
+                                title="Patients"
+                                to="/patient"
+                                icon={<PeopleOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
+                                title="Patient Documents"
+                                to="/patient_documents"
+                                icon={<PeopleOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                        </>
+                        : null}
                     </Box>
                 </Menu>
             </ProSidebar>

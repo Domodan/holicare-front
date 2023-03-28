@@ -7,6 +7,13 @@ import Header from '../../includes/Header';
 import {AddOutlined} from "@mui/icons-material";
 import { getData } from '../../../utils/ApiCalls';
 import { globalVariables } from '../../../utils/GlobalVariables';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const D = process.env.REACT_APP_ROLE_D;
+const N = process.env.REACT_APP_ROLE_N;
+const SA = process.env.REACT_APP_ROLE_SA;
+
+const role = [ D, N, SA ];
 
 const Infection = () => {
     const theme = useTheme();
@@ -14,6 +21,7 @@ const Infection = () => {
 
     const [infections, setInfections] = useState([])
     const mounted = useRef();
+    const { auth } = useAuth();
 
     useEffect(() => {
         mounted.current = true;
@@ -70,14 +78,16 @@ const Infection = () => {
         <Box m="20px">
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="INFECTIONS" subtitle="Known Infections" />
-                <Box>
-                    <Link to={'/add_infection'}>
-                    <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New Infection
-                        </Button>
-                    </Link>
-                </Box>
+                {role.includes(auth.role) ?
+                    <Box>
+                        <Link to={'/add_infection'}>
+                            <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                New Infection
+                            </Button>
+                        </Link>
+                    </Box>
+                :null}
             </Box>
            
             <Box

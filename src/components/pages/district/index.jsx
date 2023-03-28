@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import { AddOutlined } from '@mui/icons-material';
 import { globalVariables } from '../../../utils/GlobalVariables';
 import { getData } from '../../../utils/ApiCalls';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const SA = process.env.REACT_APP_ROLE_SA;
 
 const District = () => {
     const theme = useTheme();
@@ -14,6 +17,7 @@ const District = () => {
 
     const [districts, setDistricts] = useState([]);
     const mounted = useRef();
+    const { auth } = useAuth();
 
     useEffect(() => {
         mounted.current = true;
@@ -72,14 +76,16 @@ const District = () => {
                     title="DISTRICTS"
                     subtitle="Different Districts within the study area"
                 />
-                <Box>
-                    <Link to={'/add_district'}>
-                        <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New District
-                        </Button>
-                    </Link>
-                </Box>
+                {auth.role === SA ?
+                    <Box>
+                        <Link to={'/add_district'}>
+                            <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                New District
+                            </Button>
+                        </Link>
+                    </Box>
+                :null}
             </Box>
                 
             <Box

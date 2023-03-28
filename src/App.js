@@ -36,17 +36,16 @@ import useAuth from "./auth/useAuth/useAuth";
 import EmailVerification from "./components/pages/auth/EmailVerification";
 
 const ROUTES = [ "/", "/sign_in", "/sign_up", "/otp", "/verify_email"];
-const ROLES = [
-    process.env.REACT_APP_ROLE_ADMIN,
-    process.env.REACT_APP_ROLE_RESEARCHER,
-    process.env.REACT_APP_ROLE_DOCTOR,
-    process.env.REACT_APP_ROLE_PATIENT,
-    process.env.REACT_APP_ROLE_HOSPITAL_ADMIN,
-    process.env.REACT_APP_ROLE_NURSE,
-    process.env.REACT_APP_ROLE_LAB_ATTENDANT,
-    process.env.REACT_APP_ROLE_PARTNER,
-    process.env.REACT_APP_ROLE_SUPER_ADMIN,
-]
+
+const A = process.env.REACT_APP_ROLE_A;
+const R = process.env.REACT_APP_ROLE_R;
+const D = process.env.REACT_APP_ROLE_D;
+const P = process.env.REACT_APP_ROLE_P;
+const HA = process.env.REACT_APP_ROLE_HA;
+const N = process.env.REACT_APP_ROLE_N;
+const LA = process.env.REACT_APP_ROLE_LA;
+const PR = process.env.REACT_APP_ROLE_PR;
+const SA = process.env.REACT_APP_ROLE_SA;
 
 function App() {
     const [theme, colorMode] = useMode();
@@ -82,30 +81,44 @@ function App() {
                             <main className="content">
                                 <Topbar setIsSidebar={setIsSidebar} />
                                 <Routes>
-                                        <Route element={<RequireAuth roles={ ROLES } />}>
-                                            <Route path="/dashboard" element={<Dashboard />} />
-                                            <Route path="/admin" element={<Team />} />
-                                            <Route path="/doctor" element={<Doctor />} />
-                                            <Route path="/add_doctor" element={<AddDoctor />} />
-                                            <Route path="/patient" element={<Patient />} />
-                                            <Route path="/add_patient" element={<AddPatient />} />
-                                            <Route path="/add_patient2" element={<AddPatient2 />} />
-                                            <Route path="/upload_patient" element={<UploadPatient />} />
-                                            <Route path="/patient_documents" element={<PatientDocuments />} />
-                                            <Route path="/hospital" element={<Hospital />} />
-                                            <Route path="/add_hospital" element={<AddHospital />} />
-                                            <Route path="/district" element={<District />} />
-                                            <Route path="/add_district" element={<AddDistrict />} />
-                                            <Route path="/lab" element={<Laboratory />} />
-                                            <Route path="/add_lab" element={<AddLab />} />
-                                            <Route path="/infection" element={<Infection />} />
-                                            <Route path="/add_infection" element={<AddInfection />} />
-                                            <Route path="/risk_factor" element={<RiskFactor />} />
-                                            <Route path="/add_riskfactor" element={<AddRiskfactor />} />
-                                            <Route path="/test" element={<Tests />} />
-                                            <Route path="/add_test" element={<AddTest />} />
-                                            <Route path="/user_profile" element={<UserProfile />} />
-                                        </Route>
+                                    <Route element={<RequireAuth roles={[ A, SA, HA, D, N, PR, R ]} />}>
+                                        <Route path="/dashboard" element={<Dashboard />} />
+                                        <Route path="/admin" element={<Team />} />
+                                        <Route path="/doctor" element={<Doctor />} />
+                                        <Route path="/user_profile" element={<UserProfile />} />
+                                        <Route path="/risk_factor" element={<RiskFactor />} />
+                                        <Route path="/infection" element={<Infection />} />
+                                        <Route path="/district" element={<District />} />
+                                        <Route path="/hospital" element={<Hospital />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[ A, SA, HA, D, N, LA, PR ]} />}>
+                                        <Route path="/test" element={<Tests />} />
+                                        <Route path="/lab" element={<Laboratory />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[ A, SA, HA, D, N, PR, P, R, LA ]} />}>
+                                        <Route path="/patient" element={<Patient />} />
+                                        <Route path="/patient_documents" element={<PatientDocuments />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[ SA ]} />}>
+                                        <Route path="/add_hospital" element={<AddHospital />} />
+                                        <Route path="/add_district" element={<AddDistrict />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[ A, HA ]} />}>
+                                        <Route path="/add_doctor" element={<AddDoctor />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[ HA, D, N ]} />}>
+                                        <Route path="/add_patient" element={<AddPatient />} />
+                                        <Route path="/add_patient2" element={<AddPatient2 />} />
+                                        <Route path="/upload_patient" element={<UploadPatient />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[ D, N, LA ]} />}>
+                                        <Route path="/add_lab" element={<AddLab />} />
+                                        <Route path="/add_test" element={<AddTest />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[ D, N ]} />}>
+                                        <Route path="/add_infection" element={<AddInfection />} />
+                                        <Route path="/add_riskfactor" element={<AddRiskfactor />} />
+                                    </Route>
                                 </Routes>
                             </main>
                         </div>

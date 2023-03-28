@@ -6,10 +6,19 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { mockDataLaboratories } from '../../../data/mockData';
 import {Link} from "react-router-dom";
 import {AddOutlined} from "@mui/icons-material";
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const D = process.env.REACT_APP_ROLE_D;
+const N = process.env.REACT_APP_ROLE_N;
+const LA = process.env.REACT_APP_ROLE_LA;
+const SA = process.env.REACT_APP_ROLE_SA;
+
+const role = [ D, N, LA, SA ];
 
 const Laboratory = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const { auth } = useAuth();
   
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
@@ -44,14 +53,16 @@ const Laboratory = () => {
                     title="LABORATORIES"
                     subtitle="Different Labs within partnering hospitals"
                 />
-                <Box>
-                    <Link to={'/add_lab'}>
-                        <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New Lab
-                        </Button>
-                    </Link>
-                </Box>
+                {role.includes(auth.role) ?
+                    <Box>
+                        <Link to={'/add_lab'}>
+                            <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                New Lab
+                            </Button>
+                        </Link>
+                    </Box>
+                :null}
             </Box>
                 
             <Box

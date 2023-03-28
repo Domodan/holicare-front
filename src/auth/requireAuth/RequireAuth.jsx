@@ -10,7 +10,7 @@ const RequireAuth = ({ roles }) => {
         (authed && (roles.includes(auth.role)))
             ? <Outlet />
             : auth?.username
-                ? <Navigate to={"/"} state={{ from: location }} replace />
+                ? <Navigate to={"/dashboard"} state={{ from: location }} replace />
                 : <Navigate to={"/sign_in"} state={{ from: location }} replace />
     )
 }

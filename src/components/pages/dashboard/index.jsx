@@ -15,31 +15,39 @@ import { mockTransactions } from '../../../data/mockData';
 import BarChart from '../../includes/BarChart';
 import GeographyChart from '../../includes/GeographyChart';
 import ProgressCircle from '../../includes/ProgressCircle';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const A = process.env.REACT_APP_ROLE_A;
+const SA = process.env.REACT_APP_ROLE_SA;
+
+const role = [ A, SA, ];
 
 const Dashboard = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const { auth } = useAuth();
 
     return (
         <Box m="20px">
             {/* HEADER */}
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="DASHBOARD" subtitle="Welcome to Holicare" sx={{color: colors.blueAccent[800]}} />
-        
-                <Box>
-                    <Button
-                        sx={{
-                        backgroundColor: colors.primary[500],
-                        color: "#fff",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        padding: "10px 20px",
-                        }}
-                    >
-                        <DownloadOutlined sx={{ mr: "10px" }} />
-                        Download Reports
-                    </Button>
-                </Box>
+                {role.includes(auth.role) ?
+                    <Box>
+                        <Button
+                            sx={{
+                            backgroundColor: colors.primary[500],
+                            color: "#fff",
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                            }}
+                        >
+                            <DownloadOutlined sx={{ mr: "10px" }} />
+                            Download Reports
+                        </Button>
+                    </Box>
+                :null}
             </Box>
         
             {/* GRID & CHARTS */}

@@ -10,11 +10,20 @@ import { Link } from 'react-router-dom';
 import { mockDataPatient as data } from '../../../data/mockData';
 import { tokens } from '../../../theme';
 import Header from '../../includes/Header';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const D = process.env.REACT_APP_ROLE_D;
+const N = process.env.REACT_APP_ROLE_N;
+const SA = process.env.REACT_APP_ROLE_SA;
+
+const role = [ D, N, SA ];
 
 
 const Patient = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const { auth } = useAuth();
+    
     const patients = [
         { field: "id", headerName: "ID" },
         {
@@ -51,21 +60,21 @@ const Patient = () => {
         <Box m="20px">
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="PATIENTS" subtitle="Manage Patients " />
+                {role.includes(auth.role) ?
+                    <Box>
+                        <Link to={'/add_patient'}>
+                            <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                Add Patient
+                            </Button>
+                        </Link>&nbsp;&nbsp;&nbsp;
 
-                <Box>
-                    <Link to={'/add_patient'}>
-                    <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            Add Patient
+                        <Button variant="contained" component="label">
+                            Upload data
+                            <input hidden accept="image/*" multiple type="file" />
                         </Button>
-                    </Link>&nbsp;&nbsp;&nbsp;
-
-                    <Button variant="contained" component="label">
-                        Upload data
-                        <input hidden accept="image/*" multiple type="file" />
-                    </Button>
-                </Box>
-              
+                    </Box>
+                :null}
             </Box>
 
             <Box

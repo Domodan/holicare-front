@@ -6,10 +6,17 @@ import { tokens } from "../../../theme";
 import { mockDataInvoices } from "../../../data/mockData";
 import Header from '../../includes/Header';
 import { AddOutlined } from '@mui/icons-material';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const HA = process.env.REACT_APP_ROLE_HA;
+const SA = process.env.REACT_APP_ROLE_SA;
+
+const role = [ HA, SA, ];
 
 const Doctor = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const { auth } = useAuth();
 
     const columns = [
         { field: "id", headerName: "ID" },
@@ -47,14 +54,16 @@ const Doctor = () => {
         <Box m="20px">
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="DOCTOR" subtitle="Subscribed Doctors Available" />
-                <Box>
-                    <Link to={'/add_doctor'}>
-                        <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New Doctor
-                        </Button>
-                    </Link>
-                </Box>
+                {role.includes(auth.role) ?
+                    <Box>
+                        <Link to={'/add_doctor'}>
+                            <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                New Doctor
+                            </Button>
+                        </Link>
+                    </Box>
+                :null}
             </Box>
             
             <Box
