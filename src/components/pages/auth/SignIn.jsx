@@ -35,10 +35,10 @@ const SignIn = () => {
                 const username = data.username;
                 const role = data.role;
 
-                // localStorage.setItem("refresh_token", refresh_token);
-                // localStorage.setItem("access_token", access_token);
-                // localStorage.setItem("email", email);
-                // localStorage.setItem("username", username);
+                localStorage.setItem("refresh_token", refresh_token);
+                localStorage.setItem("access_token", access_token);
+                localStorage.setItem("email", email);
+                localStorage.setItem("username", username);
                 
                 setAuthed(true);
                 setAuth({
