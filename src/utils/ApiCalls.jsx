@@ -6,13 +6,16 @@ const baseURL = globalVariables.BASE_URL;
 
 // Post data
 export async function postData(api_endpoint, data) {
+    let header = new Headers({
+        Accept: globalVariables.ACCEPT,
+        "Content-Type": globalVariables.CONTENT_TYPE,
+        "Authorization": `Token ${localStorage.getItem("access_token")}`,
+    });
+    // header.append('Authorization', `Bearer ${localStorage.getItem("token")}`)
     const url = baseURL + api_endpoint;
     const response = await fetch(url, {
         method: globalVariables.METHOD_POST,
-        headers: {
-            Accept: globalVariables.ACCEPT,
-            "Content-Type": globalVariables.CONTENT_TYPE,
-        },
+        headers: header,
         body: JSON.stringify(data),
     });
     return await response.json();

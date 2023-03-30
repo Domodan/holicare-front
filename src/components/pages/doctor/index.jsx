@@ -21,6 +21,11 @@ const Doctor = () => {
     const columns = [
         { field: "id", headerName: "ID" },
         {
+            field: "photo",
+            headerName: "Photo",
+            flex: 1,
+        },
+        {
             field: "name",
             headerName: "Full Name",
             flex: 1,
@@ -80,9 +85,9 @@ const Doctor = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.primary[200],
+                    backgroundColor: colors.grey[900],
                     borderBottom: "none",
-                    color: colors.grey[900],
+                    color: colors.primary[200],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
@@ -96,7 +101,7 @@ const Doctor = () => {
                 },
                 }}
             >
-                <DataGrid checkboxSelection rows={mockDataInvoices} columns={columns} />
+                <DataGrid  rows={mockDataInvoices} columns={columns} />
             </Box>
         </Box>
     )

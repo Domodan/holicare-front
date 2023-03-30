@@ -23,13 +23,6 @@ const Team = () => {
             cellClassName: "name-column--cell",
         },
         {
-            field: "age",
-            headerName: "Age",
-            type: "number",
-            headerAlign: "left",
-            align: "left",
-        },
-        {
             field: "phone",
             headerName: "Phone Number",
             flex: 1,
@@ -89,9 +82,9 @@ const Team = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.primary[200],
+                    backgroundColor: colors.grey[900],
                     borderBottom: "none",
-                    color: colors.grey[900],
+                    color: colors.primary[200],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
@@ -105,7 +98,7 @@ const Team = () => {
                 },
                 }}
             >
-                <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+                <DataGrid rows={mockDataTeam} columns={columns} />
             </Box>
         </Box>
     )

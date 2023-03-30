@@ -21,12 +21,13 @@ const Topbar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
-    const { setAuthed } = useAuth();
+    const { setAuth, setAuthed } = useAuth();
     const navigate = useNavigate();
     
     const handleClick = () => {
         setAuthed(false);
-        localStorage.clear();
+        setAuth("");
+        // localStorage.clear();
         navigate("/", { replace: true });
 
     }
