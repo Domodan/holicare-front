@@ -94,9 +94,9 @@ const Infection = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.primary[200],
+                    backgroundColor: colors.grey[900],
                     borderBottom: "none",
-                    color: colors.grey[900],
+                    color: colors.primary[200],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
@@ -110,7 +110,7 @@ const Infection = () => {
                 },
                 }}
             >
-                <DataGrid checkboxSelection rows={ infections } columns={ columns } />
+                <DataGrid rows={ infections } columns={ columns } />
             </Box>
         </Box>
     )

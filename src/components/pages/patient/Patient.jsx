@@ -82,9 +82,9 @@ const Patient = () => {
                     color: colors.greenAccent[300],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.primary[200],
+                    backgroundColor: colors.grey[900],
                     borderBottom: "none",
-                    color: colors.grey[900],
+                    color: colors.primary[200],
                 },
                 "& .MuiDataGrid-virtualScroller": {
                     backgroundColor: colors.primary[400],
@@ -98,7 +98,7 @@ const Patient = () => {
                 },
                 }}
             >
-                <DataGrid checkboxSelection rows={data} columns={patients} />
+                <DataGrid rows={data} columns={patients} />
             </Box>
         </Box>
     )
