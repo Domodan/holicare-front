@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../../includes/Footer';
 import {
@@ -18,26 +18,44 @@ const SignUp = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState([]);
     const navigate = useNavigate();
-
+    const errorRef = useRef();
+    const inputRef = useRef();
+    
     const handleFormSubmit = (data) => {
         const url = globalVariables.END_POINT_SIGN_UP;
-        console.log("Data:", data, "URL:");
         if (data.password === data.confirm_password) {
             postData(url, data)
             .then((data) => {
-                console.log("Response Data:", data);
-                if (data.first_name) {
-                    navigate("/otp", {replace: true});
+                if (data.username && (typeof data.username === 'string')) {
+                    navigate("/verify_email", {replace: true});
                 }
-                else if (data.detail) {
-                    setError(data.detail)
+                else if ((typeof data.first_name === 'object') ||
+                    (typeof data.last_name === 'object') ||
+                    (typeof data.email === 'object') ||
+                    (typeof data.password === 'object') ||
+                    (typeof data.username === 'object')) {
+                    const error = Object.entries(data).map((d) => {
+                        const key0 = d[0][0].toUpperCase() + d[0].slice(1) + ': ';
+                        return key0 + d[1];
+                    });
+                    setError(error);
+                    window.scrollTo({
+                        top: 70,
+                        left: 0,
+                        behavior: 'smooth',
+                    });
                 }
                 else {
                     const newData = Object.entries(data).map((d, i) => {
                         const key0 = d[0][0].toUpperCase() + d[0].slice(1) + ': ';
-                        return key0 + d[1]
+                        return key0 + d[1];
                     });
                     setError(newData);
+                    window.scrollTo({
+                        top: 70,
+                        left: 0,
+                        behavior: 'smooth',
+                    });
                 }
             })
             .catch((error) => {
@@ -45,7 +63,12 @@ const SignUp = () => {
             });
         }
         else {
-            setError("Two passwords do not match")
+            setError("Two passwords do not match");
+            window.scrollTo({
+                top: 70,
+                left: 0,
+                behavior: 'smooth',
+            });
         }
     };
     
@@ -73,9 +96,9 @@ const SignUp = () => {
                         {error.length > 0 || Object.keys(error).length ?
                             <>
                                 {typeof error === 'object' ?
-                                    Object.entries(error).map(([key, value]) => {
-                                        return <Stack sx={{ width: '100%' }} key={ key }>
-                                            <Alert severity="error"  sx={{ mt: 1}}>
+                                    Object.entries(error).map(([keys, value]) => {
+                                        return <Stack sx={{ width: '100%' }} key={ keys }>
+                                            <Alert severity="error" sx={{ mt: 1}} ref={ errorRef }>
                                                 <AlertTitle>Error</AlertTitle>
                                                 <strong>{ value }</strong>
                                             </Alert>
@@ -83,7 +106,7 @@ const SignUp = () => {
                                     })
                                 :
                                     <Stack sx={{ width: '100%' }} spacing={2}>
-                                        <Alert severity="error"  sx={{ mt: 1}}>
+                                        <Alert severity="error" sx={{ mt: 1}} ref={ errorRef }>
                                             <AlertTitle>Error</AlertTitle>
                                             <strong>{ error }</strong>
                                         </Alert>
@@ -121,6 +144,7 @@ const SignUp = () => {
                                             name="first_name"
                                             autoComplete="first_name"
                                             autoFocus
+                                            ref={ inputRef }
                                         />
                                         <TextField
                                             fullWidth
@@ -183,6 +207,11 @@ const SignUp = () => {
                                                 <MenuItem value="admin">Admin</MenuItem>
                                                 <MenuItem value="doctor">Doctor</MenuItem>
                                                 <MenuItem value="nurse">Nurse</MenuItem>
+                                                <MenuItem value="partner">Partner</MenuItem>
+                                                <MenuItem value="hospital_admin">Hospital Admin</MenuItem>
+                                                <MenuItem value="lab_attendant">Lab Attendant</MenuItem>
+                                                <MenuItem value="researcher">Researcher</MenuItem>
+                                                <MenuItem value="super_admin">Super Admin</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <TextField

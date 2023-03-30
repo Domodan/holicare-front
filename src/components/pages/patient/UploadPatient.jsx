@@ -3,12 +3,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
-import { useTheme } from '@mui/material';
 
 
 
 const UploadPatient = () => {
-    const theme = useTheme();
    
 
   return (

@@ -7,6 +7,13 @@ import Header from '../../includes/Header';
 import {AddOutlined} from "@mui/icons-material";
 import { globalVariables } from '../../../utils/GlobalVariables';
 import { getData } from '../../../utils/ApiCalls';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const D = process.env.REACT_APP_ROLE_D;
+const N = process.env.REACT_APP_ROLE_N;
+const SA = process.env.REACT_APP_ROLE_SA;
+
+const role = [ D, N, SA ];
 
 const RiskFactor = () => {
     const theme = useTheme();
@@ -14,6 +21,7 @@ const RiskFactor = () => {
 
     const [riskfactors, setRiskFactors] = useState([]);
     const mounted = useRef();
+    const { auth } = useAuth();
 
     useEffect(() => {
         mounted.current = true;
@@ -65,14 +73,16 @@ const RiskFactor = () => {
         <Box m="20px">
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="RISK FACTORS" subtitle="Known Risk Factors" />
-                <Box>
-                    <Link to={'/add-riskfactor'}>
-                    <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New Risk Factor
-                        </Button>
-                    </Link>
-                </Box>
+                {role.includes(auth.role) ?
+                    <Box>
+                        <Link to={'/add_riskfactor'}>
+                            <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                New Risk Factor
+                            </Button>
+                        </Link>
+                    </Box>
+                :null}
             </Box>
             <Box
                 m="40px 0 0 0"

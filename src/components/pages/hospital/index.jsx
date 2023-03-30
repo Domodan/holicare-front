@@ -8,6 +8,9 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useRef } from 'react';
 import { getData } from '../../../utils/ApiCalls';
 import { globalVariables } from '../../../utils/GlobalVariables';
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const SA = process.env.REACT_APP_ROLE_SA;
 
 const Hospital = () => {
     const theme = useTheme();
@@ -15,6 +18,7 @@ const Hospital = () => {
 
     const [hospitals, setHospitals] = useState([]);
     const mounted = useRef();
+    const { auth } = useAuth();
 
     useEffect(() => {
         mounted.current = true;
@@ -91,23 +95,23 @@ const Hospital = () => {
     
     return (
         <Box m="20px">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header
-                title="HOSPITALS"
-                subtitle="Hospitals in Districts within the study area"
-            />
-
-            <Box>
-                    <Link to={'/add-hospital'}>
-                    <Button variant="contained" component="label">
-                            <AddOutlined sx={{ mr: "10px" }} />
-                            New Hospital
-                        </Button>
-                    </Link>
-                </Box>
-   
-        </Box>
-          
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Header
+                    title="HOSPITALS"
+                    subtitle="Hospitals in Districts within the study area"
+                />
+                {auth.role === SA ?
+                    <Box>
+                        <Link to={'/add_hospital'}>
+                        <Button variant="contained" component="label">
+                                <AddOutlined sx={{ mr: "10px" }} />
+                                New Hospital
+                            </Button>
+                        </Link>
+                    </Box>
+                :null}
+            </Box>
+            
         <Box
                 m="40px 0 0 0"
                 height="75vh"

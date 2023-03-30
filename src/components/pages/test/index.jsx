@@ -1,17 +1,24 @@
-import { DownloadOutlined } from '@mui/icons-material'
-import { Box, Button, IconButton, Typography, useTheme } from '@mui/material'
+import { Box, Button, useTheme } from '@mui/material'
 import React from 'react'
-import LineChart from '../../includes/LineChart'
 import { mockDataTests } from '../../../data/mockData'
 import { tokens } from '../../../theme'
 import Header from '../../includes/Header'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import {Link} from "react-router-dom";
 import {AddOutlined} from "@mui/icons-material";
+import useAuth from '../../../auth/useAuth/useAuth';
+
+const D = process.env.REACT_APP_ROLE_D;
+const N = process.env.REACT_APP_ROLE_N;
+const LA = process.env.REACT_APP_ROLE_LA;
+const SA = process.env.REACT_APP_ROLE_SA;
+
+const role = [ D, N, LA, SA ];
 
 const Tests = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const { auth } = useAuth();
   
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
@@ -65,19 +72,17 @@ const Tests = () => {
         <Box m="20px">
          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Header title={"TESTS"} subtitle={"Diagnosis tests reports"} />
-           
-
-
-           
-            <Box>
-                    <Link to={'/add-test'}>
-                    <Button variant="contained" component="label">
+            {role.includes(auth.role) ?
+                <Box>
+                    <Link to={'/add_test'}>
+                        <Button variant="contained" component="label">
                             <AddOutlined sx={{ mr: "10px" }} />
                             New Test
                         </Button>
                     </Link>
                 </Box>
-            </Box>
+            :null}
+        </Box>
             
             
             <Box
