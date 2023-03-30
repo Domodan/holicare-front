@@ -26,7 +26,7 @@ yarn install or npm install
 ```
 4. Start the HoliCare Frontend Application locally with this command
 ```bash
-yarn start or npm start
+npm run dev
 ```
 5. Ready for deployment? Create the light-weight build version of the project as below
 ```bash
