@@ -25,7 +25,6 @@ const Hospital = () => {
         const api_endpoint = globalVariables.END_POINT_HOSPITAL;
         getData(api_endpoint)
         .then((data) => {
-            console.log("Data:", data)
             if (mounted) {
                 if (data.length > 0) {
                     setHospitals(data);
@@ -64,11 +63,6 @@ const Hospital = () => {
             flex: 0.8,
         },
         {
-            field: "region",
-            headerName: "Region",
-            flex: 0.8,
-        },
-        {
             field: "district",
             headerName: "District",
             flex: 1,
@@ -81,12 +75,12 @@ const Hospital = () => {
         {
             field: "longitude",
             headerName: "Longitude",
-            flex: 1,
+            flex: 0.8,
         },
         {
             field: "latitude",
             headerName: "Latitude",
-            flex: 1,
+            flex: 0.8,
         },
 
         

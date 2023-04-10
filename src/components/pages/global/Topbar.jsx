@@ -27,7 +27,7 @@ const Topbar = () => {
     const handleClick = () => {
         setAuthed(false);
         setAuth("");
-        // localStorage.clear();
+        localStorage.clear();
         navigate("/", { replace: true });
 
     }

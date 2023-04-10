@@ -18,17 +18,21 @@ export const globalVariables = {
 
     // Hospitals API End-points
     END_POINT_HOSPITAL: "hospital/",
-    END_POINT_HOSPITAL_ID: "hospital/",
 
     // Districts API End-points
     END_POINT_DISTRICT: "district/",
-    END_POINT_DISTRICT_ID: "district/",
 
     // Risk Factors API End-points
     END_POINT_RISK_FACTOR: "riskfactor/",
 
     // Infections API End-points
     END_POINT_INFECTION: "infection/",
+
+    // Patients API End-points
+    END_POINT_PATIENT: "patients/",
+
+    // Clinicians [Doctors, Nurses, ] API End-points
+    END_POINT_CLINICIAN: "clinician/",
 
     // Authentication API End-points
     END_POINT_SIGN_IN: "auth/login/",
