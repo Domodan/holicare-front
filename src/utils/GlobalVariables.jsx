@@ -34,6 +34,12 @@ export const globalVariables = {
     // Clinicians [Doctors, Nurses, ] API End-points
     END_POINT_CLINICIAN: "clinician/",
 
+    // Hospital Admins API End-points
+    END_POINT_HOSPITAL_ADMIN: "hospital_admin/",
+
+    // General Admins API End-points
+    END_POINT_ADMIN: "admins/",
+
     // Authentication API End-points
     END_POINT_SIGN_IN: "auth/login/",
     END_POINT_SIGN_UP: "auth/register/",

@@ -35,6 +35,7 @@ import SignOut from "./components/pages/auth/SignOut";
 import OTPVerification from "./components/pages/auth/OTPVerification";
 import useAuth from "./auth/useAuth/useAuth";
 import EmailVerification from "./components/pages/auth/EmailVerification";
+import AddAdmin from "./components/pages/admin/AddAdmin";
 
 const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
 
@@ -104,6 +105,7 @@ function App() {
                                     <Route element={<RequireAuth roles={[ SA ]} />}>
                                         <Route path="/add_hospital" element={<AddHospital />} />
                                         <Route path="/add_district" element={<AddDistrict />} />
+                                        <Route path="/add_admin" element={<AddAdmin />} />
                                     </Route>
                                     <Route element={<RequireAuth roles={[ A, HA, SA ]} />}>
                                         <Route path="/add_doctor" element={<AddDoctor />} />
