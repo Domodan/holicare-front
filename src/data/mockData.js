@@ -1,4 +1,7 @@
 import { tokens } from "../theme";
+import doctor from "../assets/img/dr.png";
+import doctor2 from "../assets/img/doc2.png";
+import user from "../assets/img/user.png";
 
 export const mockDataPatient = [
   {
@@ -200,7 +203,7 @@ export const mockDataInfections = [
 export const mockDataInvoices = [
   {
     id: 1,
-    photo: "assets/img/child.png",
+    avatar: doctor,
     name: "Ssenabulya Johnson",
     hospital: "Mulago Hospital",
     specialty: "Children",
@@ -209,7 +212,7 @@ export const mockDataInvoices = [
   },
   {
     id: 2,
-    photo: "assets/img/child.png",
+    avatar: doctor2,
     name: "Akello Silver",
     hospital: "Seguku Doctors Hospital",
     specialty: "Elderly",
@@ -218,7 +221,7 @@ export const mockDataInvoices = [
   },
   {
     id: 3,
-    photo: "assets/img/child.png",
+    avatar: user,
     name: "Racheal Mwesigye",
     hospital: "Kawaala Health Care Centre 4",
     specialty: "Maternity",

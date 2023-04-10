@@ -1,34 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-    Box,
-    Button,
-    TextField,
-    useMediaQuery
+    Box, Button, TextField, useMediaQuery, Stack, Alert,
+    AlertTitle
 } from '@mui/material';
 import { Formik } from 'formik';
 import * as yup from "yup";
 import Header from '../../includes/Header';
 import { globalVariables } from '../../../utils/GlobalVariables';
-import { postData } from '../../../utils/ApiCalls';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { postDataToken } from '../../../utils/ApiCalls';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
+import useAuth from '../../../auth/useAuth/useAuth';
 
 const AddDistrict = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate();
     const location = useLocation();
+    const { setAuth, setAuthed } = useAuth();
+    const [errorMsg, setErrorMsg] = useState([]);
 
     const from = location.state?.from?.pathname || "/district";
-
-    console.log("From:", from);
     
     const handleFormSubmit = (data) => {
-        console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_DISTRICT_ID;
-        postData(url, data)
+        const endpoint = globalVariables.END_POINT_DISTRICT;
+        postDataToken(endpoint, data)
         .then((data) => {
-            console.log("Response Data:", data);
             if (data.id) {
                 navigate(from, {replace: true});
+            }
+            else if (data.code === "token_not_valid") {
+                setErrorMsg(data.messages[0].message);
+                setAuthed(false);
+                setAuth("");
+                localStorage.clear();
+                <Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+            }
+            else {
+                const error = Object.entries(data).map((e) => {
+                    const field = e[0].charAt(0).toUpperCase() + e[0].slice(1);
+                    const errorMessage = e[1];
+                    const fullErrorMessage = field + ":--- " + errorMessage;
+                    return fullErrorMessage;
+                })
+                setErrorMsg(error);
             }
         })
         .catch((error) => {
@@ -40,6 +53,28 @@ const AddDistrict = () => {
         <Box m="20px">
             <Header title="" subtitle="Create a New District Profile" />
         
+            {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                <>
+                    {typeof errorMsg === 'object' ?
+                        Object.entries(errorMsg).map(([key, value]) => {
+                            return <Stack sx={{ width: '100%' }} key={ key }>
+                                <Alert severity="error"  sx={{ mt: 1}}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{ value }</strong>
+                                </Alert>
+                            </Stack>
+                        })
+                    :
+                        <Stack sx={{ width: '100%' }} spacing={2}>
+                            <Alert severity="error"  sx={{ mt: 1}}>
+                                <AlertTitle>Error</AlertTitle>
+                                <strong>{ errorMsg }</strong>
+                            </Alert>
+                        </Stack>
+                    }
+                </>
+            :''}
+
             <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}

@@ -24,10 +24,8 @@ const SignIn = () => {
 
     const handleFormSubmit = (data) => {
         const url = globalVariables.END_POINT_SIGN_IN;
-        console.log("Data:", data, "URL:", url);
         postData(url, data)
         .then((data) => {
-            console.log("Response Data:", data);
             if (data.tokens) {
                 const refresh_token = data.tokens.refresh;
                 const access_token = data.tokens.access;
@@ -50,24 +48,22 @@ const SignIn = () => {
                 })
                 navigate(from, {replace: true});
             }
+            else if (data.code === "token_not_valid") {
+                setErrorMsg(data.messages[0].message);
+            }
             else if (data.detail) {
                 setErrorMsg(data.detail)
             }
             else {
                 const newData = Object.entries(data).map((d, i) => {
                     const key0 = d[0][0].toUpperCase() + d[0].slice(1) + ': ';
-                    console.log("Key0:", key0);
                     return key0 + d[1]
                 });
                 setErrorMsg(newData);
             }
         })
         .catch((error) => {
-            console.log("Error:", error);
-            if (!error?.response) {
-                setErrorMsg("No Server Response");
-            }
-            else if (error.response?.status === 500) {
+            if (error.response?.status === 500) {
                 setErrorMsg("Internal Server Error");
             }
             else if (error.response?.status === 400) {
@@ -77,7 +73,7 @@ const SignIn = () => {
                 setErrorMsg("Unauthorized access");
             }
             else {
-                setErrorMsg("Login Failed");
+                setErrorMsg("Login Failed: No Server Response");
             }
         });
     };

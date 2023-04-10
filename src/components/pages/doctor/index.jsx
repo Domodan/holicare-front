@@ -1,12 +1,16 @@
 import React from 'react';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button, useTheme, Avatar } from '@mui/material';
 import {Link} from "react-router-dom"
 import { DataGrid } from '@mui/x-data-grid';
 import { tokens } from "../../../theme";
-import { mockDataInvoices } from "../../../data/mockData";
 import Header from '../../includes/Header';
 import { AddOutlined } from '@mui/icons-material';
 import useAuth from '../../../auth/useAuth/useAuth';
+import { useState } from 'react';
+import { useRef } from 'react';
+import { useEffect } from 'react';
+import { globalVariables } from '../../../utils/GlobalVariables';
+import { getData } from '../../../utils/ApiCalls';
 
 const HA = process.env.REACT_APP_ROLE_HA;
 const SA = process.env.REACT_APP_ROLE_SA;
@@ -17,13 +21,35 @@ const Doctor = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const { auth } = useAuth();
+    const [doctors, setDoctors] = useState([])
+    const mounted = useRef();
+
+    useEffect(() => {
+        mounted.current = true;
+
+        const endpoint = globalVariables.END_POINT_CLINICIAN;
+        getData(endpoint)
+        .then((data) => {
+            if (mounted) {
+                setDoctors(data);
+            }
+            return () => mounted.current = false;
+        })
+        .catch((error) => console.log("Error:", error))
+    }, [mounted])
 
     const columns = [
-        { field: "id", headerName: "ID" },
         {
-            field: "photo",
-            headerName: "Photo",
-            flex: 1,
+            field: "avatar",
+            headerName: "Avatar",
+            renderCell: (params) =>
+                <Avatar
+                    src={params.value}
+                    sx={{ width: 40, height: 40 }}
+                    alt={params.row.name}
+                />,
+            // <img src={params.value} alt="Doctor's Avatar" width={60} height={60}/>,
+            flex: 0.5,
         },
         {
             field: "name",
@@ -39,12 +65,17 @@ const Doctor = () => {
         {
             field: "specialty",
             headerName: "Specialty",
-            flex: 1,
+            flex: 0.7,
+        },
+        {
+            field: "role",
+            headerName: "Role",
+            flex: 0.5,
         },
         {
             field: "phone",
             headerName: "Phone Number",
-            flex: 1,
+            flex: 0.8,
         },
         {
             field: "email",
@@ -101,7 +132,7 @@ const Doctor = () => {
                 },
                 }}
             >
-                <DataGrid  rows={mockDataInvoices} columns={columns} />
+                <DataGrid  rows={doctors} columns={columns} />
             </Box>
         </Box>
     )

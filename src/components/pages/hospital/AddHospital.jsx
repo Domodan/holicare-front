@@ -1,34 +1,63 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
-    Box,
-    Button,
-    TextField,
-    useMediaQuery
+    Box, Button, TextField, useMediaQuery, Select,MenuItem,
+    FormControl, InputLabel, Stack, Alert,
+    AlertTitle,
 } from '@mui/material';
 import { Formik } from 'formik';
 import * as yup from "yup";
 import Header from '../../includes/Header';
 import { globalVariables } from '../../../utils/GlobalVariables';
-import { postData } from '../../../utils/ApiCalls';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { getData, postDataToken } from '../../../utils/ApiCalls';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
+import useAuth from '../../../auth/useAuth/useAuth';
 
 const AddHospital = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate();
     const location = useLocation();
+    const { setAuth, setAuthed } = useAuth();
+    const [districts, setDistricts] = useState([]);
+    const [errorMsg, setErrorMsg] = useState([]);
+    const mounted = useRef();
 
     const from = location.state?.from?.pathname || "/hospital";
 
-    console.log("From:", from);
+    useEffect(() => {
+        const endpoint = globalVariables.END_POINT_DISTRICT;
+        getData(endpoint)
+        .then((data) => {
+            if (mounted) {
+                if (data?.length > 0)
+                    setDistricts(data);
+            }
+        })
+        return () => mounted.current = false
+    }, [mounted])
+    
     
     const handleFormSubmit = (data) => {
-        console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_HOSPITAL_ID;
-        postData(url, data)
+        const endpoint = globalVariables.END_POINT_HOSPITAL;
+        postDataToken(endpoint, data)
         .then((data) => {
-            console.log("Response Data:", data);
             if (data.id) {
                 navigate(from, {replace: true});
+            }
+            else if (data.code === "token_not_valid") {
+                setErrorMsg(data.messages[0].message);
+                setAuthed(false);
+                setAuth("");
+                localStorage.clear();
+                <Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+            }
+            else {
+                const error = Object.entries(data).map((e) => {
+                    const field = e[0].charAt(0).toUpperCase() + e[0].slice(1);
+                    const errorMessage = e[1];
+                    const fullErrorMessage = field + ":--- " + errorMessage;
+                    return fullErrorMessage;
+                })
+                setErrorMsg(error);
             }
         })
         .catch((error) => {
@@ -40,6 +69,28 @@ const AddHospital = () => {
         <Box m="20px">
             <Header title="" subtitle="Create a New Hospital Profile" />
         
+            {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                <>
+                    {typeof errorMsg === 'object' ?
+                        Object.entries(errorMsg).map(([key, value]) => {
+                            return <Stack sx={{ width: '100%' }} key={ key }>
+                                <Alert severity="error"  sx={{ mt: 1}}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{ value }</strong>
+                                </Alert>
+                            </Stack>
+                        })
+                    :
+                        <Stack sx={{ width: '100%' }} spacing={2}>
+                            <Alert severity="error"  sx={{ mt: 1}}>
+                                <AlertTitle>Error</AlertTitle>
+                                <strong>{ errorMsg }</strong>
+                            </Alert>
+                        </Stack>
+                    }
+                </>
+            :''}
+
             <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}
@@ -118,34 +169,30 @@ const AddHospital = () => {
                                 helperText={touched.authority && errors.authority}
                                 sx={{ gridColumn: "span 2" }}
                             />
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                type="text"
-                                label="Region"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.region}
-                                name="region"
-                                error={!!touched.region && !!errors.region}
-                                helperText={touched.region && errors.region}
-                                sx={{ gridColumn: "span 2" }}
-                            />
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                type="text"
-                                label="District"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.district}
-                                name="district"
-                                error={!!touched.district && !!errors.district}
-                                helperText={touched.district && errors.district}
-                                sx={{ gridColumn: "span 2" }}
-                            />
+                            <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
+                                <InputLabel id="hospitalLabel">District</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="District"
+                                    id="district"
+                                    labelId="districtLabel"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.district}
+                                    error={!!touched.district && !!errors.district}
+                                    name="district"
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {districts.length > 0 ?
+                                        districts.map((district) => {
+                                            return <MenuItem value={district.id} key={district.id}>
+                                                {district.district_name}
+                                            </MenuItem>
+                                        })
+                                    :null}
+                                </Select>
+                            </FormControl>
+
                             <TextField
                                 fullWidth
                                 variant="outlined"
@@ -206,7 +253,6 @@ const checkoutSchema = yup.object().shape({
     hospital_type: yup.string().required("required"),
     ownership: yup.string().required("required"),
     authority: yup.string().required("required"),
-    region: yup.string().required("required"),
     district: yup.string().required("required"),
     sub_county: yup.string().required("required"),
     longitude: yup.string().required("required"),
@@ -218,7 +264,6 @@ const initialValues = {
     hospital_type: "",
     ownership: "",
     authority: "",
-    region: "",
     district: "",
     sub_county: "",
     longitude: "",

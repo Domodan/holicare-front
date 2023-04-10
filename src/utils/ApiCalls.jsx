@@ -9,7 +9,22 @@ export async function postData(api_endpoint, data) {
     let header = new Headers({
         Accept: globalVariables.ACCEPT,
         "Content-Type": globalVariables.CONTENT_TYPE,
-        "Authorization": `Token ${localStorage.getItem("access_token")}`,
+    });
+    const url = baseURL + api_endpoint;
+    const response = await fetch(url, {
+        method: globalVariables.METHOD_POST,
+        headers: header,
+        body: JSON.stringify(data),
+    });
+    return await response.json();
+}
+
+// Post data with Tokens
+export async function postDataToken(api_endpoint, data) {
+    let header = new Headers({
+        Accept: globalVariables.ACCEPT,
+        "Content-Type": globalVariables.CONTENT_TYPE,
+        "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
     });
     // header.append('Authorization', `Bearer ${localStorage.getItem("token")}`)
     const url = baseURL + api_endpoint;
