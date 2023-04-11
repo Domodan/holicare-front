@@ -29,7 +29,7 @@ export const globalVariables = {
     END_POINT_INFECTION: "infection/",
 
     // Patients API End-points
-    END_POINT_PATIENT: "patients/",
+    END_POINT_PATIENT: "patients/patients/",
 
     // Clinicians [Doctors, Nurses, ] API End-points
     END_POINT_CLINICIAN: "clinician/",

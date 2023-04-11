@@ -6,7 +6,6 @@ import {
 } from '@mui/material';
 import { MuiFileInput } from 'mui-file-input';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { tokens } from '../../../theme';
 import { Formik } from 'formik';
 import * as yup from "yup";
 import Header from '../../includes/Header';
@@ -15,10 +14,9 @@ import useAuth from '../../../auth/useAuth/useAuth';
 import { serialize } from 'object-to-formdata';
 import { globalVariables } from '../../../utils/GlobalVariables';
 import { getData } from '../../../utils/ApiCalls';
+import dayjs from 'dayjs';
 
 const AddPatient = () => {
-    // const theme = useTheme();
-    // const colors = tokens(theme.palette.mode);
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate();
     const { setAuth, setAuthed } = useAuth();
@@ -28,7 +26,14 @@ const AddPatient = () => {
     const [districts, setDistricts] = useState([]);
     const mounted = useRef();
 
-    const from = location.state?.from?.pathname || "/hospital";
+    const [prevDistrict, setPrevDistrict] = useState();
+    const [prevCounty, setPrevCounty] = useState();
+    const [prevSubcounty, setPrevSubcounty] = useState();
+    const [prevParish, setPrevParish] = useState();
+    const [prevVillage, setPrevVillage] = useState();
+    const [prevTimeSpent, setPrevTimeSpent] = useState();
+
+    const from = location.state?.from?.pathname || "/patient";
 
     useEffect(() => {
         const endpoint = globalVariables.END_POINT_DISTRICT;
@@ -58,7 +63,7 @@ const AddPatient = () => {
     
 
     const handleFormSubmit = (data) => {
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_CLINICIAN;
+        const url = globalVariables.BASE_URL + globalVariables.END_POINT_PATIENT;
         data = serialize(data);
         let header = new Headers({
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
@@ -136,16 +141,8 @@ const AddPatient = () => {
                     setFieldValue,
                 }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* <Box
-                            display="grid"
-                            gap="30px"
-                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                            sx={{
-                                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-                            }}
-                        > */}
                         <Typography variant="h5" fontWeight="600" sx={{ marginY: 2 }}>
-                            User Mandatory Data
+                            User Auth Data (Mandatory)
                         </Typography>
                         <Box
                             display="grid"
@@ -163,10 +160,10 @@ const AddPatient = () => {
                                 label="First Name"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.firstName}
-                                name="firstName"
-                                error={!!touched.firstName && !!errors.firstName}
-                                helperText={touched.firstName && errors.firstName}
+                                value={values.first_name}
+                                name="first_name"
+                                error={!!touched.first_name && !!errors.first_name}
+                                helperText={touched.first_name && errors.first_name}
                                 sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
@@ -177,10 +174,10 @@ const AddPatient = () => {
                                 label="Last Name"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.lastName}
-                                name="lastName"
-                                error={!!touched.lastName && !!errors.lastName}
-                                helperText={touched.lastName && errors.lastName}
+                                value={values.last_name}
+                                name="last_name"
+                                error={!!touched.last_name && !!errors.last_name}
+                                helperText={touched.last_name && errors.last_name}
                                 sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
@@ -245,8 +242,8 @@ const AddPatient = () => {
                         >
                             <DatePicker
                                 label="Date of Birth"
-                                value={values.date_of_birth}
-                                onChange={(newValue) => setFieldValue("date_of_birth", newValue)}
+                                value={dayjs(values.date_of_birth)}
+                                onChange={(date) => setFieldValue("date_of_birth", date.format("YYYY-MM-DD")) }
                                 format="LL"
                                 slotProps={{ textField: { size: 'small' } }}
                                 sx={{ gridColumn: "span 2" }}
@@ -287,10 +284,10 @@ const AddPatient = () => {
                                 label="Emergency Contact"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.emergency}
-                                name="emergency"
-                                error={!!touched.emergency && !!errors.emergency}
-                                helperText={touched.emergency && errors.emergency}
+                                value={values.emergency_contact}
+                                name="emergency_contact"
+                                error={!!touched.emergency_contact && !!errors.emergency_contact}
+                                helperText={touched.emergency_contact && errors.emergency_contact}
                                 sx={{ gridColumn: "span 2" }}
                             />
                             <MuiFileInput
@@ -378,21 +375,6 @@ const AddPatient = () => {
                                 </Select>
                             </FormControl>
                         </Box>
-                        {/* <FormControl sx={{ gridColumn: "span 2" }}>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Marital Status</FormLabel>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                        >
-                            <FormControlLabel value="female" control={<Radio />} label="Single" />
-                            <FormControlLabel value="male" control={<Radio />} label="Married" />
-                            <FormControlLabel value="divorced" control={<Radio />} label="Divorced" />
-                            <FormControlLabel value="widowed" control={<Radio />} label="Widowed" />
-                            
-                            
-                        </RadioGroup>
-                        </FormControl> */}
                         <Typography variant="h5" fontWeight="600" sx={{ marginY: 2 }}>
                             Patient Location
                         </Typography>
@@ -450,9 +432,9 @@ const AddPatient = () => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 value={values.sub_county}
-                                name="time_spent"
-                                error={!!touched.time_spent && !!errors.time_spent}
-                                helperText={touched.time_spent && errors.time_spent}
+                                name="sub_county"
+                                error={!!touched.sub_county && !!errors.sub_county}
+                                helperText={touched.sub_county && errors.sub_county}
                                 sx={{ gridColumn: "span 1" }}
                             />
                             <TextField
@@ -460,13 +442,13 @@ const AddPatient = () => {
                                 variant="outlined"
                                 size="small"
                                 type="text"
-                                label="Village"
+                                label="Parish"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.village}
-                                name="village"
-                                error={!!touched.village && !!errors.village}
-                                helperText={touched.village && errors.village}
+                                value={values.parish}
+                                name="parish"
+                                error={!!touched.parish && !!errors.parish}
+                                helperText={touched.parish && errors.parish}
                                 sx={{ gridColumn: "span 1" }}
                             />
                         </Box>
@@ -487,12 +469,9 @@ const AddPatient = () => {
                                 size="small"
                                 type="text"
                                 label="District"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.district}
-                                name="district"
-                                error={!!touched.district && !!errors.district}
-                                helperText={touched.district && errors.district}
+                                onChange={(e) => setPrevDistrict(e.target.value)}
+                                value={prevDistrict}
+                                name="prevDistrict"
                                 sx={{ gridColumn: "span 1" }}
                                 disabled
                             />
@@ -502,12 +481,9 @@ const AddPatient = () => {
                                 size="small"
                                 type="text"
                                 label="County"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.county}
-                                name="county"
-                                error={!!touched.county && !!errors.county}
-                                helperText={touched.county && errors.county}
+                                onChange={(e) => setPrevCounty(e.target.value)}
+                                value={prevCounty}
+                                name="prevCounty"
                                 sx={{ gridColumn: "span 1" }}
                                 disabled
                             />
@@ -517,12 +493,9 @@ const AddPatient = () => {
                                 size="small"
                                 type="text"
                                 label="Sub County"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.sub_county}
-                                name="sub_county"
-                                error={!!touched.sub_county && !!errors.sub_county}
-                                helperText={touched.sub_county && errors.sub_county}
+                                onChange={(e) => setPrevSubcounty(e.target.value)}
+                                value={prevSubcounty}
+                                name="prevSubcounty"
                                 sx={{ gridColumn: "span 1" }}
                                 disabled
                             />
@@ -532,12 +505,9 @@ const AddPatient = () => {
                                 size="small"
                                 type="text"
                                 label="Parish"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.parish}
-                                name="parish"
-                                error={!!touched.parish && !!errors.parish}
-                                helperText={touched.parish && errors.parish}
+                                onChange={(e) => setPrevParish(e.target.value)}
+                                value={prevParish}
+                                name="prevParish"
                                 sx={{ gridColumn: "span 1" }}
                                 disabled
                             />
@@ -547,12 +517,9 @@ const AddPatient = () => {
                                 size="small"
                                 type="text"
                                 label="Time Spent"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.time_spent}
-                                name="sub_county"
-                                error={!!touched.sub_county && !!errors.sub_county}
-                                helperText={touched.sub_county && errors.sub_county}
+                                onChange={(e) => setPrevTimeSpent(e.target.value)}
+                                value={prevTimeSpent}
+                                name="prevTimeSpent"
                                 sx={{ gridColumn: "span 1" }}
                                 disabled
                             />
@@ -561,13 +528,10 @@ const AddPatient = () => {
                                 variant="outlined"
                                 size="small"
                                 type="text"
-                                label="Parish"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.parish}
-                                name="parish"
-                                error={!!touched.parish && !!errors.parish}
-                                helperText={touched.parish && errors.parish}
+                                label="Village"
+                                onChange={(e) => setPrevVillage(e.target.value)}
+                                value={prevVillage}
+                                name="preVillage"
                                 sx={{ gridColumn: "span 1" }}
                                 disabled
                             />
@@ -600,6 +564,9 @@ const checkoutSchema = yup.object().shape({
         .required("Emergency Contact is required"),
     hospital: yup.string().required("Hospital field is required"),
     district: yup.string().required("District field is required"),
+    county: yup.string().required("County field is required"),
+    sub_county: yup.string().required("Sub County field is required"),
+    parish: yup.string().required("Parish field is required"),
     image: yup.mixed()
         .required('Please select an image')
         .test('fileSize', 'The image size is too large, Max. 2MB', (value) => {
@@ -623,12 +590,15 @@ const initialValues = {
     phone: "",
     hospital: "",
     district: "",
+    county: "",
+    sub_county: "",
+    parish: "",
     image: "",
     age: 0,
     gender: "",
     emergency_contact: "",
     occupation: "",
-    date_of_birth: "",
+    date_of_birth: new Date().toLocaleDateString()
 };
 
 export default AddPatient
