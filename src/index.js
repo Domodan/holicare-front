@@ -3,6 +3,8 @@ import ReactDom from "react-dom/client";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from './auth/context/AuthProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import "./index.css";
 
@@ -14,9 +16,11 @@ root.render(
     <React.StrictMode>
         <Router>
             <AuthProvider>
-                <Routes >
-                    <Route path="/*" element={<App />} />
-                </Routes>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Routes >
+                        <Route path="/*" element={<App />} />
+                    </Routes>
+                </LocalizationProvider>
             </AuthProvider>
         </Router>
     </React.StrictMode>
