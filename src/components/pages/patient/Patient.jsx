@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AddOutlined } from '@mui/icons-material';
 import {
     Box,
     Button,
-    useTheme
+    useTheme,
+    Avatar
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
-import { mockDataPatient as data } from '../../../data/mockData';
 import { tokens } from '../../../theme';
 import Header from '../../includes/Header';
 import useAuth from '../../../auth/useAuth/useAuth';
+import { getData } from '../../../utils/ApiCalls';
+import { globalVariables } from '../../../utils/GlobalVariables';
 
 const D = process.env.REACT_APP_ROLE_D;
 const N = process.env.REACT_APP_ROLE_N;
@@ -23,9 +25,34 @@ const Patient = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const { auth } = useAuth();
+    const [patients, setPatients] = useState([]);
+    const mounted = useRef();
+
+    useEffect(() => {
+        mounted.current = true;
+        const endpoint = globalVariables.END_POINT_PATIENT;
+        getData(endpoint)
+        .then((data) => {
+            if (mounted && data?.length > 0) {
+                setPatients(data);
+            }
+            return () => mounted.current = false;
+        })
+        .catch((error) => console.log("Error:", error))
+    }, [mounted])
     
-    const patients = [
-        { field: "id", headerName: "ID" },
+    const column = [
+        {
+            field: "avatar",
+            headerName: "Avatar",
+            renderCell: (params) =>
+                <Avatar
+                    src={params.value}
+                    sx={{ width: 40, height: 40 }}
+                    alt={params.row.name}
+                />,
+            flex: 0.5,
+        },
         {
             field: "name",
             headerName: "Name",
@@ -33,25 +60,31 @@ const Patient = () => {
             cellClassName: "name-column--cell",
         },
         {
+            field: "occupation",
+            headerName: "Occupation",
+            flex: 0.7,
+        },
+        {
             field: "age",
             headerName: "Age",
             type: "number",
             headerAlign: "left",
             align: "left",
+            flex: 0.4
         },
         {
-            field: "type",
-            headerName: "Type",
-            flex: 1,
+            field: "phone",
+            headerName: "Phone Number",
+            flex: 0.8,
         },
         {
             field: "location",
             headerName: "Location",
-            flex: 1,
+            flex: 0.8,
         },
         {
-            field: "date",
-            headerName: "Date",
+            field: "hospital",
+            headerName: "Hospital",
             flex: 1,
         },
     ];
@@ -107,7 +140,7 @@ const Patient = () => {
                 },
                 }}
             >
-                <DataGrid rows={data} columns={patients} />
+                <DataGrid rows={patients} columns={column} />
             </Box>
         </Box>
     )

@@ -14,16 +14,17 @@ import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import useAuth from '../../../auth/useAuth/useAuth';
 import { serialize } from 'object-to-formdata';
 
-const AddDoctor = () => {
+const AddAdmin = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate();
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
     const [errorMsg, setErrorMsg] = useState([]);
     const [hospitals, setHospitals] = useState([]);
+    const [admin, setAdmin] = useState(false);
     const mounted = useRef();
 
-    const from = location.state?.from?.pathname || "/doctor";
+    const from = location.state?.from?.pathname || "/admin";
 
     useEffect(() => {
         mounted.current = true;
@@ -41,7 +42,12 @@ const AddDoctor = () => {
     
 
     const handleFormSubmit = (data) => {
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_CLINICIAN;
+        let endpoint = "";
+        if (admin) 
+            endpoint = globalVariables.END_POINT_HOSPITAL_ADMIN;
+        else
+            endpoint = globalVariables.END_POINT_ADMIN;
+        const url = globalVariables.BASE_URL + endpoint;
         data = serialize(data);
         let header = new Headers({
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
@@ -80,7 +86,7 @@ const AddDoctor = () => {
 
     return (
         <Box m="20px">
-            <Header title="" subtitle="Create a New Doctor's Profile" />
+            <Header title="" subtitle="Create a New Admin's Profile" />
         
             {errorMsg.length > 0 || Object.keys(errorMsg).length ?
                 <>
@@ -191,20 +197,6 @@ const AddDoctor = () => {
                             <TextField
                                 fullWidth
                                 variant="outlined"
-                                size="small"
-                                type="text"
-                                label="Specialty"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.specialty}
-                                name="specialty"
-                                error={!!touched.specialty && !!errors.specialty}
-                                helperText={touched.specialty && errors.specialty}
-                                sx={{ gridColumn: "span 2" }}
-                            />
-                            <TextField
-                                fullWidth
-                                variant="outlined"
                                 type="text"
                                 id="password"
                                 label="Password"
@@ -275,24 +267,26 @@ const AddDoctor = () => {
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            checked={values.is_doctor}
-                                            onChange={(e) => setFieldValue('is_doctor', e.target.checked)
-                                            }
+                                            checked={values.is_admin}
+                                            onChange={(e) => {
+                                                setFieldValue('is_admin', e.target.checked);
+                                                setAdmin(e.target.checked);
+                                            }}
                                             inputProps={{
                                                 'aria-label': 'controlled'
                                             }}
                                         />
                                     }
-                                    label="Is Doctor?"
+                                    label="Is Hospital Admin?"
                                 />
                                 <FormHelperText sx={{ fontWeight: "bold" }}>
-                                    Check this box if adding a Doctor, leave it unchecked for a Nurse
+                                    Check this box if adding a Hospital Admin, leave it unchecked for a General Admin
                                 </FormHelperText>
                             </FormControl>
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">
                             <Button type="submit" color="secondary" variant="contained">
-                                Add New Doctor
+                                Add New Admin
                             </Button>
                         </Box>
                     </form>
@@ -310,7 +304,6 @@ const checkoutSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
     phone: yup.string().required("Phone Number is required"),
     hospital: yup.string().required("Hospital field is required"),
-    specialty: yup.string().required("Field is required"),
     image: yup.mixed()
     .required('Please select an image')
     .test('fileSize', 'The image size is too large, Max. 2MB', (value) => {
@@ -319,7 +312,6 @@ const checkoutSchema = yup.object().shape({
     .test('fileType', 'Only JPEG, PNG, GIF, and BMP images are allowed', (value) => {
         return value && ['image/jpeg', 'image/png', 'image/gif', 'image/bmp'].includes(value.type);
     }),
-    // is_doctor: yup.boolean.oneOf([true], "You must select this field")
 });
 
 const initialValues = {
@@ -330,9 +322,8 @@ const initialValues = {
     password: "",
     phone: "",
     hospital: "",
-    specialty: "",
     image: "",
-    is_doctor: false,
+    is_admin: false,
 };
 
-export default AddDoctor
+export default AddAdmin

@@ -1,38 +1,131 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-    Box,
-    Button,
-    TextField,
-    useMediaQuery,
-    Typography,
-    useTheme
+    Box, Button, TextField, useMediaQuery, Typography,
+    Radio, RadioGroup, FormControl, FormControlLabel, FormLabel,
+    Stack, Select, InputLabel, MenuItem, Alert, AlertTitle
 } from '@mui/material';
-import { tokens } from '../../../theme';
-import {Grid} from '@mui/material'
+import { MuiFileInput } from 'mui-file-input';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Formik } from 'formik';
 import * as yup from "yup";
 import Header from '../../includes/Header';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { Link } from 'react-router-dom';
-import Stack from '@mui/material/Stack';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
+import useAuth from '../../../auth/useAuth/useAuth';
+import { serialize } from 'object-to-formdata';
+import { globalVariables } from '../../../utils/GlobalVariables';
+import { getData } from '../../../utils/ApiCalls';
+import dayjs from 'dayjs';
 
 const AddPatient = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
     const isNonMobile = useMediaQuery("(min-width:600px)");
-    const handleFormSubmit = (values) => {
-      console.log("Form Data:", values);
-    };
+    const navigate = useNavigate();
+    const { setAuth, setAuthed } = useAuth();
+    const location = useLocation();
+    const [errorMsg, setErrorMsg] = useState([]);
+    const [hospitals, setHospitals] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const mounted = useRef();
+
+    const [prevDistrict, setPrevDistrict] = useState();
+    const [prevCounty, setPrevCounty] = useState();
+    const [prevSubcounty, setPrevSubcounty] = useState();
+    const [prevParish, setPrevParish] = useState();
+    const [prevVillage, setPrevVillage] = useState();
+    const [prevTimeSpent, setPrevTimeSpent] = useState();
+
+    const from = location.state?.from?.pathname || "/patient";
+
+    useEffect(() => {
+        const endpoint = globalVariables.END_POINT_DISTRICT;
+        getData(endpoint)
+        .then((data) => {
+            if (mounted) {
+                if (data?.length > 0)
+                    setDistricts(data);
+            }
+        })
+        return () => mounted.current = false
+    }, [mounted])
+
+    useEffect(() => {
+        mounted.current = true;
+        const endpoint = globalVariables.END_POINT_HOSPITAL;
+        getData(endpoint)
+        .then((data) => {
+            if (data?.length > 0) {
+                setHospitals(data);
+            }
+        })
+        .catch((error) => console.log("Error:", error));
+
+        return () => mounted.current = false;
+    }, [mounted])
     
+
+    const handleFormSubmit = (data) => {
+        const url = globalVariables.BASE_URL + globalVariables.END_POINT_PATIENT;
+        data = serialize(data);
+        let header = new Headers({
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+        });
+        fetch(url, {
+            method: globalVariables.METHOD_POST,
+            headers: header,
+            body: data,
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.id) {
+                navigate(from, {replace: true});
+            }
+            else if (data.code === "token_not_valid") {
+                setErrorMsg(data.messages[0].message);
+                setAuthed(false);
+                setAuth("");
+                localStorage.clear();
+                <Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+            }
+            else {
+                const error = Object.entries(data).map((e) => {
+                    const field = e[0].charAt(0).toUpperCase() + e[0].slice(1);
+                    const errorMessage = e[1];
+                    const fullErrorMessage = field + ":--- " + errorMessage;
+                    return fullErrorMessage;
+                })
+                setErrorMsg(error);
+            }
+        })
+        .catch((error) => {
+            console.log("Error:", error);
+        });
+    };
 
     return (
         <Box m="20px">
             <Header title="" subtitle="Create a New Patient Profile" />
         
+            {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                <>
+                    {typeof errorMsg === 'object' ?
+                        Object.entries(errorMsg).map(([key, value]) => {
+                            return <Stack sx={{ width: '100%' }} key={ key }>
+                                <Alert severity="error"  sx={{ mt: 1}}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{ value }</strong>
+                                </Alert>
+                            </Stack>
+                        })
+                    :
+                        <Stack sx={{ width: '100%' }} spacing={2}>
+                            <Alert severity="error"  sx={{ mt: 1}}>
+                                <AlertTitle>Error</AlertTitle>
+                                <strong>{ errorMsg }</strong>
+                            </Alert>
+                        </Stack>
+                    }
+                </>
+            :''}
+
             <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}
@@ -45,8 +138,12 @@ const AddPatient = () => {
                     handleBlur,
                     handleChange,
                     handleSubmit,
+                    setFieldValue,
                 }) => (
                     <form onSubmit={handleSubmit}>
+                        <Typography variant="h5" fontWeight="600" sx={{ marginY: 2 }}>
+                            User Auth Data (Mandatory)
+                        </Typography>
                         <Box
                             display="grid"
                             gap="30px"
@@ -55,347 +152,395 @@ const AddPatient = () => {
                                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
                             }}
                         >
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="First Name"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.firstName}
-                            name="firstName"
-                            error={!!touched.firstName && !!errors.firstName}
-                            helperText={touched.firstName && errors.firstName}
-                            sx={{ gridColumn: "span 2" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Last Name"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.lastName}
-                            name="lastName"
-                            error={!!touched.lastName && !!errors.lastName}
-                            helperText={touched.lastName && errors.lastName}
-                            sx={{ gridColumn: "span 2" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Birth Date"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.birth}
-                            name="birth"
-                            error={!!touched.birth && !!errors.birth}
-                            helperText={touched.birth && errors.birth}
-                            sx={{ gridColumn: "span 2" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Occupation"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.occupation}
-                            name="occupation"
-                            error={!!touched.occupation && !!errors.occupation}
-                            helperText={touched.occupation && errors.occupation}
-                            sx={{ gridColumn: "span 2" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Phone Number"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.phone}
-                            name="phone"
-                            error={!!touched.phone && !!errors.phone}
-                            helperText={touched.phone && errors.phone}
-                            sx={{ gridColumn: "span 2" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Emergency Contact"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.emergency}
-                            name="emergency"
-                            error={!!touched.emergency && !!errors.emergency}
-                            helperText={touched.emergency && errors.emergency}
-                            sx={{ gridColumn: "span 2" }}
-                        />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="First Name"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.first_name}
+                                name="first_name"
+                                error={!!touched.first_name && !!errors.first_name}
+                                helperText={touched.first_name && errors.first_name}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Last Name"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.last_name}
+                                name="last_name"
+                                error={!!touched.last_name && !!errors.last_name}
+                                helperText={touched.last_name && errors.last_name}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                type="text"
+                                id="username"
+                                label="Username"
+                                placeholder="Jane Doe"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.username}
+                                error={!!touched.username && !!errors.username}
+                                helperText={touched.username && errors.username}
+                                name="username"
+                                size="small"
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                type="text"
+                                id="email"
+                                label="Email Address"
+                                placeholder="someone@example.com"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.email}
+                                error={!!touched.email && !!errors.email}
+                                helperText={touched.email && errors.email}
+                                name="email"
+                                size="small"
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                type="text"
+                                id="password"
+                                label="Password"
+                                placeholder="********"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.password}
+                                error={!!touched.password && !!errors.password}
+                                helperText={touched.password && errors.password}
+                                name="password"
+                                size="small"
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                        </Box>
+                        <Typography variant="h5" fontWeight="600" sx={{ marginY: 2 }}>
+                            Other Mandatory Data
+                        </Typography>
+                        <Box
+                            display="grid"
+                            gap="30px"
+                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                            sx={{
+                                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                            }}
+                        >
+                            <DatePicker
+                                label="Date of Birth"
+                                value={dayjs(values.date_of_birth)}
+                                onChange={(date) => setFieldValue("date_of_birth", date.format("YYYY-MM-DD")) }
+                                format="LL"
+                                slotProps={{ textField: { size: 'small' } }}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Phone Number"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.phone}
+                                name="phone"
+                                error={!!touched.phone && !!errors.phone}
+                                helperText={touched.phone && errors.phone}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Occupation"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.occupation}
+                                name="occupation"
+                                error={!!touched.occupation && !!errors.occupation}
+                                helperText={touched.occupation && errors.occupation}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Emergency Contact"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.emergency_contact}
+                                name="emergency_contact"
+                                error={!!touched.emergency_contact && !!errors.emergency_contact}
+                                helperText={touched.emergency_contact && errors.emergency_contact}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <MuiFileInput
+                                fullWidth
+                                size="small"
+                                label="Select an Image"
+                                onBlur={handleBlur}
+                                onChange={(event) => setFieldValue('image', event)}
+                                value={values.image}
+                                name="image"
+                                error={!!touched.image && !!errors.image}
+                                helperText={touched.image && errors.image}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Age"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.age}
+                                name="age"
+                                error={!!touched.age && !!errors.age}
+                                helperText={touched.age && errors.age}
+                                sx={{ gridColumn: "span 2" }}
+                            />
                             <FormControl sx={{ gridColumn: "span 2" }}>
-                                <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+                                <FormLabel id="gender">Gender</FormLabel>
                                 <RadioGroup
                                     row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
+                                    aria-labelledby="gender"
+                                    name="gender"
                                 >
-                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                   
-                                    
+                                    <FormControlLabel
+                                        value="female"
+                                        control={<Radio />}
+                                        label="Female"
+                                        checked={values.gender === "female"}
+                                        onChange={() => setFieldValue("gender", "female")}
+                                    />
+                                    <FormControlLabel
+                                        value="male"
+                                        control={<Radio />}
+                                        label="Male"
+                                        checked={values.gender === "male"}
+                                        onChange={() => setFieldValue("gender", "male")}
+                                    />
                                 </RadioGroup>
-                                </FormControl>
-                                <FormControl sx={{ gridColumn: "span 2" }}>
-                                <FormLabel id="demo-row-radio-buttons-group-label">Marital Status</FormLabel>
-                                <RadioGroup
-                                    row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
+                            </FormControl>
+                        </Box>
+                        <Typography variant="h5" fontWeight="600" sx={{ marginY: 2 }}>
+                            Hospital Attached
+                        </Typography>
+                        <Box
+                            display="grid"
+                            gap="30px"
+                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                            sx={{
+                                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                            }}
+                        >
+                            <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
+                                <InputLabel id="hospitalLabel">Hospital</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="Hospital"
+                                    id="hospital"
+                                    labelId="hospitalLabel"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.hospital}
+                                    error={!!touched.hospital && !!errors.hospital}
+                                    name="hospital"
                                 >
-                                    <FormControlLabel value="female" control={<Radio />} label="Single" />
-                                    <FormControlLabel value="male" control={<Radio />} label="Married" />
-                                    <FormControlLabel value="divorced" control={<Radio />} label="Divorced" />
-                                    <FormControlLabel value="widowed" control={<Radio />} label="Widowed" />
-                                   
-                                    
-                                </RadioGroup>
-                                </FormControl>
-                                <Typography variant="h5" fontWeight="600" sx={{ gridColumn: "span 2" }}>
-                                    Patient Location
-                                </Typography>
-                                <Typography variant="h5" fontWeight="600" sx={{ gridColumn: "span 2" }}>
-                                    Patient Location History
-                                </Typography>
-                                
-                                <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="District"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.district}
-                            name="district"
-                            error={!!touched.district && !!errors.district}
-                            helperText={touched.district && errors.district}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                         <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="County"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.county}
-                            name="county"
-                            error={!!touched.county && !!errors.county}
-                            helperText={touched.county && errors.county}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                        
-                                <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="District"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.district}
-                            name="district"
-                            error={!!touched.district && !!errors.district}
-                            helperText={touched.district && errors.district}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                         <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="County"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.county}
-                            name="county"
-                            error={!!touched.county && !!errors.county}
-                            helperText={touched.county && errors.county}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Parish"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.parish}
-                            name="parish"
-                            error={!!touched.parish && !!errors.parish}
-                            helperText={touched.parish && errors.parish}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                         <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Sub County"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.subcounty}
-                            name="subcounty"
-                            error={!!touched.subcounty && !!errors.subcounty}
-                            helperText={touched.subcounty && errors.subcounty}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Parish"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.parish}
-                            name="parish"
-                            error={!!touched.parish && !!errors.parish}
-                            helperText={touched.parish && errors.parish}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                         <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Sub County"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.subcounty}
-                            name="subcounty"
-                            error={!!touched.subcounty && !!errors.subcounty}
-                            helperText={touched.subcounty && errors.subcounty}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-
-                        <Typography variant="h5" fontWeight="400" sx={{ gridColumn: "span 2" }}>
-                                   Coordinates
-                                </Typography>
-                                <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Time spent"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.time}
-                            name="time"
-                            error={!!touched.time && !!errors.time}
-                            helperText={touched.time && errors.time}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Village"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.village}
-                            name="village"
-                            error={!!touched.village && !!errors.village}
-                            helperText={touched.village && errors.village}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                        
-                             <Grid container spacing={3}>
-                                
-                                <Grid item xs={6}>
-                                  
-                                    <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="LAT"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.latitude}
-                            name="latitude"
-                            error={!!touched.latitude && !!errors.latitude}
-                            helperText={touched.latitude && errors.latitude}
-                            sx={{ gridColumn: "span 0.5" }}
-                        />
-                                </Grid>
-                                <Grid item xs={6}>
-                                  
-                                    <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="LNG"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.longitude}
-                            name="longitude"
-                            error={!!touched.longitude && !!errors.longitude}
-                            helperText={touched.longitude && errors.longitude}
-                            sx={{ gridColumn: "span 0.5" }}
-                        />
-                                </Grid>
-                            </Grid>     
-
-
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Village"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.village}
-                            name="village"
-                            error={!!touched.village && !!errors.village}
-                            helperText={touched.village && errors.village}
-                            sx={{ gridColumn: "span 1" }}
-                        />
-                        
-                        
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {hospitals.length > 0 ?
+                                        hospitals.map((hospital) => {
+                                            return <MenuItem value={hospital.id} key={hospital.id}>
+                                                {hospital.hospital_name}
+                                            </MenuItem>
+                                        })
+                                    :null}
+                                </Select>
+                            </FormControl>
                         </Box>
-                        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{padding: 10}}>
-                            <Box>
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                            <Button variant="contained" component="label" sx={{backgroundColor: colors.grey[100], color: colors.grey[700],}}>
-                                Save changes                               
-                            </Button>
-                            <Link to={'/add-patient2'}>
-                            <Button variant="outlined" component="label" sx={{backgroundColor: colors.grey[700], color: colors.grey[100], }}>
-                                Next
-                            </Button>
-                            </Link>
-                            
-                            
-                            </Stack>
-                            </Box>
-                        
+                        <Typography variant="h5" fontWeight="600" sx={{ marginY: 2 }}>
+                            Patient Location
+                        </Typography>
+                        <Box
+                            display="grid"
+                            gap="30px"
+                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                            sx={{
+                                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                            }}
+                        >
+                            <FormControl sx={{gridColumn: "span 1", minWidth: 150}} size="small">
+                                <InputLabel id="districtLabel">District</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="District"
+                                    id="district"
+                                    labelId="districtLabel"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.district}
+                                    error={!!touched.district && !!errors.district}
+                                    name="district"
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {districts.length > 0 ?
+                                        districts.map((district) => {
+                                            return <MenuItem value={district.id} key={district.id}>
+                                                {district.district_name}
+                                            </MenuItem>
+                                        })
+                                    :null}
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="County"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.county}
+                                name="county"
+                                error={!!touched.county && !!errors.county}
+                                helperText={touched.county && errors.county}
+                                sx={{ gridColumn: "span 1" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Sub County"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.sub_county}
+                                name="sub_county"
+                                error={!!touched.sub_county && !!errors.sub_county}
+                                helperText={touched.sub_county && errors.sub_county}
+                                sx={{ gridColumn: "span 1" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Parish"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.parish}
+                                name="parish"
+                                error={!!touched.parish && !!errors.parish}
+                                helperText={touched.parish && errors.parish}
+                                sx={{ gridColumn: "span 1" }}
+                            />
                         </Box>
-                        
-
-                            
+                        <Typography variant="h5" fontWeight="600" sx={{ marginY: 2 }}>
+                            Patient Location History
+                        </Typography>
+                        <Box
+                            display="grid"
+                            gap="30px"
+                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                            sx={{
+                                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="District"
+                                onChange={(e) => setPrevDistrict(e.target.value)}
+                                value={prevDistrict}
+                                name="prevDistrict"
+                                sx={{ gridColumn: "span 1" }}
+                                disabled
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="County"
+                                onChange={(e) => setPrevCounty(e.target.value)}
+                                value={prevCounty}
+                                name="prevCounty"
+                                sx={{ gridColumn: "span 1" }}
+                                disabled
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Sub County"
+                                onChange={(e) => setPrevSubcounty(e.target.value)}
+                                value={prevSubcounty}
+                                name="prevSubcounty"
+                                sx={{ gridColumn: "span 1" }}
+                                disabled
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Parish"
+                                onChange={(e) => setPrevParish(e.target.value)}
+                                value={prevParish}
+                                name="prevParish"
+                                sx={{ gridColumn: "span 1" }}
+                                disabled
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Time Spent"
+                                onChange={(e) => setPrevTimeSpent(e.target.value)}
+                                value={prevTimeSpent}
+                                name="prevTimeSpent"
+                                sx={{ gridColumn: "span 1" }}
+                                disabled
+                            />
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                type="text"
+                                label="Village"
+                                onChange={(e) => setPrevVillage(e.target.value)}
+                                value={prevVillage}
+                                name="preVillage"
+                                sx={{ gridColumn: "span 1" }}
+                                disabled
+                            />
+                        </Box>
+                        <Box display="flex" justifyContent="center" alignItems="center" sx={{padding: 5}}>
+                            <Button type="submit" color="secondary" variant="contained">
+                                Add New Patient
+                            </Button>
+                        </Box> 
                     </form>
                 )}
             </Formik>
@@ -406,24 +551,54 @@ const AddPatient = () => {
 const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
 const checkoutSchema = yup.object().shape({
-    firstName: yup.string().required("required"),
-    lastName: yup.string().required("required"),
-    email: yup.string().email("invalid email").required("required"),
-    contact: yup
-        .string()
+    first_name: yup.string().required("First Name is required"),
+    last_name: yup.string().required("Last Name is required"),
+    username: yup.string().required("Username is required"),
+    email: yup.string().required("Email is required"),
+    password: yup.string().required("Password is required"),
+    phone: yup.string()
         .matches(phoneRegExp, "Phone number is not valid")
-        .required("required"),
-    address1: yup.string().required("required"),
-    address2: yup.string().required("required"),
+        .required("Phone Number is required"),
+    emergency_contact: yup.string()
+        .matches(phoneRegExp, "Emergency Contact is not valid")
+        .required("Emergency Contact is required"),
+    hospital: yup.string().required("Hospital field is required"),
+    district: yup.string().required("District field is required"),
+    county: yup.string().required("County field is required"),
+    sub_county: yup.string().required("Sub County field is required"),
+    parish: yup.string().required("Parish field is required"),
+    image: yup.mixed()
+        .required('Please select an image')
+        .test('fileSize', 'The image size is too large, Max. 2MB', (value) => {
+            return value && value.size <= 2 * 1024 * 1024; // 2MB
+        })
+        .test('fileType', 'Only JPEG, PNG, GIF, and BMP images are allowed', (value) => {
+            return value && ['image/jpeg', 'image/png', 'image/gif', 'image/bmp'].includes(value.type);
+        }),
+    age: yup.string().required("Age field is required"),
+    gender: yup.string().required("Gender field is required"),
+    date_of_birth: yup.string().required("Birthday is required"),
+    occupation: yup.string().required("District field is required"),
 });
 
 const initialValues = {
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
+    username: "",
     email: "",
-    contact: "",
-    address1: "",
-    address2: "",
+    password: "",
+    phone: "",
+    hospital: "",
+    district: "",
+    county: "",
+    sub_county: "",
+    parish: "",
+    image: "",
+    age: 0,
+    gender: "",
+    emergency_contact: "",
+    occupation: "",
+    date_of_birth: new Date().toLocaleDateString()
 };
 
 export default AddPatient
