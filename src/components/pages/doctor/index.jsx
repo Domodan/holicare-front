@@ -1,16 +1,16 @@
-import React from 'react';
-import { Box, Button, useTheme, Avatar } from '@mui/material';
-import {Link} from "react-router-dom"
+import React, { useState, useRef, useEffect } from 'react';
+import {
+    Box, Button, useTheme, Avatar, Stack, Alert,
+    AlertTitle
+} from '@mui/material';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { tokens } from "../../../theme";
 import Header from '../../includes/Header';
 import { AddOutlined } from '@mui/icons-material';
 import useAuth from '../../../auth/useAuth/useAuth';
-import { useState } from 'react';
-import { useRef } from 'react';
-import { useEffect } from 'react';
 import { globalVariables } from '../../../utils/GlobalVariables';
-import { getData } from '../../../utils/ApiCalls';
+import { getDataTokens } from '../../../utils/ApiCalls';
 
 const HA = process.env.REACT_APP_ROLE_HA;
 const SA = process.env.REACT_APP_ROLE_SA;
@@ -20,23 +20,36 @@ const role = [ HA, SA, ];
 const Doctor = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const { auth } = useAuth();
-    const [doctors, setDoctors] = useState([])
+    const [doctors, setDoctors] = useState([]);
+    const [errorMsg, setErrorMsg] = useState([]);
     const mounted = useRef();
+    const { auth, setAuth, setAuthed } = useAuth();
+    const location = useLocation();
 
     useEffect(() => {
         mounted.current = true;
-
         const endpoint = globalVariables.END_POINT_CLINICIAN;
-        getData(endpoint)
+        getDataTokens(endpoint)
         .then((data) => {
             if (mounted) {
-                setDoctors(data);
+                if (data?.length > 0) {
+                    setDoctors(data);
+                }
+                else if (data.code === "token_not_valid") {
+                    setErrorMsg(data.messages[0].message);
+                    setAuthed(false);
+                    setAuth("");
+                    localStorage.clear();
+                    <Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+                }
+                else {
+                    setErrorMsg(data)
+                }
             }
             return () => mounted.current = false;
         })
         .catch((error) => console.log("Error:", error))
-    }, [mounted])
+    }, [mounted, location, setAuth, setAuthed])
 
     const columns = [
         {
@@ -132,7 +145,29 @@ const Doctor = () => {
                 },
                 }}
             >
-                <DataGrid  rows={doctors} columns={columns} />
+                {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                    <>
+                        {typeof errorMsg === 'object' ?
+                            Object.entries(errorMsg).map(([key, value]) => {
+                                return <Stack sx={{ width: '100%' }} key={ key }>
+                                    <Alert severity="error"  sx={{ mt: 1}}>
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>{ value }</strong>
+                                    </Alert>
+                                </Stack>
+                            })
+                        :
+                            <Stack sx={{ width: '100%' }} spacing={2}>
+                                <Alert severity="error"  sx={{ mt: 1}}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{ errorMsg }</strong>
+                                </Alert>
+                            </Stack>
+                        }
+                    </>
+                :
+                    <DataGrid  rows={doctors} columns={columns} />
+                }
             </Box>
         </Box>
     )
