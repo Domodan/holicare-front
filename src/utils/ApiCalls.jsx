@@ -26,7 +26,6 @@ export async function postDataToken(api_endpoint, data) {
         "Content-Type": globalVariables.CONTENT_TYPE,
         "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
     });
-    // header.append('Authorization', `Bearer ${localStorage.getItem("token")}`)
     const url = baseURL + api_endpoint;
     const response = await fetch(url, {
         method: globalVariables.METHOD_POST,
@@ -41,5 +40,16 @@ export async function postDataToken(api_endpoint, data) {
 export async function getData(api_endpoint) {
     const url = baseURL + api_endpoint;
     const response = await fetch(url);
+    return await response.json();
+}
+
+// Get data with Access Tokens
+export async function getDataTokens(api_endpoint) {
+    const url = baseURL + api_endpoint;
+    const response = await fetch(url, {
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+        }
+    });
     return await response.json();
 }

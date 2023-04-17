@@ -3,14 +3,17 @@ import {
     AdminPanelSettingsOutlined,
     SecurityOutlined
 } from '@mui/icons-material';
-import { Box, Button, Typography, useTheme, Avatar } from '@mui/material';
+import {
+    Box, Button, Typography, useTheme, Avatar, Stack, Alert,
+    AlertTitle
+} from '@mui/material';
 import { AddOutlined } from '@mui/icons-material';
 import { tokens } from "../../../theme";
 import { DataGrid } from '@mui/x-data-grid';
 import Header from '../../includes/Header';
-import { getData } from '../../../utils/ApiCalls';
+import { getDataTokens } from '../../../utils/ApiCalls';
 import { globalVariables } from '../../../utils/GlobalVariables';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import useAuth from '../../../auth/useAuth/useAuth';
 
 const SA = process.env.REACT_APP_ROLE_SA;
@@ -20,22 +23,36 @@ const role = [ SA, ];
 const Team = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const [admins, setAdmins] = useState([])
+    const [admins, setAdmins] = useState([]);
+    const [errorMsg, setErrorMsg] = useState([]);
     const mounted = useRef();
-    const { auth } = useAuth();
+    const { auth, setAuth, setAuthed } = useAuth();
+    const location = useLocation();
 
     useEffect(() => {
         mounted.current = true;
         const endpoint = globalVariables.END_POINT_ADMIN;
-        getData(endpoint)
+        getDataTokens(endpoint)
         .then((data) => {
             if (mounted) {
-                setAdmins(data);
+                if (data?.length > 0) {
+                    setAdmins(data);
+                }
+                else if (data.code === "token_not_valid") {
+                    setErrorMsg(data.messages[0].message);
+                    setAuthed(false);
+                    setAuth("");
+                    localStorage.clear();
+                    <Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+                }
+                else {
+                    setErrorMsg(data)
+                }
             }
             return () => mounted.current = false;
         })
         .catch((error) => console.log("Error:", error))
-    }, [mounted])
+    }, [mounted, location, setAuth, setAuthed])
 
     const columns = [
         {
@@ -104,7 +121,6 @@ const Team = () => {
 
     return (
         <Box m="20px">
-            
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="ADMIN" subtitle="Managing Administrators" />
                 {role.includes(auth.role) ?
@@ -118,6 +134,7 @@ const Team = () => {
                     </Box>
                 :null}
             </Box>
+            
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -148,7 +165,29 @@ const Team = () => {
                 },
                 }}
             >
-                <DataGrid rows={admins} columns={columns} />
+                {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                    <>
+                        {typeof errorMsg === 'object' ?
+                            Object.entries(errorMsg).map(([key, value]) => {
+                                return <Stack sx={{ width: '100%' }} key={ key }>
+                                    <Alert severity="error"  sx={{ mt: 1}}>
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>{ value }</strong>
+                                    </Alert>
+                                </Stack>
+                            })
+                        :
+                            <Stack sx={{ width: '100%' }} spacing={2}>
+                                <Alert severity="error"  sx={{ mt: 1}}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{ errorMsg }</strong>
+                                </Alert>
+                            </Stack>
+                        }
+                    </>
+                :
+                    <DataGrid rows={admins} columns={columns} />
+                }
             </Box>
         </Box>
     )
