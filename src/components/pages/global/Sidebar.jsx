@@ -137,21 +137,21 @@ const Sidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="Admin"
+                                title="Administrators"
                                 to="/admin"
                                 icon={<PeopleOutline />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="Doctors"
+                                title="Clinicians"
                                 to="/doctor"
                                 icon={<ReceiptOutlined />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="Health Centres"
+                                title="Hospitals"
                                 to="/hospital"
                                 icon={<ContactsOutlined />}
                                 selected={selected}

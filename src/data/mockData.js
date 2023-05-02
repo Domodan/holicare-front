@@ -3,6 +3,86 @@ import doctor from "../assets/img/dr.png";
 import doctor2 from "../assets/img/doc2.png";
 import user from "../assets/img/user.png";
 
+export const hospital_type = [
+  {
+    id: 1,
+    type: "NR Hospital"
+  },
+  {
+    id: 2,
+    type: "RR Hospital"
+  },
+  {
+    id: 3,
+    type: "General Hospital"
+  },
+  {
+    id: 4,
+    type: "HC IV"
+  },
+  {
+    id: 5,
+    type: "HC III"
+  },
+  {
+    id: 6,
+    type: "HC II"
+  },
+]
+
+export const hospital_ownership = [
+  {
+    id: 1,
+    ownership: "Government"
+  },
+  {
+    id: 2,
+    ownership: "Private"
+  },
+]
+
+export const hospital_authority = [
+  {
+    id: 1,
+    authority: "MOH"
+  },
+  {
+    id: 2,
+    authority: "Prison"
+  },
+  {
+    id: 3,
+    authority: "Army"
+  },
+  {
+    id: 4,
+    authority: "Police"
+  },
+]
+
+export const regions = [
+  {
+    id: 1,
+    region: "Central"
+  },
+  {
+    id: 2,
+    region: "Eastern"
+  },
+  {
+    id: 3,
+    region: "Southern"
+  },
+  {
+    id: 4,
+    region: "Western"
+  },
+  {
+    id: 5,
+    region: "Northern"
+  },
+]
+
 export const mockDataPatient = [
   {
     id: 1,
@@ -98,6 +178,7 @@ export const mockDataContacts = [
   },
   
 ];
+
 export const mockDataDistricts = [
   {
     
@@ -127,6 +208,7 @@ export const mockDataDistricts = [
   
   },
 ];
+
 export const mockDataLaboratories = [
   {
     
@@ -165,6 +247,7 @@ export const mockDataTests = [
   },
 
 ];
+
 export const mockDataRiskFactors = [
   {
     
