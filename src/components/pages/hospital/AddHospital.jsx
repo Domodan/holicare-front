@@ -8,9 +8,12 @@ import { Formik } from 'formik';
 import * as yup from "yup";
 import Header from '../../includes/Header';
 import { globalVariables } from '../../../utils/GlobalVariables';
-import { getData, postDataToken } from '../../../utils/ApiCalls';
+import { getData, postData, postDataToken } from '../../../utils/ApiCalls';
 import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import useAuth from '../../../auth/useAuth/useAuth';
+import { hospital_type as types } from '../../../data/mockData';
+import { hospital_ownership as ownerships } from '../../../data/mockData';
+import { hospital_authority as authorities } from '../../../data/mockData';
 
 const AddHospital = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -18,6 +21,8 @@ const AddHospital = () => {
     const location = useLocation();
     const { setAuth, setAuthed } = useAuth();
     const [districts, setDistricts] = useState([]);
+    const [counties, setCounties] = useState([]);
+    const [subcounties, setSubcounties] = useState([]);
     const [errorMsg, setErrorMsg] = useState([]);
     const mounted = useRef();
 
@@ -34,7 +39,36 @@ const AddHospital = () => {
         })
         return () => mounted.current = false
     }, [mounted])
+
+    const getCounty = (district) => {
+        const endpoint = globalVariables.END_POINT_COUNTY;
+
+        const data = {
+            action: district,
+        }
+
+        postData(endpoint, data)
+        .then((data) => {
+            if (data?.length > 0) {
+                setCounties(data);
+            }
+        })
+    }
     
+    const getSubcounty = (county) => {
+        const endpoint = globalVariables.END_POINT_SUBCOUNTY;
+
+        const data = {
+            action: county,
+        }
+
+        postData(endpoint, data)
+        .then((data) => {
+            if (data?.length > 0) {
+                setSubcounties(data);
+            }
+        })
+    }
     
     const handleFormSubmit = (data) => {
         const endpoint = globalVariables.END_POINT_HOSPITAL;
@@ -103,6 +137,7 @@ const AddHospital = () => {
                     handleBlur,
                     handleChange,
                     handleSubmit,
+                    setFieldValue
                 }) => (
                     <form onSubmit={handleSubmit}>
                         <Box
@@ -127,48 +162,73 @@ const AddHospital = () => {
                                 helperText={touched.hospital_name && errors.hospital_name}
                                 sx={{ gridColumn: "span 2" }}
                             />
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                type="text"
-                                label="Hospital Type"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.hospital_type}
-                                name="hospital_type"
-                                error={!!touched.hospital_type && !!errors.hospital_type}
-                                helperText={touched.hospital_type && errors.hospital_type}
-                                sx={{ gridColumn: "span 2" }}
-                            />
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                type="text"
-                                label="Ownership"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.ownership}
-                                name="ownership"
-                                error={!!touched.ownership && !!errors.ownership}
-                                helperText={touched.ownership && errors.ownership}
-                                sx={{ gridColumn: "span 2" }}
-                            />
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                type="text"
-                                label="Authority"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.authority}
-                                name="authority"
-                                error={!!touched.authority && !!errors.authority}
-                                helperText={touched.authority && errors.authority}
-                                sx={{ gridColumn: "span 2" }}
-                            />
+                            
+                            <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
+                                <InputLabel id="hospitalTypeLabel">Hospital Type</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="Hospital Type"
+                                    id="hospital_type"
+                                    labelId="hospitalTypeLabel"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.hospital_type}
+                                    error={!!touched.hospital_type && !!errors.hospital_type}
+                                    name="hospital_type"
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {types.map((type) => {
+                                            return <MenuItem value={type.type} key={type.id}>
+                                                {type.type}
+                                            </MenuItem>
+                                        })}
+                                </Select>
+                            </FormControl>
+
+                            <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
+                                <InputLabel id="ownershipLabel">Ownership</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="Ownership"
+                                    id="ownership"
+                                    labelId="ownershipLabel"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.ownership}
+                                    error={!!touched.ownership && !!errors.ownership}
+                                    name="ownership"
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {ownerships.map((ownership) => {
+                                        return <MenuItem value={ownership.ownership} key={ownership.id}>
+                                            {ownership.ownership}
+                                        </MenuItem>
+                                    })}
+                                </Select>
+                            </FormControl>
+
+                            <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
+                                <InputLabel id="authorityLabel">Authority</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="Authority"
+                                    id="authority"
+                                    labelId="authorityLabel"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.authority}
+                                    error={!!touched.authority && !!errors.authority}
+                                    name="authority"
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {authorities.map((authority) => {
+                                        return <MenuItem value={authority.authority} key={authority.id}>
+                                            {authority.authority}
+                                        </MenuItem>
+                                    })}
+                                </Select>
+                            </FormControl>
+
                             <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
                                 <InputLabel id="hospitalLabel">District</InputLabel>
                                 <Select
@@ -177,7 +237,10 @@ const AddHospital = () => {
                                     id="district"
                                     labelId="districtLabel"
                                     onBlur={handleBlur}
-                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                        setFieldValue("district", e.target.value);
+                                        getCounty(e.target.value);
+                                    }}
                                     value={values.district}
                                     error={!!touched.district && !!errors.district}
                                     name="district"
@@ -186,27 +249,64 @@ const AddHospital = () => {
                                     {districts.length > 0 ?
                                         districts.map((district) => {
                                             return <MenuItem value={district.id} key={district.id}>
-                                                {district.district_name}
+                                                {district.district}
                                             </MenuItem>
                                         })
                                     :null}
                                 </Select>
                             </FormControl>
 
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                type="text"
-                                label="Sub County"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.sub_county}
-                                name="sub_county"
-                                error={!!touched.sub_county && !!errors.sub_county}
-                                helperText={touched.sub_county && errors.sub_county}
-                                sx={{ gridColumn: "span 2" }}
-                            />
+                            <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
+                                <InputLabel id="countyLabel">County</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="County"
+                                    id="county"
+                                    labelId="countyLabel"
+                                    onBlur={handleBlur}
+                                    onChange={(e) => {
+                                        setFieldValue("county", e.target.value);
+                                        getSubcounty(e.target.value);
+                                    }}
+                                    value={values.county}
+                                    error={!!touched.county && !!errors.county}
+                                    name="county"
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {counties.length > 0 ?
+                                        counties.map((county) => {
+                                            return <MenuItem value={county.id} key={county.id}>
+                                                {county.county}
+                                            </MenuItem>
+                                        })
+                                    :null}
+                                </Select>
+                            </FormControl>
+
+                            <FormControl sx={{gridColumn: "span 2", minWidth: 150}} size="small">
+                                <InputLabel id="subCountyLabel">Sub County</InputLabel>
+                                <Select
+                                    fullWidth
+                                    label="Sub County"
+                                    id="sub_county"
+                                    labelId="subCountyLabel"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.sub_county}
+                                    error={!!touched.sub_county && !!errors.sub_county}
+                                    name="sub_county"
+                                >
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {subcounties.length > 0 ?
+                                        subcounties.map((subcounty) => {
+                                            return <MenuItem value={subcounty.id} key={subcounty.id}>
+                                                {subcounty.sub_county}
+                                            </MenuItem>
+                                        })
+                                    :null}
+                                </Select>
+                            </FormControl>
+
                             <TextField
                                 fullWidth
                                 variant="outlined"
@@ -221,6 +321,7 @@ const AddHospital = () => {
                                 helperText={touched.longitude && errors.longitude}
                                 sx={{ gridColumn: "span 1" }}
                             />
+
                             <TextField
                                 fullWidth
                                 variant="outlined"
@@ -254,6 +355,7 @@ const checkoutSchema = yup.object().shape({
     ownership: yup.string().required("required"),
     authority: yup.string().required("required"),
     district: yup.string().required("required"),
+    county: yup.string().required("required"),
     sub_county: yup.string().required("required"),
     longitude: yup.string().required("required"),
     latitude: yup.string().required("required"),
@@ -265,6 +367,7 @@ const initialValues = {
     ownership: "",
     authority: "",
     district: "",
+    county: "",
     sub_county: "",
     longitude: "",
     latitude: "",

@@ -20,7 +20,12 @@ export const globalVariables = {
     END_POINT_HOSPITAL: "hospital/",
 
     // Districts API End-points
-    END_POINT_DISTRICT: "district/",
+    END_POINT_REGION: "districts/region/",
+    END_POINT_DISTRICT: "districts/district/",
+    END_POINT_COUNTY: "districts/county/",
+    END_POINT_SUBCOUNTY: "districts/subcounty/",
+    END_POINT_PARISH: "districts/parish/",
+    END_POINT_LOCATION: "districts/location/",
 
     // Risk Factors API End-points
     END_POINT_RISK_FACTOR: "riskfactor/",
