@@ -42,7 +42,7 @@ const District = () => {
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
         {
-            field: "district_name",
+            field: "district",
             headerName: "Name",
             flex: 1,
             cellClassName: "name-column--cell",
