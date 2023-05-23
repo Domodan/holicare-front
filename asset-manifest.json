@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/holicare/static/css/main.d8351a1d.css",
+    "main.js": "/holicare/static/js/main.007ae335.js",
+    "static/media/child.png": "/holicare/static/media/child.74eba4def89aae9436dc.png",
+    "static/media/test.png": "/holicare/static/media/test.c479cfb50bfdb63bb711.png",
+    "static/media/dr.png": "/holicare/static/media/dr.9c880ee3f5d827b9b7f6.png",
+    "static/media/doc2.png": "/holicare/static/media/doc2.15f688b050e3ba9f24bf.png",
+    "static/media/gm3.png": "/holicare/static/media/gm3.16540773d069a2c5a23a.png",
+    "static/media/gm2.png": "/holicare/static/media/gm2.d78130dbd0106f117df7.png",
+    "static/media/gm1.png": "/holicare/static/media/gm1.ef77144d72b4c3d78834.png",
+    "static/media/hc_logo.png": "/holicare/static/media/hc_logo.37caaa67d51015bb67c4.png",
+    "static/media/user.png": "/holicare/static/media/user.16d4e32ca122e2c539cc.png",
+    "index.html": "/holicare/index.html",
+    "main.d8351a1d.css.map": "/holicare/static/css/main.d8351a1d.css.map",
+    "main.007ae335.js.map": "/holicare/static/js/main.007ae335.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d8351a1d.css",
+    "static/js/main.007ae335.js"
+  ]
+}
