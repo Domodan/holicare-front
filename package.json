@@ -1,4 +1,5 @@
 {
+  "homepage": "https://domodan.github.io/holicare/",
   "name": "holicare",
   "version": "0.1.0",
   "private": true,
@@ -30,6 +31,7 @@
     "@testing-library/user-event": "^13.5.0",
     "dayjs": "^1.11.7",
     "formik": "^2.2.9",
+    "gh-pages": "^5.0.0",
     "mui-file-input": "^2.0.0",
     "object-to-formdata": "^4.4.2",
     "react": "^18.2.0",
@@ -48,7 +50,9 @@
     "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
