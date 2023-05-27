@@ -36,6 +36,7 @@ import OTPVerification from "./components/pages/auth/OTPVerification";
 import useAuth from "./auth/useAuth/useAuth";
 import EmailVerification from "./components/pages/auth/EmailVerification";
 import AddAdmin from "./components/pages/admin/AddAdmin";
+import Calendar from "./components/pages/calendar";
 
 const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
 
@@ -93,6 +94,7 @@ function App() {
                                         <Route path="/infection" element={<Infection />} />
                                         <Route path="/district" element={<District />} />
                                         <Route path="/hospital" element={<Hospital />} />
+                                        <Route path="/appointment" element={<Calendar />} />
                                     </Route>
                                     <Route element={<RequireAuth roles={[ A, SA, HA, D, N, LA, PR ]} />}>
                                         <Route path="/test" element={<Tests />} />
