@@ -45,6 +45,9 @@ export const globalVariables = {
     // General Admins API End-points
     END_POINT_ADMIN: "admins/",
 
+    // Appointments API End-points
+    END_POINT_APPOINTMENT: "appointment/",
+
     // Authentication API End-points
     END_POINT_SIGN_IN: "auth/login/",
     END_POINT_SIGN_UP: "auth/register/",
