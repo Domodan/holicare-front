@@ -1,0 +1,33 @@
+.App {
+    font-family: sans-serif;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  h1,
+  h2 {
+    text-align: center;
+  }
+  
+  .output-wrapper {
+    box-sizing: border-box;
+    background-color: rgb(240, 240, 240);
+    border: 1px solid rgb(230, 230, 230);
+    padding: 10px 30px;
+    border-radius: 5px;
+    margin-top: 30px;
+    font-size: 1.2em;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    border: 1px solid rgba(180, 180, 180, 0.5);
+  }
+  
+  .output-wrapper pre {
+    text-align: left;
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 200;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  

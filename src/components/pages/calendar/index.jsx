@@ -198,23 +198,16 @@ const Calendar = () => {
                                 Schedule an Appointment
                             </Typography>
                             <form onSubmit={handleSubmit}>
-                                <FormControl fullWidth required margin="normal">
-                                    <InputLabel id="demo-simple-select-helper-label">Select a Service</InputLabel>
-                                    <Select
-                                        label="Select Service"
-                                        fullWidth
-                                        id="demo-simple-select-helper"
-                                        value={service}
-                                        onChange={(e) => setService(e.target.value)}
-                                    >
-                                        <MenuItem value={1}>
-                                            <em>General Medical Service</em>
-                                        </MenuItem>
-                                        <MenuItem value={10}>Rehabilitation Services</MenuItem>
-                                        <MenuItem value={20}>Outpatient Department</MenuItem>
-                                        <MenuItem value={30}>Inpatient Department</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                
+                                <TextField
+                                    label="Reason for the visit"
+                                    fullWidth
+                                    value={service}
+                                    onChange={(e) => setService(e.target.value)}
+                                    margin="normal"
+                                    type="text"
+                                    required
+                                />
                                 
                                 <FormControl fullWidth required margin="normal">
                                     <InputLabel id="demo-simple-select-helper-label">Doctors' Name</InputLabel>
@@ -228,9 +221,9 @@ const Calendar = () => {
                                         <MenuItem value={1}>
                                             <em>Any</em>
                                         </MenuItem>
-                                        <MenuItem value={10}>John</MenuItem>
-                                        <MenuItem value={20}>Tom</MenuItem>
-                                        <MenuItem value={30}>Sam</MenuItem>
+                                        <MenuItem value={10}>John Kato</MenuItem>
+                                        <MenuItem value={20}>Tom Kiwanuka</MenuItem>
+                                        <MenuItem value={30}>Sam Kagwa</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <TextField

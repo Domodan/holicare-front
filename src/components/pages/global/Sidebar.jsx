@@ -192,6 +192,13 @@ const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
+                            <Item
+                                title="Schedules"
+                                to="/schedule"
+                                icon={<CalendarTodayOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
                         </> : null}
                         {cat1.includes(auth.role) ?
                         <>
