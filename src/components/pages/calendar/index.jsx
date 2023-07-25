@@ -10,67 +10,186 @@ import {
     Box, List, ListItem, ListItemText, Typography, useTheme,
     Modal, TextField, Button, Select, InputLabel, MenuItem,
     FormControl, FormGroup, FormControlLabel, Checkbox,
+    Stack, Alert, AlertTitle,
 } from "@mui/material";
 import { tokens } from "../../../theme";
 import Header from "../../includes/Header";
+import { globalVariables } from '../../../utils/GlobalVariables';
+import { postDataTokens } from '../../../utils/ApiCalls';
+import { useLocation, Navigate } from 'react-router-dom';
+import useAuth from '../../../auth/useAuth/useAuth';
 
 
 const Calendar = () => {
+    const userEmail = localStorage.getItem("email");
+    const username = localStorage.getItem("username");
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [currentEvents, setCurrentEvents] = useState([]);
     const [open, setOpen] = useState(false);
+    const [email, setEmail] = useState(userEmail);
     const [doctorName, setDoctorName] = useState("");
     const [service, setService] = useState("");
-    const [email, setEmail] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
     const [reminder, setReminder] = useState(false);
     const [calendarApi, setCalendarApi] = useState(false);
     const [patient, setPatient] = useState("");
+    const [doctors, setDoctors] = useState();
+    
+    const { setAuth, setAuthed } = useAuth();
+    const location = useLocation();
+    const [errorMsg, setErrorMsg] = useState([]);
 
+    const getAvailableDoctors = (day) => {
+        setErrorMsg([]);
+        const api_endpoint = globalVariables.END_POINT_SCHEDULE;
+        const body = {
+            action: "get_doctor",
+            day: day
+        }
+        postDataTokens(api_endpoint, body)
+        .then((data) => {
+            console.log('====================================');
+            console.log("Doctor Response:", data);
+            console.log('====================================');
+            if (data.data) {
+                const availableDoctors = data.data;
+                if (availableDoctors?.length > 0) {
+                    setDoctors(availableDoctors);
+                    setOpen(true);
+                }
+            }
+            else if (data.errorData.error) {
+                const status = data.errorData.status;
+                const message = data.errorData.message;
+                if (status === 401 && message === 'Unauthorized') {
+                    setErrorMsg(message);
+                    setAuthed(false);
+                    setAuth("");
+                    localStorage.clear();
+                    <Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+                }
+                else if (status === 500) {
+                    setErrorMsg(message);
+                }
+                else {
+                    setErrorMsg(message);
+                }
+            }
+        })
+        .catch((error) => {
+            if (error?.message) {
+                if (error.message.includes("Failed to fetch")) {
+                    const errorMessage = "ERR_CONNECTION_REFUSED: Please try again or reload the page";
+                    setErrorMsg(errorMessage);
+                }
+                else {
+                    setErrorMsg(error.message);
+                }
+            }
+        });
+    }
 
     const handleDateClick = (selected) => {
-        console.log("yeeeee");
-        setOpen(true);
-        setDate(selected.view.calendar.currentData.currentDate);
+        // const dateObj = new Date(selected.view.calendar.currentData.currentDate);
         setPatient(selected)
-        console.log("Selected:", selected.view);
         setCalendarApi(selected.view.calendar);
-        console.log("Date:", date);
     };
+
+    const handleDayClick = (day) => {
+        const dateObj = new Date(day.date);
+        const daySelected = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+        const dateSelected = day.dateStr;
+        setDate(dateSelected);
+        getAvailableDoctors(daySelected);
+    }
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log("Form submitted!");
-        console.log("Name:", doctorName);
-        console.log("Email:", email);
-        console.log("Service:", service);
-        console.log("Date:", date);
-        console.log("Time:", time);
-        console.log("Reminder:", reminder);
-        // const calendarApi = date.view.calendar;
-        console.log("CalendarApi:", calendarApi);
 
-        calendarApi.unselect();
-
-        if (doctorName) {
-        calendarApi.addEvent({
-            id: `${patient.dateStr}-${doctorName}`,
-            title: "Doctor Appointment",
-            name: doctorName,
+        const api_endpoint = globalVariables.END_POINT_APPOINTMENT;
+        const body = {
+            doctor: doctorName,
             email: email,
+            username: username,
             service: service,
             time: time,
             reminder: reminder,
-            start: patient.startStr,
-            end: patient.endStr,
-            allDay: patient.allDay,
-        });
+            date: date,
         }
-        setOpen(false);
+
+        postDataTokens(api_endpoint, body)
+        .then((data) => {
+            console.log("Response:", data);
+            if (data.data) {
+                const appointments = data.data;
+                console.log("Appointments:", appointments)
+                if (appointments?.length > 0) {
+                    console.log("Appointment Created Successfully");
+
+                    calendarApi.unselect();
+            
+                    if (doctorName) {
+                        calendarApi.addEvent({
+                            id: `${patient.dateStr}-${doctorName}`,
+                            title: "Doctor Appointment",
+                            name: doctorName,
+                            email: userEmail,
+                            service: service,
+                            time: time,
+                            reminder: reminder,
+                            start: patient.startStr,
+                            end: patient.endStr,
+                            allDay: patient.allDay,
+                        });
+                        console.log("Patient:", patient);
+                    }
+                    setOpen(false);
+                }
+                else if (appointments.error) {
+                    setErrorMsg(appointments.message);
+                }
+            }
+            else if (data.errorData.error) {
+                const status = data.errorData.status;
+                const message = data.errorData.message;
+                if (status === 401 && message === 'Unauthorized') {
+                    setErrorMsg(message);
+                    setAuthed(false);
+                    setAuth("");
+                    localStorage.clear();
+                    <Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+                }
+                else if (status === 500) {
+                    setErrorMsg(message);
+                }
+                else if (status === 404) {
+                    if (message.includes("Not Found")) {
+                        const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
+                        setErrorMsg(errorMessage)
+                    }
+                    else {
+                        setErrorMsg(message);
+                    }
+                }
+                else {
+                    setErrorMsg(message);
+                }
+            }
+        })
+        .catch((error) => {
+            if (error?.message) {
+                if (error.message.includes("Failed to fetch")) {
+                    const errorMessage = "ERR_CONNECTION_REFUSED: Please try again or reload the page";
+                    setErrorMsg(errorMessage);
+                }
+                else {
+                    setErrorMsg(error.message);
+                }
+            }
+        });
     };
 
 
@@ -86,9 +205,45 @@ const Calendar = () => {
     const handleClose = () => {
         setOpen(false);
     };
+
+
     return (
         <Box m="20px">
             <Header title="Appointments" />
+
+            {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                <>
+                    {typeof errorMsg === 'object' ?
+                        Object.entries(errorMsg).map(([key, value]) => {
+                            return <Stack sx={{ width: '100%', mb: 2, alignItems: "center" }} key={ key }>
+                                <Alert severity="error"  sx={{ mt: 1}}>
+                                    <AlertTitle>
+                                        <Typography variant='h1' fontSize="30px">
+                                            <strong>Error:</strong>
+                                        </Typography>
+                                    </AlertTitle>
+                                    <Typography variant='h1' fontSize="25px">
+                                        <strong>{ value }</strong>
+                                    </Typography>
+                                </Alert>
+                            </Stack>
+                        })
+                    :
+                        <Stack sx={{ width: '100%', mb: 2, alignItems: 'center'}} spacing={2}>
+                            <Alert severity="error"  sx={{ mt: 1}}>
+                                <AlertTitle>
+                                    <Typography variant='h1' fontSize="30px">
+                                        <strong>Error:</strong>
+                                    </Typography>
+                                </AlertTitle>
+                                <Typography variant='h1' fontSize="25px">
+                                    <strong>{ errorMsg }</strong>
+                                </Typography>
+                            </Alert>
+                        </Stack>
+                    }
+                </>
+            :''}
 
             <Box display="flex" justifyContent="space-between">
 
@@ -151,6 +306,7 @@ const Calendar = () => {
                         selectMirror={true}
                         dayMaxEvents={true}
                         select={handleDateClick}
+                        dateClick={handleDayClick}
                         eventClick={handleEventClick}
                         eventsSet={(events) => setCurrentEvents(events)}
                         initialEvents={[
@@ -188,6 +344,40 @@ const Calendar = () => {
                                 p: 4,
                             }}
                         >
+                            {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                                <>
+                                    {typeof errorMsg === 'object' ?
+                                        Object.entries(errorMsg).map(([key, value]) => {
+                                            return <Stack sx={{ width: '100%', mb: 2 }} key={ key }>
+                                                <Alert severity="error"  sx={{ mt: 1}}>
+                                                    <AlertTitle>
+                                                        <Typography variant='h1' fontSize="25px">
+                                                            <strong>Error:</strong>
+                                                        </Typography>
+                                                    </AlertTitle>
+                                                    <Typography variant='h1' fontSize="20px">
+                                                        <strong>{ value }</strong>
+                                                    </Typography>
+                                                </Alert>
+                                            </Stack>
+                                        })
+                                    :
+                                        <Stack sx={{ width: '100%', mb: 2 }} spacing={2}>
+                                            <Alert severity="error"  sx={{ mt: 1}}>
+                                                <AlertTitle>
+                                                    <Typography variant='h1' fontSize="25px">
+                                                        <strong>Error:</strong>
+                                                    </Typography>
+                                                </AlertTitle>
+                                                <Typography variant='h1' fontSize="20px">
+                                                    <strong>{ errorMsg }</strong>
+                                                </Typography>
+                                            </Alert>
+                                        </Stack>
+                                    }
+                                </>
+                            :''}
+
                             <CloseIcon onClick={handleClose} sx={{ color: "red", float:"right" }} alignitems={ "left"} />
                             {/* Add your form components here */}
                             {/* Doctors field should be a select */}
@@ -218,12 +408,14 @@ const Calendar = () => {
                                         value={doctorName}
                                         onChange={(e) => setDoctorName(e.target.value)}
                                     >
-                                        <MenuItem value={1}>
-                                            <em>Any</em>
-                                        </MenuItem>
-                                        <MenuItem value={10}>John Kato</MenuItem>
-                                        <MenuItem value={20}>Tom Kiwanuka</MenuItem>
-                                        <MenuItem value={30}>Sam Kagwa</MenuItem>
+                                        <MenuItem value={""}><em>None</em></MenuItem>
+                                        {doctors?.length > 0 ?
+                                            doctors.map((doctor) => {
+                                                return <MenuItem value={doctor.id} key={doctor.id}>
+                                                    {doctor.name}
+                                                </MenuItem>
+                                            })
+                                        :null}
                                     </Select>
                                 </FormControl>
                                 <TextField
@@ -232,18 +424,13 @@ const Calendar = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     margin="normal"
+                                    // variant='filled'
+                                    // InputProps={{
+                                    //   readOnly: true,
+                                    // }}
                                     type="email"
                                     required
                                 />
-                                {/* <TextField
-                                    label="Date"
-                                    fullWidth
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                    margin="normal"
-                                    type="date"
-                                    required
-                                /> */}
                                 <TextField
                                     label="Time"
                                     fullWidth
