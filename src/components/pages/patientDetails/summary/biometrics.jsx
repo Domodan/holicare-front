@@ -14,6 +14,7 @@ import {
   Container,
   TextField
 } from "@mui/material";
+import InputAdornment from '@mui/material/InputAdornment';
 import { tokens } from "../../../../theme";
 import { Chart, registerables } from "chart.js";
 import Grid from "@mui/material/Grid";
@@ -121,6 +122,9 @@ const Biometrics = () => {
                   margin="normal"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">cm</InputAdornment>,
+                  }}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -133,6 +137,9 @@ const Biometrics = () => {
                   margin="normal"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">kg</InputAdornment>,
+                  }}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -145,6 +152,9 @@ const Biometrics = () => {
                   margin="normal"
                   value={bmi}
                   onChange={(e) => setBmi(e.target.value)}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">kg/m2</InputAdornment>,
+                  }}
                 />
                 </Grid>
                 <Grid item xs={12}>

@@ -346,13 +346,13 @@ const PatientSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            {/* <Item
-                                title="Medical History"
-                                to="/doctor"
+                            <Item
+                                title="Medications"
+                                to="/medical"
                                 icon={<ReceiptOutlined />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            /> */}
+                            />
                             {/* <Item
                                 title="Test Results"
                                 to="/patient_documents"

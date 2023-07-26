@@ -46,9 +46,10 @@ import Notes from "./components/pages/patientDetails/summary/notes";
 import Visits from "./components/pages/patientDetails/summary/visits";
 import VisitsPage from "./components/pages/patientDetails/summary/visitsPage";
 import Allergies from "./components/pages/patientDetails/summary/allergies";
+import Medical from "./components/pages/patientDetails/summary/medical";
 
 const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
-const PATIENTROUTES = [ "/appointment","/visits_page","/add_test", "/vitals", "/biometrics", "/conditions","/allergies", "/notes", "/verify_email"];
+const PATIENTROUTES = [ "/medical","/appointment","/visits_page","/add_test", "/vitals", "/biometrics", "/conditions","/allergies", "/notes", "/verify_email"];
 const A = process.env.REACT_APP_ROLE_A;
 const R = process.env.REACT_APP_ROLE_R;
 const D = process.env.REACT_APP_ROLE_D;
@@ -124,6 +125,7 @@ function App() {
                                         <Route path="/visits" element={<Visits/>}/>
                                         <Route path="/allergies" element={<Allergies/>}/>
                                         <Route path="/visits_page" element={<VisitsPage/>}/>
+                                        <Route path="/medical" element={<Medical/>}/>
                                     </Route>
                                     <Route element={<RequireAuth roles={[ SA ]} />}>
                                         <Route path="/add_hospital" element={<AddHospital />} />

@@ -14,6 +14,7 @@ import {
   Container,
   TextField,
 } from "@mui/material";
+import InputAdornment from '@mui/material/InputAdornment';
 import { tokens } from "../../../../theme";
 import { Chart, registerables } from "chart.js";
 import Grid from "@mui/material/Grid";
@@ -119,7 +120,7 @@ const Vitals = () => {
           />
         </Button>
         <Paper elevation={3} sx={{ margin: "15%" }}>
-          <Box sx={{ padding: 5 }}>p={1}
+          <Box sx={{ padding: 5 }}>
             <Typography
               variant="h3"
               fontWeight={"bold"}
@@ -140,6 +141,9 @@ const Vitals = () => {
                     margin="normal"
                     value={temperature}
                     onChange={(e) => setTemperature(e.target.value)}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">DEG C</InputAdornment>,
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -152,6 +156,9 @@ const Vitals = () => {
                     margin="normal"
                     value={bp}
                     onChange={(e) => setBp(e.target.value)}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">mmHg</InputAdornment>,
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -164,6 +171,9 @@ const Vitals = () => {
                     margin="normal"
                     value={pulse}
                     onChange={(e) => setPulse(e.target.value)}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">beats/min</InputAdornment>,
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -176,6 +186,9 @@ const Vitals = () => {
                     margin="normal"
                     value={rRate}
                     onChange={(e) => setRRate(e.target.value)}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">breaths/min</InputAdornment>,
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -188,13 +201,16 @@ const Vitals = () => {
                     margin="normal"
                     value={spo}
                     onChange={(e) => setSpo(e.target.value)}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                    }}
                   />
                 </Grid>
               </Grid>
               <Grid>
                 <Grid item xs={12}>
                   <TextField
-                    label="Date"
+                    // label="Date"
                     fullWidth
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
