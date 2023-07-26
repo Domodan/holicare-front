@@ -38,9 +38,17 @@ import EmailVerification from "./components/pages/auth/EmailVerification";
 import AddAdmin from "./components/pages/admin/AddAdmin";
 import Calendar from "./components/pages/calendar";
 import Schedules from "./components/pages/schedules";
+import Homepage from "./components/pages/patientDetails/summary";
+import Vitals from "./components/pages/patientDetails/summary/vitals";
+import Biometrics from "./components/pages/patientDetails/summary/biometrics";
+import Conditions from "./components/pages/patientDetails/summary/conditions";
+import Notes from "./components/pages/patientDetails/summary/notes";
+import Visits from "./components/pages/patientDetails/summary/visits";
+import VisitsPage from "./components/pages/patientDetails/summary/visitsPage";
+import Allergies from "./components/pages/patientDetails/summary/allergies";
 
 const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
-
+const PATIENTROUTES = [ "/appointment","/visits_page","/add_test", "/vitals", "/biometrics", "/conditions","/allergies", "/notes", "/verify_email"];
 const A = process.env.REACT_APP_ROLE_A;
 const R = process.env.REACT_APP_ROLE_R;
 const D = process.env.REACT_APP_ROLE_D;
@@ -58,7 +66,10 @@ function App() {
     const { authed } = useAuth();
     const location = useLocation();
     const pathname = location.pathname;
-
+    var userRole = 'admin';
+    if (PATIENTROUTES.includes(pathname) || pathname.includes('/details/')) {
+        userRole = 'patient';
+    } 
     useEffect(() => {
         if (authed) setLanding(false);
         else setLanding(true);
@@ -82,7 +93,7 @@ function App() {
                     <ThemeProvider theme={ theme }>
                         <CssBaseline />
                         <div className="app">
-                            <Sidebar isSidebar={isSidebar} />
+                            <Sidebar isSidebar={isSidebar} role={userRole} />
                             <main className="content">
                                 <Topbar setIsSidebar={setIsSidebar} />
                                 <Routes>
@@ -91,6 +102,7 @@ function App() {
                                         <Route path="/admin" element={<Team />} />
                                         <Route path="/doctor" element={<Doctor />} />
                                         <Route path="/user_profile" element={<UserProfile />} />
+                                        <Route path="/details/:id" element={<Homepage />} />
                                         <Route path="/risk_factor" element={<RiskFactor />} />
                                         <Route path="/infection" element={<Infection />} />
                                         <Route path="/district" element={<District />} />
@@ -105,6 +117,13 @@ function App() {
                                     <Route element={<RequireAuth roles={[ A, SA, HA, D, N, PR, P, R, LA ]} />}>
                                         <Route path="/patient" element={<Patient />} />
                                         <Route path="/patient_documents" element={<PatientDocuments />} />
+                                        <Route path="/vitals" element={<Vitals/>}/>
+                                        <Route path="/biometrics" element={<Biometrics/>}/>
+                                        <Route path="/conditions" element={<Conditions/>}/>
+                                        <Route path="/notes" element={<Notes/>}/>
+                                        <Route path="/visits" element={<Visits/>}/>
+                                        <Route path="/allergies" element={<Allergies/>}/>
+                                        <Route path="/visits_page" element={<VisitsPage/>}/>
                                     </Route>
                                     <Route element={<RequireAuth roles={[ SA ]} />}>
                                         <Route path="/add_hospital" element={<AddHospital />} />

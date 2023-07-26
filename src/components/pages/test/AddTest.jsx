@@ -1,132 +1,218 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
-    Box,
-    Button,
-    TextField,
-    useMediaQuery
-} from '@mui/material';
-import { Formik } from 'formik';
-import * as yup from "yup";
-import Header from '../../includes/Header';
-import { globalVariables } from '../../../utils/GlobalVariables';
-import { postData } from '../../../utils/ApiCalls';
-import { useLocation, useNavigate } from 'react-router-dom';
+  Box,
+  Button,
+  TextField,
+  useMediaQuery,
+  Paper,
+  Typography,
+  FormControl,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  FormLabel,
+  Divider,
+  Select,
+  InputLabel,
+  MenuItem,
+} from "@mui/material";
+import Header from "../../includes/Header";
+import { globalVariables } from "../../../utils/GlobalVariables";
+import { postData } from "../../../utils/ApiCalls";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AddTest = () => {
-    const isNonMobile = useMediaQuery("(min-width:600px)");
-    const navigate = useNavigate();
-    const location = useLocation();
+  const isNonMobile = useMediaQuery("(min-width:600px)");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [blood, setBlood] = useState(false);
+  const [sputum, setSputum] = useState(false);
+  const [urine, setUrine] = useState(false);
+  const [saliva, setSaliva] = useState(false);
+  const [others, setOthers] = useState("");
+  const [lab, setLab] = useState("");
+  const [notes, setNotes] = useState("");
+  const [priority, setPriority] = useState("");
 
-    const from = location.state?.from?.pathname || "/test";
+  const from = location.state?.from?.pathname || "/test";
 
-    console.log("From:", from);
-    
-    const handleFormSubmit = (data) => {
-        console.log("Form Data:", data);
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_DISTRICT_ID;
-        postData(url, data)
-        .then((data) => {
-            console.log("Response Data:", data);
-            if (data.id) {
-                navigate(from, {replace: true});
-            }
-        })
-        .catch((error) => {
-            console.log("Error:", error);
-        });
-    };
+  console.log("From:", from);
 
-    return (
-        <Box m="20px">
-            <Header title="" subtitle="Create a New Test" />
-        
-            <Formik
-                onSubmit={handleFormSubmit}
-                initialValues={initialValues}
-                validationSchema={checkoutSchema}
-            >
-                {({
-                    values,
-                    errors,
-                    touched,
-                    handleBlur,
-                    handleChange,
-                    handleSubmit,
-                }) => (
-                    <form onSubmit={handleSubmit}>
-                        <Box
-                            display="grid"
-                            gap="30px"
-                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                            sx={{
-                                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-                            }}
-                        >
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Test"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.test}
-                            name="test"
-                            error={!!touched.test && !!errors.test}
-                            helperText={touched.test && errors.test}
-                            sx={{ gridColumn: "span 2" }}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form Data:", e);
+    // const url =
+    //   globalVariables.BASE_URL + globalVariables.END_POINT_DISTRICT_ID;
+    // postData(url, data)
+    //   .then((data) => {
+    //     console.log("Response Data:", data);
+    //     if (data.id) {
+    //       navigate(from, { replace: true });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error:", error);
+    //   });
+  };
+  const options = ["Lancet Laboratory", "MBN Clical Lab", "Crane Medical Lab"];
+  const urgencyList = ["High", "Normal"];
+  return (
+    <Box m={3}>
+      {/* <Header title="" subtitle="Request Lab Test" /> */}
+
+      <form onSubmit={handleSubmit}>
+          <Paper elevation={3} sx={{ margin: "auto" }}>
+            <Box sx={{ padding: 5 }}>
+              <Typography
+                variant="h3"
+                fontWeight={"bold"}
+                gutterBottom
+                sx={{ paddingBottom: 5 }}
+              >
+                Request Lab Test
+              </Typography>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <FormControl
+                      sx={{ display: "flex" }}
+                      component="fieldset"
+                      variant="standard"
+                    >
+                      <FormLabel component="legend">Sample</FormLabel>
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={blood}
+                              onChange={(e) => setBlood(e.target.checked)}
+                              name="blood"
+                            />
+                          }
+                          label="Blood"
                         />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Parameters"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.parameters}
-                            name="parameters"
-                            error={!!touched.parameters && !!errors.parameters}
-                            helperText={touched.parameters && errors.parameters}
-                            sx={{ gridColumn: "span 2" }}
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={sputum}
+                              onChange={(e) => setSputum(e.target.checked)}
+                              name="sputum"
+                            />
+                          }
+                          label="Sputum"
                         />
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            size="small"
-                            type="text"
-                            label="Results"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values.results}
-                            name="results"
-                            error={!!touched.results && !!errors.results}
-                            helperText={touched.results && errors.results}
-                            sx={{ gridColumn: "span 2" }}
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={urine}
+                              onChange={(e) => setUrine(e.target.checked)}
+                              name="urine"
+                            />
+                          }
+                          label="Urine"
                         />
-                        </Box>
-                        <Box display="flex" justifyContent="end" mt="20px">
-                            <Button type="submit" color="secondary" variant="contained">
-                                Add New Test
-                            </Button>
-                        </Box>
-                    </form>
-                )}
-            </Formik>
-        </Box>
-    )
-}
-
-const checkoutSchema = yup.object().shape({
-    test: yup.string().required("required"),
-    parameters: yup.string().required("required"),
-    results: yup.number().required("required")
-});
-
-const initialValues = {
-    test: "",
-    parameters: "",
-    results: "",
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={saliva}
+                              onChange={(e) => setSaliva(e.target.checked)}
+                              name="saliva"
+                            />
+                          }
+                          label="Saliva"
+                        />
+                      </FormGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      name="Others"
+                      label="Others Specify"
+                      fullWidth
+                      variant="outlined"
+                      margin="normal"
+                      value={others}
+                      onChange={(e) => setOthers(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Divider />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth required margin="normal">
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Laboratory
+                      </InputLabel>
+                      <Select
+                        label="Select Lab"
+                        fullWidth
+                        id="demo-simple-select-helper"
+                        value={lab}
+                        onChange={(e) => setLab(e.target.value)}
+                      >
+                        {options.map((option, index) => (
+                          <MenuItem key={index} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid item xs={12}>
+                     
+                        <TextField
+                          id="outlined-multiline-static"
+                          label="Additional clinical information"
+                          multiline
+                          fullWidth
+                          margin="auto"
+                          rows={4}
+                          value={notes}
+                          onChange={(e) => setNotes(e.target.value)}
+                        />
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth required margin="normal">
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Priority
+                      </InputLabel>
+                      <Select
+                        label="Select Lab"
+                        fullWidth
+                        id="demo-simple-select-helper"
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                      >
+                        {urgencyList.map((option, index) => (
+                          <MenuItem key={index} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid>
+                  <Grid item xs={12} sm={5} />
+                  <Grid item xs={12} sm={4}>
+                    <Button
+                      variant="contained"
+                      sx={{ color: "white" }}
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} sm={5} />
+                </Grid>
+            </Box>
+          </Paper>
+      </form>
+    </Box>
+  );
 };
 
-export default AddTest
+export default AddTest;
