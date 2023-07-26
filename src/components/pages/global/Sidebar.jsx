@@ -407,13 +407,13 @@ const PatientSidebar = () => {
 const Sidebar = ({ role }) => {
     // Render the appropriate sidebar component based on the role
     switch (role) {
-      case 'admin':
-        return <AdminSidebar />;
-      case 'patient':
-        return <PatientSidebar />;
-      default:
-        return null; // Render nothing if the role is not recognized
+        case 'admin':
+            return <AdminSidebar />;
+        case 'patient':
+            return <PatientSidebar />;
+        default:
+            return null; // Render nothing if the role is not recognized
     }
-  };
+};
   
-  export default Sidebar;
+export default Sidebar;
