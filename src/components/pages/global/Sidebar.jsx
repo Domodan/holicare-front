@@ -378,6 +378,13 @@ const PatientSidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
+                                title="Test Results"
+                                to="/test"
+                                icon={<ContactsOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
                                 title="Visits"
                                 to="/visits_page"
                                 icon={<PieChartOutlined />}

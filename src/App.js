@@ -48,15 +48,8 @@ import VisitsPage from "./components/pages/patientDetails/summary/visitsPage";
 import Allergies from "./components/pages/patientDetails/summary/allergies";
 import Medical from "./components/pages/patientDetails/summary/medical";
 
-const ROUTES = [
-    "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email",
-];
-
-const PATIENTROUTES = [
-    "/medical","/appointment","/visits_page","/add_test", "/vitals", "/biometrics",
-    "/conditions","/allergies", "/notes", "/verify_email", "/patient", "/patient_documents",
-];
-
+const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
+const PATIENTROUTES = ["/test", "/medical","/appointment","/visits_page","/add_test", "/vitals", "/biometrics", "/conditions","/allergies", "/notes", "/verify_email"];
 const A = process.env.REACT_APP_ROLE_A;
 const R = process.env.REACT_APP_ROLE_R;
 const D = process.env.REACT_APP_ROLE_D;
