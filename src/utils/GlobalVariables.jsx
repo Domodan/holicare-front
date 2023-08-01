@@ -35,6 +35,15 @@ export const globalVariables = {
 
     // Patients API End-points
     END_POINT_PATIENT: "patients/patients/",
+    END_POINT_VITALS: "patients/vitals/",
+    END_POINT_VISITS: "patients/visits/",
+    END_POINT_SYMPTOMS: "patients/symptoms/",
+    END_POINT_ALLERGIES: "patients/allergies/",
+    END_POINT_CONDITIONS: "patients/conditions/",
+    END_POINT_APPOINTMENT: "patients/appointments/",
+    END_POINT_MEDICATIONS: "patients/medications/",
+    END_POINT_ANTHROPOMETRIC: "patients/anthropometric/",
+    END_POINT_PROVISIONAL_DIAGNOSIS: "patients/provisional-diagnosis/",
 
     // Clinicians [Doctors, Nurses, ] API End-points
     END_POINT_CLINICIAN: "clinician/",
@@ -45,9 +54,6 @@ export const globalVariables = {
 
     // General Admins API End-points
     END_POINT_ADMIN: "admins/",
-
-    // Appointments API End-points
-    END_POINT_APPOINTMENT: "patients/appointments/",
 
     // Authentication API End-points
     END_POINT_SIGN_IN: "auth/login/",

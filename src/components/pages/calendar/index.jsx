@@ -25,6 +25,7 @@ const Calendar = () => {
     const username = localStorage.getItem("username");
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
     const [currentEvents, setCurrentEvents] = useState([]);
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState(userEmail);

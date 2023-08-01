@@ -48,8 +48,15 @@ import VisitsPage from "./components/pages/patientDetails/summary/visitsPage";
 import Allergies from "./components/pages/patientDetails/summary/allergies";
 import Medical from "./components/pages/patientDetails/summary/medical";
 
-const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
-const PATIENTROUTES = [ "/medical","/appointment","/visits_page","/add_test", "/vitals", "/biometrics", "/conditions","/allergies", "/notes", "/verify_email"];
+const ROUTES = [
+    "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email",
+];
+
+const PATIENTROUTES = [
+    "/medical","/appointment","/visits_page","/add_test", "/vitals", "/biometrics",
+    "/conditions","/allergies", "/notes", "/verify_email", "/patient", "/patient_documents",
+];
+
 const A = process.env.REACT_APP_ROLE_A;
 const R = process.env.REACT_APP_ROLE_R;
 const D = process.env.REACT_APP_ROLE_D;
@@ -66,11 +73,14 @@ function App() {
     const [landing, setLanding] = useState(true);
     const { authed } = useAuth();
     const location = useLocation();
+
     const pathname = location.pathname;
-    var userRole = 'admin';
+    let userRole = 'admin';
+
     if (PATIENTROUTES.includes(pathname) || pathname.includes('/details/')) {
         userRole = 'patient';
-    } 
+    }
+
     useEffect(() => {
         if (authed) setLanding(false);
         else setLanding(true);

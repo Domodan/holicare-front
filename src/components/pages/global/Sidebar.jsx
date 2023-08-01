@@ -216,6 +216,13 @@ const AdminSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
+                            <Item
+                                title="Provisional Diagnosis"
+                                to="/notes"
+                                icon={<CalendarTodayOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
                         </>: null}
                         {cat2.includes(auth.role) ?
                         <>
@@ -319,6 +326,23 @@ const PatientSidebar = () => {
                         {cat.includes(auth.role) ?
                         <>
                             <Item
+                                title="Dashboard"
+                                to="/dashboard"
+                                icon={<HomeOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                        </>:null}
+                        {cat2.includes(auth.role) ?
+                        <>
+                            <Item
+                                title="Patients"
+                                to="/patient"
+                                icon={<PeopleOutlined />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
                                 title="Patient Summary"
                                 to="/details/:id"
                                 icon={<HomeOutlined />}
@@ -353,13 +377,6 @@ const PatientSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            {/* <Item
-                                title="Test Results"
-                                to="/patient_documents"
-                                icon={<ContactsOutlined />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> */}
                             <Item
                                 title="Visits"
                                 to="/visits_page"
