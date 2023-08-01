@@ -94,7 +94,6 @@ const Team = () => {
             renderCell: ({ row: { role } }) => {
                 return (
                     <Box
-                        width="60%"
                         m="0 auto"
                         p="5px"
                         display="flex"
@@ -111,7 +110,8 @@ const Team = () => {
                         {role === "ADMIN" && <AdminPanelSettingsOutlined />}
                         {role === "HOSPITAL_ADMIN" && <SecurityOutlined />}
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                            {role}
+                            {role === "ADMIN" && "Admin"}
+                            {role === "HOSPITAL_ADMIN" && "Hospital Admin"}
                         </Typography>
                     </Box>
                 );
