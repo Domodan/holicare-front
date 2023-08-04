@@ -1,7 +1,7 @@
 import { globalVariables } from "./GlobalVariables";
 
-const baseURL = globalVariables.BASE_URL;
-// const baseURL = globalVariables.BASE_URL_2;
+// const baseURL = globalVariables.BASE_URL;
+const baseURL = globalVariables.BASE_URL_2;
 // const baseURL = globalVariables.BASE_URL_3;
 
 // Post data
@@ -48,6 +48,10 @@ export async function postDataTokens(api_endpoint, data) {
         headers: header,
         body: JSON.stringify(data),
     });
+
+    console.log('====================================');
+    console.log("Response:", response);
+    console.log('====================================');
 
     // Check if the response status is in the 200-299 range
     if (!response.ok) {

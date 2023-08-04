@@ -41,7 +41,7 @@ const AddDoctor = () => {
     
 
     const handleFormSubmit = (data) => {
-        const url = globalVariables.BASE_URL + globalVariables.END_POINT_CLINICIAN;
+        const url = globalVariables.BASE_URL_2 + globalVariables.END_POINT_CLINICIAN;
         data = serialize(data);
         let header = new Headers({
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`,

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import Vitals from "./vitals";
 import Biometrics from "./biometrics";
 import Conditions from "./conditions";
