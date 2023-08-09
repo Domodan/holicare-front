@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-  Typography,
-  useTheme,
-  Container,
-  TextField,
-  Stack, Alert, AlertTitle,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Paper,
+	Box,
+	Typography,
+	useTheme,
+	Container,
+	TextField,
+	Stack, Alert, AlertTitle,
 } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
 import Grid from "@mui/material/Grid";
@@ -79,14 +79,15 @@ const Vitals = () => {
 	const [pulse, setPulse] = useState("");
 	const [rRate, setRRate] = useState("");
 	const [spo, setSpo] = useState("");
-	const [patientEmail, setPatientEmail] = useState("");
+	// const [patientEmail, setPatientEmail] = useState("");
 	const [currentView, setCurrentView] = useState("table");
 	const [state, setState] = useState({ right: false, });
-	const [vitals, setVitals] = useState(null);
+	const [vitals, setVitals] = useState([]);
     
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
     const [errorMsg, setErrorMsg] = useState([]);
+    const [successMsg, setSuccessMsg] = useState([]);
 
 	const mounted = useRef();
 
@@ -108,10 +109,6 @@ const Vitals = () => {
 				console.log("Data:", data);
 				if (data.data) {
 					const response = data.data;
-					console.log('====================================');
-					console.log("Response in Vitals:", response);
-					console.log("Type of:", typeof 1)
-					console.log('====================================');
 					if (response?.message) {
 						setErrorMsg(response.message);
 					}
@@ -165,6 +162,16 @@ const Vitals = () => {
 		return () => mounted.current = false;
 	}, [ mounted, patientID, setAuth, setAuthed, location ]);
 
+	useEffect(() => {
+		const intervalRef = setInterval(clearFields, 20000);
+		return () => clearInterval(intervalRef);
+	}, []);
+
+	const clearFields = () => {
+		setErrorMsg([]);
+		setSuccessMsg([]);
+	}
+
 
 	const handleViewSwitch = () => {
 		setCurrentView(currentView === "table" ? "chart" : "table");
@@ -180,10 +187,6 @@ const Vitals = () => {
 
 		setState({ ...state, [anchor]: open });
 	};
-
-	const clearFields = () => {
-		setErrorMsg([]);
-	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -206,7 +209,11 @@ const Vitals = () => {
 				if (response?.message) {
 					setErrorMsg(response.message);
 				}
-				setVitals(response);
+				else if (response?.id) {
+					const message = "Vitals with Temperature: " + response.temperature +
+					" and Blood Pressure: " + response.blood_pressure
+					setSuccessMsg(message + " was added Succcessfull");
+				}
 			}
             else if (data.errorData.error) {
                 const status = data.errorData.status;
@@ -291,6 +298,40 @@ const Vitals = () => {
 									</AlertTitle>
 									<Typography variant='h1' fontSize="20px">
 										<strong>{ errorMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
 									</Typography>
 								</Alert>
 							</Stack>
@@ -385,21 +426,6 @@ const Vitals = () => {
 									}}
 									/>
 								</Grid>
-								<Grid item xs={12}>
-									<TextField
-									required
-									name="Patient's Name"
-									label="Patient's Name"
-									fullWidth
-									variant="outlined"
-									margin="normal"
-									value={patientEmail}
-									onChange={(e) => setPatientEmail(e.target.value)}
-									InputProps={{
-										startAdornment: <InputAdornment position="start">Email</InputAdornment>,
-									}}
-									/>
-								</Grid>
 							</Grid>
 							<Grid>
 								<Grid item xs={12}>
@@ -431,10 +457,6 @@ const Vitals = () => {
 			</React.Fragment>
 		</Box>
 	);
-	
-	if (vitals === null) {
-		return <div>Loading....</div>
-	}
 
 	return (
 		<Box>
@@ -513,6 +535,40 @@ const Vitals = () => {
 						}
 					</>
 				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
 
 				<Box>
 					{currentView === "table" ? (
@@ -529,14 +585,19 @@ const Vitals = () => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Date</TableCell>
-										{vitals.datasets.map((dataset) => (
-											<TableCell key={dataset.label}>{dataset.label}</TableCell>
-										))}
+									{vitals.length > 0 || Object.keys(vitals).length ?
+										<>
+											<TableCell>Month</TableCell>
+											{vitals.datasets.map((dataset) => (
+												<TableCell key={dataset.label}>{dataset.label}</TableCell>
+											))}
+										</>
+									:null}
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{vitals.labels.map((label, index) => (
+								{vitals.length > 0 || Object.keys(vitals).length ?
+									vitals.labels.map((label, index) => (
 									<TableRow key={index}>
 										<TableCell>{label}</TableCell>
 										{vitals.datasets.map((dataset, datasetIndex) => (
@@ -545,7 +606,8 @@ const Vitals = () => {
 											</TableCell>
 										))}
 									</TableRow>
-								))}
+								))
+							:null}
 							</TableBody>
 						</Table>
 					</TableContainer>

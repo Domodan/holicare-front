@@ -35,7 +35,7 @@ import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
-import { getDataTokens, postDataTokens } from "../../../../utils/ApiCalls";
+import { getDataTokens, postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
 
 Chart.register(...registerables);
 
@@ -101,8 +101,10 @@ const Allergies = () => {
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
     const [errorMsg, setErrorMsg] = useState([]);
+    const [successMsg, setSuccessMsg] = useState([]);
 
 	const mounted = useRef();
+	const patientID = localStorage.getItem("patientID");
 
 	const severityList = ["Mild", "Moderate", "Severe"];
 
@@ -166,15 +168,19 @@ const Allergies = () => {
 	const selectedReactionsValues = Object.entries(checkedReactionsItems)
 		.filter(([key, value]) => value === true)
 		.map(([key]) => key);
-	
-		
+
+
 	useEffect(() => {
 		clearFields();
 		mounted.current = true;
 
 		const api_endpoint = globalVariables.END_POINT_ALLERGIES;
+		const body = {
+			action: "get_allergy",
+			patient_id: patientID
+		}
 
-		getDataTokens(api_endpoint)
+		postDataToken(api_endpoint, body)
 		.then((data) => {
 			console.log('====================================');
 			console.log("Allergies Response:", data);
@@ -213,11 +219,16 @@ const Allergies = () => {
 
 		return () => mounted.current = false;
 
-	}, [ mounted, location, setAuth, setAuthed, ]);
+	}, [ mounted, location, setAuth, setAuthed, patientID ]);
 
+	useEffect(() => {
+		const intervalRef = setInterval(clearFields, 20000);
+		return () => clearInterval(intervalRef);
+	}, []);
 
 	const clearFields = () => {
 		setErrorMsg([]);
+		setSuccessMsg([]);
 	}
 
 	const toggleDrawer = (anchor, open) => (event) => {
@@ -285,7 +296,13 @@ const Allergies = () => {
 			checkedEnvironmentalItems[7] === true ? reaction : selectedReactionsValues
 		);
 
-		const api_endpoint = globalVariables.END_POINT_ALLERGIES;
+		console.log('====================================');
+		console.log("Food:", foods);
+		console.log("Drug:", drug);
+		console.log("Environment:", environment)
+		console.log('====================================');
+
+		const api_endpoint = globalVariables.END_POINT_ALLERGIE;
 		const body = {
 			drug: drug,
 			food: foods,

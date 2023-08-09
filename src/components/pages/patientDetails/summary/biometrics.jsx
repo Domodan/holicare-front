@@ -25,33 +25,33 @@ import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
-import { getDataTokens, postDataTokens } from "../../../../utils/ApiCalls";
+import { postDataTokens } from "../../../../utils/ApiCalls";
 
 Chart.register(...registerables);
 
-const data = {
-	labels: ["January", "February", "March", "April", "May", "June"],
-	datasets: [
-		{
-		label: "Weight(kgs)",
-		data: [65, 59, 80, 81, 56, 55],
-		fill: false,
-		borderColor: "rgba(75,192,192,1)",
-		},
-		{
-		label: "Height(cm)",
-		data: [28, 48, 40, 19, 86, 27],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "BMI(kg/m2)",
-		data: [28, 8, 41, 18, 85, 29],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-	],
-};
+// const data = {
+// 	labels: ["January", "February", "March", "April", "May", "June"],
+// 	datasets: [
+// 		{
+// 		label: "Weight(kgs)",
+// 		data: [65, 59, 80, 81, 56, 55],
+// 		fill: false,
+// 		borderColor: "rgba(75,192,192,1)",
+// 		},
+// 		{
+// 		label: "Height(cm)",
+// 		data: [28, 48, 40, 19, 86, 27],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 		label: "BMI(kg/m2)",
+// 		data: [28, 8, 41, 18, 85, 29],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 	],
+// };
 
 const options = {
   	responsive: true,
@@ -67,45 +67,69 @@ const Biometrics = () => {
 	const [bmi, setBmi] = useState("");
 	const [date, setDate] = useState("");
 	const [state, setState] = useState({right: false,});
-	const [patientEmail, setPatientEmail] = useState("");
 	const [biometrics, setBiometrices] = useState([]);
     
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
     const [errorMsg, setErrorMsg] = useState([]);
+    const [successMsg, setSuccessMsg] = useState([]);
 
 	const mounted = useRef();
 
+	const patientID = localStorage.getItem("patientID");
+
+
 	useEffect(() => {
-		clearFields();
 		mounted.current = true;
-
+		clearFields();
 		const api_endpoint = globalVariables.END_POINT_ANTHROPOMETRIC;
+		const body = {
+			action: "get_anthropometrics",
+			patient_id: patientID
+		}
 
-		getDataTokens(api_endpoint)
+		postDataTokens(api_endpoint, body)
 		.then((data) => {
-			console.log('====================================');
-			console.log("Biometrics Response:", data);
-			console.log('====================================');			
 			if (mounted) {
-				if (data?.length > 0) {
-					setBiometrices(data);
+				if (data.data) {
+					const response = data.data;
+					if (response?.message) {
+						setErrorMsg(response.message);
+					}
+					else {
+						setBiometrices(response);
+					}
 				}
-				else if (data.code === "token_not_valid") {
-					setErrorMsg(data.messages[0].message);
-					setAuthed(false);
-					setAuth("");
-					localStorage.clear();
-					<Navigate
-						to={"/sign_in"}
-						state={{ from: location.pathname }}
-						replace
-					/>;
+				else if (data.errorData.error) {
+					const status = data.errorData.status;
+					const message = data.errorData.message;
+					if (status === 401 && message === 'Unauthorized') {
+						setErrorMsg(message);
+						setAuthed(false);
+						setAuth("");
+						localStorage.clear();
+						<Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+					}
+					else if (status === 500) {
+						setErrorMsg(message);
+					}
+					else if (status === 404) {
+						if (message.includes("Not Found")) {
+							const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
+							setErrorMsg(errorMessage)
+						}
+						else {
+							setErrorMsg(message);
+						}
+					}
+					else {
+						setErrorMsg(message);
+					}
 				}
 				else {
 					setErrorMsg(data);
 				}
-			  }
+			}
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -118,11 +142,19 @@ const Biometrics = () => {
                 }
             }
 		});
-
+		
 		return () => mounted.current = false;
+	}, [ mounted, patientID, setAuth, setAuthed, location ]);
 
-	}, [ mounted, location, setAuth, setAuthed, ]);
+	useEffect(() => {
+		const intervalRef = setInterval(clearFields, 20000);
+		return () => clearInterval(intervalRef);
+	}, []);
 
+	const clearFields = () => {
+		setErrorMsg([]);
+		setSuccessMsg([]);
+	}
 
 	const handleViewSwitch = () => {
 		setCurrentView(currentView === "table" ? "chart" : "table");
@@ -138,25 +170,15 @@ const Biometrics = () => {
 		setState({ ...state, [anchor]: open });
 	};
 
-	const clearFields = () => {
-		setErrorMsg([]);
-	}
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("Form submitted!");
-		console.log("Height:", height);
-		console.log("Weight:", weight);
-		console.log("BMI:", bmi);
-		console.log("Email:", patientEmail);
-		console.log("Date:", date);
 		
 		const api_endpoint = globalVariables.END_POINT_ANTHROPOMETRIC;
 		const body = {
 			height: height,
 			weight: weight,
 			bmi: bmi,
-			patient_email: patientEmail,
+			patient: patientID,
 			date_taken: date
 		}
 
@@ -167,6 +189,10 @@ const Biometrics = () => {
 				const response = data.data;
 				if (response?.message) {
 					setErrorMsg(response.message);
+				}
+				else if (response?.id) {
+					const message = "Anthropometrics with Weight: " + response.weight + " and Height: " + response.height
+					setSuccessMsg(message + " was added Succcessfull");
 				}
 			}
             else if (data.errorData.error) {
@@ -259,6 +285,40 @@ const Biometrics = () => {
 					</>
 				:''}
 				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
+				
 				<Paper elevation={3} sx={{ marginTop: "5%", marginX: "15%" }}>
 
 					<Box sx={{ padding: 5 }}>
@@ -314,21 +374,6 @@ const Biometrics = () => {
 										onChange={(e) => setBmi(e.target.value)}
 										InputProps={{
 											startAdornment: <InputAdornment position="start">kg/m2</InputAdornment>,
-										}}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										required
-										name="Patient Email"
-										label="Patient Email"
-										fullWidth
-										variant="outlined"
-										margin="normal"
-										value={ patientEmail }
-										onChange={(e) => setPatientEmail(e.target.value)}
-										InputProps={{
-											startAdornment: <InputAdornment position="start">@</InputAdornment>,
 										}}
 									/>
 								</Grid>
@@ -437,6 +482,40 @@ const Biometrics = () => {
 						}
 					</>
 				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
 
 				<Box>
 				{currentView === "table" ? (
@@ -452,29 +531,35 @@ const Biometrics = () => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Date</TableCell>
-									{data.datasets.map((dataset) => (
-										<TableCell key={dataset.label}>{dataset.label}</TableCell>
-									))}
+									{biometrics.length > 0 || Object.keys(biometrics).length ?
+										<>
+											<TableCell>Month</TableCell>
+											{biometrics.datasets.map((dataset) => (
+												<TableCell key={dataset.label}>{dataset.label}</TableCell>
+											))}
+										</>
+									:null}
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{data.labels.map((label, index) => (
-									<TableRow key={index}>
-										<TableCell>{label}</TableCell>
-										{data.datasets.map((dataset, datasetIndex) => (
-											<TableCell key={datasetIndex}>
-												{dataset.data[index]}
-											</TableCell>
-										))}
-									</TableRow>
-								))}
+								{biometrics.length > 0 || Object.keys(biometrics).length ?
+									biometrics.labels.map((label, index) => (
+										<TableRow key={index}>
+											<TableCell>{label}</TableCell>
+											{biometrics.datasets.map((dataset, datasetIndex) => (
+												<TableCell key={datasetIndex}>
+													{dataset.data[index]}
+												</TableCell>
+											))}
+										</TableRow>
+									))
+								:null}
 							</TableBody>
 						</Table>
 					</TableContainer>
 				) : (
 					<Box height={"200px"}>
-						<Line data={data} options={options} />
+						<Line data={biometrics} options={options} />
 					</Box>
 				)}
 				</Box>
