@@ -35,7 +35,7 @@ import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
-import { getDataTokens, postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
+import { postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
 
 Chart.register(...registerables);
 
@@ -276,41 +276,46 @@ const Allergies = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("Form submitted!");
-		console.log("Severity:", severity);
-		console.log("Comments:", comments);
-		console.log("Date:", date);
-		console.log("Options:", checkedItems[7] === true ? drug : selectedValues);
-		console.log(
-			"Food Allergies:",
-			checkedFoodItems[7] === true ? foods : selectedFoodValues
-		);
-		console.log(
-			"Environmental Allergies:",
-			checkedEnvironmentalItems[7] === true
-				? environment
-				: selectedEnvironmentalValues
-		);
-		console.log(
-			"Reaction:",
-			checkedEnvironmentalItems[7] === true ? reaction : selectedReactionsValues
-		);
 
-		console.log('====================================');
-		console.log("Food:", foods);
-		console.log("Drug:", drug);
-		console.log("Environment:", environment)
-		console.log('====================================');
+		const api_endpoint = globalVariables.END_POINT_ALLERGIES;
 
-		const api_endpoint = globalVariables.END_POINT_ALLERGIE;
 		const body = {
-			drug: drug,
-			food: foods,
-			environment: environment,
+			allergen: null,
+			category: null,
+			reaction: null,
 			severity: severity,
-			reaction: reaction,
-			date_taken: date
+			comment: comments,
+			patient: patientID,
+			date_of_onset: date
 		}
+		
+		if (selectedValues.length > 0) {
+			body.allergen = selectedValues;
+			body.category = "Drug";
+		}
+		
+		if (selectedFoodValues.length > 0) {
+			// const selectedFoods = Object.entries(checkedFoodItems).map((item) => {
+			// 	return item[0];
+			// })
+			// body.allergen = selectedFoods;
+			body.allergen = selectedFoodValues;
+			body.category = "Food";
+		}
+		
+		if (selectedEnvironmentalValues.length > 0) {
+			body.allergen = selectedEnvironmentalValues;
+			body.category = "Environmental";
+		}
+		
+		if (selectedReactionsValues.length > 0) {
+			body.reaction = selectedReactionsValues;
+		}
+
+		console.log('====================================');
+		console.log("Body:", body);
+		console.log("URL:", api_endpoint);
+		console.log('====================================');
 
 		postDataTokens(api_endpoint, body)
 		.then((data) => {
@@ -405,6 +410,40 @@ const Allergies = () => {
 									</AlertTitle>
 									<Typography variant='h1' fontSize="20px">
 										<strong>{ errorMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
 									</Typography>
 								</Alert>
 							</Stack>
@@ -603,7 +642,7 @@ const Allergies = () => {
 											label="Additional Comments"
 											multiline
 											fullWidth
-											margin="auto"
+											margin="normal"
 											rows={4}
 											value={comments}
 											onChange={(e) => setComments(e.target.value)}
@@ -702,6 +741,40 @@ const Allergies = () => {
 									</AlertTitle>
 									<Typography variant='h1' fontSize="20px">
 										<strong>{ errorMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
 									</Typography>
 								</Alert>
 							</Stack>
