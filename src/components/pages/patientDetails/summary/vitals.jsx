@@ -96,7 +96,6 @@ const Vitals = () => {
 
 	useEffect(() => {
 		mounted.current = true;
-		clearFields();
 		const api_endpoint = globalVariables.END_POINT_VITALS;
 		const body = {
 			action: "get_vitals",
@@ -146,6 +145,10 @@ const Vitals = () => {
 					setErrorMsg(data);
 				}
 			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -161,16 +164,6 @@ const Vitals = () => {
 		
 		return () => mounted.current = false;
 	}, [ mounted, patientID, setAuth, setAuthed, location ]);
-
-	useEffect(() => {
-		const intervalRef = setInterval(clearFields, 20000);
-		return () => clearInterval(intervalRef);
-	}, []);
-
-	const clearFields = () => {
-		setErrorMsg([]);
-		setSuccessMsg([]);
-	}
 
 
 	const handleViewSwitch = () => {
@@ -244,6 +237,10 @@ const Vitals = () => {
 			else {
 				setErrorMsg(data);
 			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {

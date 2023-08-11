@@ -31,11 +31,11 @@ import { postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
 
 Chart.register(...registerables);
 
-const data = [
-	{date: "January", condition: "Hymenoptera Allergy", status: "Active"},
-	{date: "February", condition: "HIV resulting in other conditions", status: "Inactive"},
-	{date: "March", condition: "Helicobacter Pylori Gastrointestinal Tract Infection", status: "Active"}
-];
+// const data = [
+// 	{date: "January", condition: "Hymenoptera Allergy", status: "Active"},
+// 	{date: "February", condition: "HIV resulting in other conditions", status: "Inactive"},
+// 	{date: "March", condition: "Helicobacter Pylori Gastrointestinal Tract Infection", status: "Active"}
+// ];
 
 const Conditions = () => {
 	const theme = useTheme();
@@ -58,7 +58,6 @@ const Conditions = () => {
 
 
 	useEffect(() => {
-		clearFields();
 		mounted.current = true;
 
 		const api_endpoint = globalVariables.END_POINT_CONDITIONS;
@@ -90,7 +89,11 @@ const Conditions = () => {
 				else {
 					setErrorMsg(data);
 				}
-			  }
+			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -108,16 +111,6 @@ const Conditions = () => {
 
 	}, [ mounted, location, setAuth, setAuthed, patientID ]);
 
-	useEffect(() => {
-		const intervalRef = setInterval(clearFields, 20000);
-		return () => clearInterval(intervalRef);
-	}, []);
-
-	const clearFields = () => {
-		setErrorMsg([]);
-		setSuccessMsg([]);
-	}
-
 	const toggleDrawer = (anchor, open) => (event) => {
 		if (
 		event.type === "keydown" &&
@@ -132,10 +125,6 @@ const Conditions = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("Form submitted!");
-		console.log("Condition:", condition);
-		console.log("Date:", date);
-		console.log("Status:", status);
 		
 		const api_endpoint = globalVariables.END_POINT_CONDITIONS;
 		const body = {
@@ -186,6 +175,10 @@ const Conditions = () => {
 			else {
 				setErrorMsg(data);
 			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {

@@ -200,6 +200,7 @@ const Patient = () => {
 					columns={column}
 					onRowClick={handleRowClick}
 					pageSize={10}
+					rowsPerPageOptions={[10, 25, 50]}
 				/>
 				)}
 			</Box>

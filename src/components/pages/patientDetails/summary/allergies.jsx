@@ -39,45 +39,45 @@ import { postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
 
 Chart.register(...registerables);
 
-const data = {
-	labels: ["2023-07-26", "2023-07-26", "2023-07-26"],
-	datasets: [
-		{
-		label: "Allergen Category",
-		data: [
-			"Drug",
-			"Food",
-			"Environmental",
-		],
-		fill: false,
-		borderColor: "rgba(75,192,192,1)",
-		},
-		{
-		label: "Allergen",
-		data: ["Penecillins", "Diary food", "Dust"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "Reaction",
-		data: ["Diarrhea", "Rash", "Cough"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "Severity",
-		data: ["Mild", "Moderate", "Severe"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "Comments",
-		data: ["Test", "Trial", "Flu"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-	],
-};
+// const data = {
+// 	labels: ["2023-07-26", "2023-07-26", "2023-07-26"],
+// 	datasets: [
+// 		{
+// 		label: "Allergen Category",
+// 		data: [
+// 			"Drug",
+// 			"Food",
+// 			"Environmental",
+// 		],
+// 		fill: false,
+// 		borderColor: "rgba(75,192,192,1)",
+// 		},
+// 		{
+// 		label: "Allergen",
+// 		data: ["Penecillins", "Diary food", "Dust"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 		label: "Reaction",
+// 		data: ["Diarrhea", "Rash", "Cough"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 		label: "Severity",
+// 		data: ["Mild", "Moderate", "Severe"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 		label: "Comments",
+// 		data: ["Test", "Trial", "Flu"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 	],
+// };
 
 const Allergies = () => {
 	const theme = useTheme();
@@ -171,7 +171,6 @@ const Allergies = () => {
 
 
 	useEffect(() => {
-		clearFields();
 		mounted.current = true;
 
 		const api_endpoint = globalVariables.END_POINT_ALLERGIES;
@@ -203,7 +202,11 @@ const Allergies = () => {
 				else {
 					setErrorMsg(data);
 				}
-			  }
+			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -220,16 +223,6 @@ const Allergies = () => {
 		return () => mounted.current = false;
 
 	}, [ mounted, location, setAuth, setAuthed, patientID ]);
-
-	useEffect(() => {
-		const intervalRef = setInterval(clearFields, 20000);
-		return () => clearInterval(intervalRef);
-	}, []);
-
-	const clearFields = () => {
-		setErrorMsg([]);
-		setSuccessMsg([]);
-	}
 
 	const toggleDrawer = (anchor, open) => (event) => {
 		if (
@@ -312,11 +305,6 @@ const Allergies = () => {
 			body.reaction = selectedReactionsValues;
 		}
 
-		console.log('====================================');
-		console.log("Body:", body);
-		console.log("URL:", api_endpoint);
-		console.log('====================================');
-
 		postDataTokens(api_endpoint, body)
 		.then((data) => {
 			console.log("Data:", data);
@@ -355,6 +343,10 @@ const Allergies = () => {
 			else {
 				setErrorMsg(data);
 			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -798,23 +790,27 @@ const Allergies = () => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Onset Date</TableCell>
-									{data.datasets.map((dataset) => (
-										<TableCell key={dataset.label}>{dataset.label}</TableCell>
-									))}
+									<TableCell>Date of Onset</TableCell>
+									<TableCell>Category</TableCell>
+									<TableCell>Allergen</TableCell>
+									<TableCell>Reaction</TableCell>
+									<TableCell>Severity</TableCell>
+									<TableCell>Comments</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{data.labels.map((label, index) => (
-									<TableRow key={index}>
-										<TableCell>{label}</TableCell>
-										{data.datasets.map((dataset, datasetIndex) => (
-											<TableCell key={datasetIndex}>
-												{dataset.data[index]}
-											</TableCell>
-										))}
-									</TableRow>
-								))}
+								{allergies.length > 0 || Object.keys(allergies).length ?
+									allergies.map((allergy, index) => (
+										<TableRow key={index}>
+											<TableCell>{allergy.date}</TableCell>
+											<TableCell>{allergy.category}</TableCell>
+											<TableCell>{allergy.allergen}</TableCell>
+											<TableCell>{allergy.reaction}</TableCell>
+											<TableCell>{allergy.severity}</TableCell>
+											<TableCell>{allergy.comment}</TableCell>
+										</TableRow>
+									))
+								:null}
 							</TableBody>
 						</Table>
 					</TableContainer>
