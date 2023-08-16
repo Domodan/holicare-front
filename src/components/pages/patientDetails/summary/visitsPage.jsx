@@ -98,7 +98,7 @@ const VisitsPage = () => {
 				else {
 					setErrorMsg(data);
 				}
-			  }
+			}
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -125,6 +125,8 @@ const VisitsPage = () => {
 		setSelectedTab(newValue);
 	};
 
+	console.log("Visits:", visits);
+	
 	return (
 		<Box display="flex" flexDirection={"column"} margin={5}>
 			<div className="head">
