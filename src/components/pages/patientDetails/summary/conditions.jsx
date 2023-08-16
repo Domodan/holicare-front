@@ -27,31 +27,15 @@ import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
-import { getDataTokens, postDataTokens } from "../../../../utils/ApiCalls";
+import { postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
 
 Chart.register(...registerables);
 
-const data = {
-	labels: ["January", "February", "March"],
-	datasets: [
-		{
-		label: "Condition",
-		data: [
-			"Hymenoptera Allergy",
-			"Helicobacter Pylori Gastrointestinal Tract Infection",
-			"HIV resulting in other conditions",
-		],
-		fill: false,
-		borderColor: "rgba(75,192,192,1)",
-		},
-		{
-		label: "Status",
-		data: ["Active", "Inactive", "Active"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-	],
-};
+// const data = [
+// 	{date: "January", condition: "Hymenoptera Allergy", status: "Active"},
+// 	{date: "February", condition: "HIV resulting in other conditions", status: "Inactive"},
+// 	{date: "March", condition: "Helicobacter Pylori Gastrointestinal Tract Infection", status: "Active"}
+// ];
 
 const Conditions = () => {
 	const theme = useTheme();
@@ -65,18 +49,24 @@ const Conditions = () => {
 
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
+    const [successMsg, setSuccessMsg] = useState([]);
     const [errorMsg, setErrorMsg] = useState([]);
 
 	const mounted = useRef();
 
+	const patientID = localStorage.getItem("patientID");
+
 
 	useEffect(() => {
-		clearFields();
 		mounted.current = true;
 
 		const api_endpoint = globalVariables.END_POINT_CONDITIONS;
+		const body = {
+			action: "get_condition",
+			patient_id: patientID
+		}
 
-		getDataTokens(api_endpoint)
+		postDataToken(api_endpoint, body)
 		.then((data) => {
 			console.log('====================================');
 			console.log("Conditions Response:", data);
@@ -99,7 +89,11 @@ const Conditions = () => {
 				else {
 					setErrorMsg(data);
 				}
-			  }
+			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -115,12 +109,7 @@ const Conditions = () => {
 
 		return () => mounted.current = false;
 
-	}, [ mounted, location, setAuth, setAuthed, ]);
-
-
-	const clearFields = () => {
-		setErrorMsg([]);
-	}
+	}, [ mounted, location, setAuth, setAuthed, patientID ]);
 
 	const toggleDrawer = (anchor, open) => (event) => {
 		if (
@@ -136,15 +125,12 @@ const Conditions = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("Form submitted!");
-		console.log("Condition:", condition);
-		console.log("Date:", date);
-		console.log("Status:", status);
 		
 		const api_endpoint = globalVariables.END_POINT_CONDITIONS;
 		const body = {
 			condition: condition,
 			status: status,
+			patient: patientID,
 			date_reported: date
 		}
 
@@ -155,6 +141,9 @@ const Conditions = () => {
 				const response = data.data;
 				if (response?.message) {
 					setErrorMsg(response.message);
+				}
+				else if (response?.id) {
+					setSuccessMsg("Condition was added Successfully");
 				}
 			}
             else if (data.errorData.error) {
@@ -186,6 +175,10 @@ const Conditions = () => {
 			else {
 				setErrorMsg(data);
 			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -241,6 +234,40 @@ const Conditions = () => {
 									</AlertTitle>
 									<Typography variant='h1' fontSize="20px">
 										<strong>{ errorMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
 									</Typography>
 								</Alert>
 							</Stack>
@@ -389,6 +416,40 @@ const Conditions = () => {
 						}
 					</>
 				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
 
 				<Box>
 					<TableContainer
@@ -406,23 +467,25 @@ const Conditions = () => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Date</TableCell>
-									{data.datasets.map((dataset) => (
-										<TableCell key={dataset.label}>{dataset.label}</TableCell>
-									))}
+									<TableCell>Date of Onset</TableCell>
+									<TableCell>Condition</TableCell>
+									<TableCell>Status</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{data.labels.map((label, index) => (
-									<TableRow key={index}>
-										<TableCell>{label}</TableCell>
-										{data.datasets.map((dataset, datasetIndex) => (
-											<TableCell key={datasetIndex}>
-												{dataset.data[index]}
-											</TableCell>
-										))}
-									</TableRow>
-								))}
+								{conditions.length > 0 || Object.keys(conditions).length ?
+									conditions.map((condition, index) => (
+										<TableRow key={index}>
+											<TableCell>{condition.date}</TableCell>
+											<TableCell>{condition.condition}</TableCell>
+											{condition.status ?
+												<TableCell>{"Active"}</TableCell>
+											:
+												<TableCell>{"Inactive"}</TableCell>
+											}
+										</TableRow>
+									))
+								:null}
 							</TableBody>
 						</Table>
 					</TableContainer>

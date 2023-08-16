@@ -403,7 +403,7 @@ const AddPatient = () => {
                                     {districts.length > 0 ?
                                         districts.map((district) => {
                                             return <MenuItem value={district.id} key={district.id}>
-                                                {district.district_name}
+                                                {district.district}
                                             </MenuItem>
                                         })
                                     :null}

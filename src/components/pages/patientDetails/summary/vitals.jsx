@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-  Typography,
-  useTheme,
-  Container,
-  TextField,
-  Stack, Alert, AlertTitle,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Paper,
+	Box,
+	Typography,
+	useTheme,
+	Container,
+	TextField,
+	Stack, Alert, AlertTitle,
 } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
 import Grid from "@mui/material/Grid";
@@ -23,48 +23,48 @@ import { tokens } from "../../../../theme";
 import { Chart, registerables } from "chart.js";
 import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import { globalVariables } from "../../../../utils/GlobalVariables";
-import { getDataTokens, postDataTokens } from "../../../../utils/ApiCalls";
+import { postDataTokens } from "../../../../utils/ApiCalls";
 import { useLocation, Navigate } from 'react-router-dom';
 import useAuth from "../../../../auth/useAuth/useAuth";
 
 Chart.register(...registerables);
 
-const data = {
-	labels: ["January", "February", "March", "April", "May", "June"],
-	datasets: [
-		{
-		label: "Temp (DEG C)",
-		data: [65, 59, 80, 81, 56, 55],
-		fill: false,
-		borderColor: "rgba(75,192,192,1)",
-		},
-		{
-		label: "BP(mmHg)",
-		data: [55, 49, 70, 71, 46, 45],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "Pulse(beats/min)",
-		data: [45, 39, 60, 61, 36, 35],
-		fill: false,
-		borderColor: "#6610f2",
-		},
-		{
-		label: "R.Rate(breaths/min)",
-		data: [35, 35, 50, 50, 30, 30],
-		fill: false,
-		borderColor: "#198754",
-		},
-		{
-		label: "SPO@(%)",
-		data: [28, 48, 46, 99, 86, 27],
-		fill: false,
-		borderColor: "#fd7e14",
-		},
-		// Add more datasets as needed
-	],
-};
+// const data = {
+// 	labels: ["January", "February", "March", "April", "May", "June"],
+// 	datasets: [
+// 		{
+// 			label: "Temp (DEG C)",
+// 			data: [65, 59, 80, 81, 56, 55],
+// 			fill: false,
+// 			borderColor: "rgba(75,192,192,1)",
+// 		},
+// 		{
+// 			label: "BP(mmHg)",
+// 			data: [55, 49, 70, 71, 46, 45],
+// 			fill: false,
+// 			borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 			label: "Pulse(beats/min)",
+// 			data: [45, 39, 60, 61, 36, 35],
+// 			fill: false,
+// 			borderColor: "#6610f2",
+// 		},
+// 		{
+// 			label: "R.Rate(breaths/min)",
+// 			data: [35, 35, 50, 50, 30, 30],
+// 			fill: false,
+// 			borderColor: "#198754",
+// 		},
+// 		{
+// 			label: "SPO@(%)",
+// 			data: [28, 48, 46, 99, 86, 27],
+// 			fill: false,
+// 			borderColor: "#fd7e14",
+// 		},
+// 		// Add more datasets as needed
+// 	],
+// };
 
 const options = {
   	responsive: true,
@@ -79,7 +79,7 @@ const Vitals = () => {
 	const [pulse, setPulse] = useState("");
 	const [rRate, setRRate] = useState("");
 	const [spo, setSpo] = useState("");
-	const [patientEmail, setPatientEmail] = useState("");
+	// const [patientEmail, setPatientEmail] = useState("");
 	const [currentView, setCurrentView] = useState("table");
 	const [state, setState] = useState({ right: false, });
 	const [vitals, setVitals] = useState([]);
@@ -87,39 +87,68 @@ const Vitals = () => {
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
     const [errorMsg, setErrorMsg] = useState([]);
+    const [successMsg, setSuccessMsg] = useState([]);
 
 	const mounted = useRef();
 
+	const patientID = localStorage.getItem("patientID");
+
+
 	useEffect(() => {
-		clearFields();
 		mounted.current = true;
-
 		const api_endpoint = globalVariables.END_POINT_VITALS;
+		const body = {
+			action: "get_vitals",
+			patient_id: patientID
+		}
 
-		getDataTokens(api_endpoint)
+		postDataTokens(api_endpoint, body)
 		.then((data) => {
-			console.log('====================================');
-			console.log("Vitals Response:", data);
-			console.log('====================================');			
 			if (mounted) {
-				if (data?.length > 0) {
-					setVitals(data);
+				console.log("Data:", data);
+				if (data.data) {
+					const response = data.data;
+					if (response?.message) {
+						setErrorMsg(response.message);
+					}
+					else {
+						setVitals(response);
+					}
 				}
-				else if (data.code === "token_not_valid") {
-					setErrorMsg(data.messages[0].message);
-					setAuthed(false);
-					setAuth("");
-					localStorage.clear();
-					<Navigate
-						to={"/sign_in"}
-						state={{ from: location.pathname }}
-						replace
-					/>;
+				else if (data.errorData.error) {
+					const status = data.errorData.status;
+					const message = data.errorData.message;
+					if (status === 401 && message === 'Unauthorized') {
+						setErrorMsg(message);
+						setAuthed(false);
+						setAuth("");
+						localStorage.clear();
+						<Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+					}
+					else if (status === 500) {
+						setErrorMsg(message);
+					}
+					else if (status === 404) {
+						if (message.includes("Not Found")) {
+							const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
+							setErrorMsg(errorMessage)
+						}
+						else {
+							setErrorMsg(message);
+						}
+					}
+					else {
+						setErrorMsg(message);
+					}
 				}
 				else {
 					setErrorMsg(data);
 				}
-			  }
+			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -132,10 +161,9 @@ const Vitals = () => {
                 }
             }
 		});
-
+		
 		return () => mounted.current = false;
-
-	}, [ mounted, location, setAuth, setAuthed, ]);
+	}, [ mounted, patientID, setAuth, setAuthed, location ]);
 
 
 	const handleViewSwitch = () => {
@@ -153,10 +181,6 @@ const Vitals = () => {
 		setState({ ...state, [anchor]: open });
 	};
 
-	const clearFields = () => {
-		setErrorMsg([]);
-	}
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		
@@ -167,17 +191,21 @@ const Vitals = () => {
 			heart_rate: pulse,
 			spo: spo,
 			respiratory_rate: rRate,
-			patient_email: patientEmail,
+			patient: patientID,
 			date_of_vital: date
 		}
 
 		postDataTokens(api_endpoint, body)
 		.then((data) => {
-			console.log("Data:", data);
 			if (data.data) {
 				const response = data.data;
 				if (response?.message) {
 					setErrorMsg(response.message);
+				}
+				else if (response?.id) {
+					const message = "Vitals with Temperature: " + response.temperature +
+					" and Blood Pressure: " + response.blood_pressure
+					setSuccessMsg(message + " was added Succcessfull");
 				}
 			}
             else if (data.errorData.error) {
@@ -209,6 +237,10 @@ const Vitals = () => {
 			else {
 				setErrorMsg(data);
 			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -263,6 +295,40 @@ const Vitals = () => {
 									</AlertTitle>
 									<Typography variant='h1' fontSize="20px">
 										<strong>{ errorMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
 									</Typography>
 								</Alert>
 							</Stack>
@@ -354,21 +420,6 @@ const Vitals = () => {
 									onChange={(e) => setSpo(e.target.value)}
 									InputProps={{
 										startAdornment: <InputAdornment position="start">%</InputAdornment>,
-									}}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-									required
-									name="Patient's Name"
-									label="Patient's Name"
-									fullWidth
-									variant="outlined"
-									margin="normal"
-									value={patientEmail}
-									onChange={(e) => setPatientEmail(e.target.value)}
-									InputProps={{
-										startAdornment: <InputAdornment position="start">Email</InputAdornment>,
 									}}
 									/>
 								</Grid>
@@ -481,6 +532,40 @@ const Vitals = () => {
 						}
 					</>
 				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
 
 				<Box>
 					{currentView === "table" ? (
@@ -497,29 +582,35 @@ const Vitals = () => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Date</TableCell>
-									{data.datasets.map((dataset) => (
-										<TableCell key={dataset.label}>{dataset.label}</TableCell>
-									))}
+									{vitals.length > 0 || Object.keys(vitals).length ?
+										<>
+											<TableCell>Month</TableCell>
+											{vitals.datasets.map((dataset) => (
+												<TableCell key={dataset.label}>{dataset.label}</TableCell>
+											))}
+										</>
+									:null}
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{data.labels.map((label, index) => (
+								{vitals.length > 0 || Object.keys(vitals).length ?
+									vitals.labels.map((label, index) => (
 									<TableRow key={index}>
 										<TableCell>{label}</TableCell>
-										{data.datasets.map((dataset, datasetIndex) => (
+										{vitals.datasets.map((dataset, datasetIndex) => (
 											<TableCell key={datasetIndex}>
 												{dataset.data[index]}
 											</TableCell>
 										))}
 									</TableRow>
-								))}
+								))
+							:null}
 							</TableBody>
 						</Table>
 					</TableContainer>
 					) : (
 					<Box>
-						<Line data={data} options={options} />
+						<Line data={vitals} options={options} />
 					</Box>
 					)}
 				</Box>

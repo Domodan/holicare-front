@@ -216,13 +216,13 @@ const AdminSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="Provisional Diagnosis"
                                 to="/notes"
                                 icon={<CalendarTodayOutlined />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                         </>: null}
                         {cat2.includes(auth.role) ?
                         <>
@@ -233,13 +233,13 @@ const AdminSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="Patient Documents"
                                 to="/patient_documents"
                                 icon={<PeopleOutlined />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                         </>
                         : null}
                     </Box>

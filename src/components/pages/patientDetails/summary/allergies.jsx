@@ -35,49 +35,49 @@ import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
-import { getDataTokens, postDataTokens } from "../../../../utils/ApiCalls";
+import { postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
 
 Chart.register(...registerables);
 
-const data = {
-	labels: ["2023-07-26", "2023-07-26", "2023-07-26"],
-	datasets: [
-		{
-		label: "Allergen Category",
-		data: [
-			"Drug",
-			"Food",
-			"Environmental",
-		],
-		fill: false,
-		borderColor: "rgba(75,192,192,1)",
-		},
-		{
-		label: "Allergen",
-		data: ["Penecillins", "Diary food", "Dust"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "Reaction",
-		data: ["Diarrhea", "Rash", "Cough"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "Severity",
-		data: ["Mild", "Moderate", "Severe"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-		{
-		label: "Comments",
-		data: ["Test", "Trial", "Flu"],
-		fill: false,
-		borderColor: "rgba(255,99,132,1)",
-		},
-	],
-};
+// const data = {
+// 	labels: ["2023-07-26", "2023-07-26", "2023-07-26"],
+// 	datasets: [
+// 		{
+// 		label: "Allergen Category",
+// 		data: [
+// 			"Drug",
+// 			"Food",
+// 			"Environmental",
+// 		],
+// 		fill: false,
+// 		borderColor: "rgba(75,192,192,1)",
+// 		},
+// 		{
+// 		label: "Allergen",
+// 		data: ["Penecillins", "Diary food", "Dust"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 		label: "Reaction",
+// 		data: ["Diarrhea", "Rash", "Cough"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 		label: "Severity",
+// 		data: ["Mild", "Moderate", "Severe"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 		{
+// 		label: "Comments",
+// 		data: ["Test", "Trial", "Flu"],
+// 		fill: false,
+// 		borderColor: "rgba(255,99,132,1)",
+// 		},
+// 	],
+// };
 
 const Allergies = () => {
 	const theme = useTheme();
@@ -101,8 +101,10 @@ const Allergies = () => {
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
     const [errorMsg, setErrorMsg] = useState([]);
+    const [successMsg, setSuccessMsg] = useState([]);
 
 	const mounted = useRef();
+	const patientID = localStorage.getItem("patientID");
 
 	const severityList = ["Mild", "Moderate", "Severe"];
 
@@ -166,15 +168,18 @@ const Allergies = () => {
 	const selectedReactionsValues = Object.entries(checkedReactionsItems)
 		.filter(([key, value]) => value === true)
 		.map(([key]) => key);
-	
-		
+
+
 	useEffect(() => {
-		clearFields();
 		mounted.current = true;
 
 		const api_endpoint = globalVariables.END_POINT_ALLERGIES;
+		const body = {
+			action: "get_allergy",
+			patient_id: patientID
+		}
 
-		getDataTokens(api_endpoint)
+		postDataToken(api_endpoint, body)
 		.then((data) => {
 			console.log('====================================');
 			console.log("Allergies Response:", data);
@@ -197,7 +202,11 @@ const Allergies = () => {
 				else {
 					setErrorMsg(data);
 				}
-			  }
+			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -213,12 +222,7 @@ const Allergies = () => {
 
 		return () => mounted.current = false;
 
-	}, [ mounted, location, setAuth, setAuthed, ]);
-
-
-	const clearFields = () => {
-		setErrorMsg([]);
-	}
+	}, [ mounted, location, setAuth, setAuthed, patientID ]);
 
 	const toggleDrawer = (anchor, open) => (event) => {
 		if (
@@ -265,34 +269,40 @@ const Allergies = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("Form submitted!");
-		console.log("Severity:", severity);
-		console.log("Comments:", comments);
-		console.log("Date:", date);
-		console.log("Options:", checkedItems[7] === true ? drug : selectedValues);
-		console.log(
-			"Food Allergies:",
-			checkedFoodItems[7] === true ? foods : selectedFoodValues
-		);
-		console.log(
-			"Environmental Allergies:",
-			checkedEnvironmentalItems[7] === true
-				? environment
-				: selectedEnvironmentalValues
-		);
-		console.log(
-			"Reaction:",
-			checkedEnvironmentalItems[7] === true ? reaction : selectedReactionsValues
-		);
 
 		const api_endpoint = globalVariables.END_POINT_ALLERGIES;
+
 		const body = {
-			drug: drug,
-			food: foods,
-			environment: environment,
+			allergen: null,
+			category: null,
+			reaction: null,
 			severity: severity,
-			reaction: reaction,
-			date_taken: date
+			comment: comments,
+			patient: patientID,
+			date_of_onset: date
+		}
+		
+		if (selectedValues.length > 0) {
+			body.allergen = selectedValues;
+			body.category = "Drug";
+		}
+		
+		if (selectedFoodValues.length > 0) {
+			// const selectedFoods = Object.entries(checkedFoodItems).map((item) => {
+			// 	return item[0];
+			// })
+			// body.allergen = selectedFoods;
+			body.allergen = selectedFoodValues;
+			body.category = "Food";
+		}
+		
+		if (selectedEnvironmentalValues.length > 0) {
+			body.allergen = selectedEnvironmentalValues;
+			body.category = "Environmental";
+		}
+		
+		if (selectedReactionsValues.length > 0) {
+			body.reaction = selectedReactionsValues;
 		}
 
 		postDataTokens(api_endpoint, body)
@@ -333,6 +343,10 @@ const Allergies = () => {
 			else {
 				setErrorMsg(data);
 			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
 		})
 		.catch((error) => {
             if (error?.message) {
@@ -388,6 +402,40 @@ const Allergies = () => {
 									</AlertTitle>
 									<Typography variant='h1' fontSize="20px">
 										<strong>{ errorMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
 									</Typography>
 								</Alert>
 							</Stack>
@@ -586,7 +634,7 @@ const Allergies = () => {
 											label="Additional Comments"
 											multiline
 											fullWidth
-											margin="auto"
+											margin="normal"
 											rows={4}
 											value={comments}
 											onChange={(e) => setComments(e.target.value)}
@@ -691,6 +739,40 @@ const Allergies = () => {
 						}
 					</>
 				:''}
+				
+				{successMsg.length > 0 || Object.keys(successMsg).length ?
+					<>
+						{typeof successMsg === 'object' ?
+							Object.entries(successMsg).map(([key, value]) => {
+								return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+									<Alert severity="success">
+										<AlertTitle>
+											<Typography variant='h1' fontSize="30px">
+												<strong>Success:</strong>
+											</Typography>
+										</AlertTitle>
+										<Typography variant='h1' fontSize="20px">
+											<strong>{ value }</strong>
+										</Typography>
+									</Alert>
+								</Stack>
+							})
+						:
+							<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ successMsg }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						}
+					</>
+				:''}
 
 				<Box>
 					<TableContainer
@@ -708,23 +790,27 @@ const Allergies = () => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>Onset Date</TableCell>
-									{data.datasets.map((dataset) => (
-										<TableCell key={dataset.label}>{dataset.label}</TableCell>
-									))}
+									<TableCell>Date of Onset</TableCell>
+									<TableCell>Category</TableCell>
+									<TableCell>Allergen</TableCell>
+									<TableCell>Reaction</TableCell>
+									<TableCell>Severity</TableCell>
+									<TableCell>Comments</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{data.labels.map((label, index) => (
-									<TableRow key={index}>
-										<TableCell>{label}</TableCell>
-										{data.datasets.map((dataset, datasetIndex) => (
-											<TableCell key={datasetIndex}>
-												{dataset.data[index]}
-											</TableCell>
-										))}
-									</TableRow>
-								))}
+								{allergies.length > 0 || Object.keys(allergies).length ?
+									allergies.map((allergy, index) => (
+										<TableRow key={index}>
+											<TableCell>{allergy.date}</TableCell>
+											<TableCell>{allergy.category}</TableCell>
+											<TableCell>{allergy.allergen}</TableCell>
+											<TableCell>{allergy.reaction}</TableCell>
+											<TableCell>{allergy.severity}</TableCell>
+											<TableCell>{allergy.comment}</TableCell>
+										</TableRow>
+									))
+								:null}
 							</TableBody>
 						</Table>
 					</TableContainer>
