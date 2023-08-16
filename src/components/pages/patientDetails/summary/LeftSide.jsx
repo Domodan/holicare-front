@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Visits from "./visits";
 import MyVerticalTabs from "./visitsPage";
+import { Link } from "react-router-dom";
 
 const LeftSide = (props) => {
     return (
@@ -10,20 +11,20 @@ const LeftSide = (props) => {
                     <h1>
                         <NameCard>Ainekirabo Mbabazi</NameCard>
                     </h1>
-                    <a>
+                    <Link to={""}>
                         <LinkCard>@ainekirabo</LinkCard>
-                    </a>
+                    </Link>
                     <p>
                         <TitleCardPro>Patient</TitleCardPro>
                     </p>
                 </UserInfo>
                 <Widget>
-                    <a>
+                    <Link to={""}>
                         <div>
                             {/* <img src="/images/adress-icon.png" alt="" /> */}
                             <span>Nansana/Wakiso</span>
                         </div>
-                    </a>
+                    </Link>
                     <StatusCard>
                         <div>
                             {/* <img src="/images/university-icon.png" alt="" /> */}
@@ -70,29 +71,29 @@ const UserInfo = styled.div`
 
 `;
 
-const CardBackground = styled.div`
-    background: url("/images/OIP.jpeg");
-    background-position: center;
-    background-size: 482px;
-    height: 224px;
-    margin: -12px -12px 0;
-`;
+// const CardBackground = styled.div`
+//     background: url("/images/OIP.jpeg");
+//     background-position: center;
+//     background-size: 482px;
+//     height: 224px;
+//     margin: -12px -12px 0;
+// `;
 
-const Photo = styled.div`
-    box-shadow: none;
-    background-image: url("/images/fotocv.jpg");
-    width: 150px;
-    height: 150px;
-    box-sizing: border-box;
-    background-clip: content-box;
-    background-color: white;
-    background-position: center;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    border: 3px solid black;
-    margin: -38px auto 12px;
-    border-radius: 50%;
-`;
+// const Photo = styled.div`
+//     box-shadow: none;
+//     background-image: url("/images/fotocv.jpg");
+//     width: 150px;
+//     height: 150px;
+//     box-sizing: border-box;
+//     background-clip: content-box;
+//     background-color: white;
+//     background-position: center;
+//     background-size: 100%;
+//     background-repeat: no-repeat;
+//     border: 3px solid black;
+//     margin: -38px auto 12px;
+//     border-radius: 50%;
+// `;
 
 const NameCard = styled.div`
     font-family: Arial;
