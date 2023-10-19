@@ -47,7 +47,7 @@ const AddAdmin = () => {
             endpoint = globalVariables.END_POINT_HOSPITAL_ADMIN;
         else
             endpoint = globalVariables.END_POINT_ADMIN;
-        const url = globalVariables.BASE_URL_2 + endpoint;
+        const url = globalVariables.BASE_URL + endpoint;
         data = serialize(data);
         let header = new Headers({
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
