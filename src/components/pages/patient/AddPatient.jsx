@@ -63,7 +63,7 @@ const AddPatient = () => {
     
 
     const handleFormSubmit = (data) => {
-        const url = globalVariables.BASE_URL_2 + globalVariables.END_POINT_PATIENT;
+        const url = globalVariables.BASE_URL + globalVariables.END_POINT_PATIENT;
         data = serialize(data);
         let header = new Headers({
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
