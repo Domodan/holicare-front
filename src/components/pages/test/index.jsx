@@ -9,7 +9,7 @@ import {
   Tabs,
   Grid,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 import { mockDataTests } from "../../../data/mockData";
 import { tokens } from "../../../theme";
