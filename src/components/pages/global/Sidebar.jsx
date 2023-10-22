@@ -185,13 +185,13 @@ const AdminSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="Appointments"
                                 to="/appointment"
                                 icon={<CalendarTodayOutlined />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                             <Item
                                 title="Schedules"
                                 to="/schedule"
@@ -209,13 +209,13 @@ const AdminSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="Tests"
                                 to="/test"
                                 icon={<ContactsOutlined />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                             {/* <Item
                                 title="Provisional Diagnosis"
                                 to="/notes"
@@ -342,13 +342,13 @@ const PatientSidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
-                            <Item
+                            {/* <Item
                                 title="Patient Summary"
                                 to="/details/:id"
                                 icon={<HomeOutlined />}
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                            /> */}
                             <Item
                                 title="Vitals"
                                 to="/vitals"
