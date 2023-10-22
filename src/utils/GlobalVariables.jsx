@@ -1,8 +1,8 @@
 export const globalVariables = {
     // Request URLs
-    // BASE_URL: "https://holicare.herokuapp.com/api/v1/",
-    // BASE_URL_2: "http://196.43.134.157:8000/api/v1/",
-    BASE_URL: "http://196.43.134.157:8000/api/v1/",
+    BASE_URL: "https://holicare.herokuapp.com/api/v1/",
+    // BASE_URL: "http://196.43.134.157:8000/api/v1/",
+    BASE_URL_2: "http://196.43.134.157:8000/api/v1/",
     BASE_URL_3: "http://196.43.134.157:8000/",
 
     // Request Headers
