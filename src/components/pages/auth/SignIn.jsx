@@ -198,12 +198,12 @@ const SignIn = () => {
                                                     Forgot password?
                                                 </Link>
                                             </Grid>
-                                            <Grid item>
+                                            {/* <Grid item>
                                                 {"Don't have an account? "}
                                                 <Link to="/sign_up" variant="body2">
                                                     {"Sign Up"}
                                                 </Link>
-                                            </Grid>
+                                            </Grid> */}
                                         </Grid>
                                         <Footer />
                                     </Box>
