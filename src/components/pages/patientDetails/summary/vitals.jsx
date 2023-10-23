@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
 	Table,
@@ -26,6 +26,7 @@ import { globalVariables } from "../../../../utils/GlobalVariables";
 import { postDataTokens } from "../../../../utils/ApiCalls";
 import { useLocation, Navigate } from 'react-router-dom';
 import useAuth from "../../../../auth/useAuth/useAuth";
+import { useCallback } from "react";
 
 Chart.register(...registerables);
 
@@ -89,13 +90,9 @@ const Vitals = () => {
     const [errorMsg, setErrorMsg] = useState([]);
     const [successMsg, setSuccessMsg] = useState([]);
 
-	const mounted = useRef();
-
 	const patientID = localStorage.getItem("patientID");
 
-
-	useEffect(() => {
-		mounted.current = true;
+	const getVitals = useCallback(() => {
 		const api_endpoint = globalVariables.END_POINT_VITALS;
 		const body = {
 			action: "get_vitals",
@@ -104,46 +101,43 @@ const Vitals = () => {
 
 		postDataTokens(api_endpoint, body)
 		.then((data) => {
-			if (mounted) {
-				console.log("Data:", data);
-				if (data.data) {
-					const response = data.data;
-					if (response?.message) {
-						setErrorMsg(response.message);
-					}
-					else {
-						setVitals(response);
-					}
+			if (data.data) {
+				const response = data.data;
+				if (response?.message) {
+					setErrorMsg(response.message);
 				}
-				else if (data.errorData.error) {
-					const status = data.errorData.status;
-					const message = data.errorData.message;
-					if (status === 401 && message === 'Unauthorized') {
-						setErrorMsg(message);
-						setAuthed(false);
-						setAuth("");
-						localStorage.clear();
-						<Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
-					}
-					else if (status === 500) {
-						setErrorMsg(message);
-					}
-					else if (status === 404) {
-						if (message.includes("Not Found")) {
-							const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
-							setErrorMsg(errorMessage)
-						}
-						else {
-							setErrorMsg(message);
-						}
+				else {
+					setVitals(response);
+				}
+			}
+			else if (data.errorData.error) {
+				const status = data.errorData.status;
+				const message = data.errorData.message;
+				if (status === 401 && message === 'Unauthorized') {
+					setErrorMsg(message);
+					setAuthed(false);
+					setAuth("");
+					localStorage.clear();
+					<Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+				}
+				else if (status === 500) {
+					setErrorMsg(message);
+				}
+				else if (status === 404) {
+					if (message.includes("Not Found")) {
+						const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
+						setErrorMsg(errorMessage)
 					}
 					else {
 						setErrorMsg(message);
 					}
 				}
 				else {
-					setErrorMsg(data);
+					setErrorMsg(message);
 				}
+			}
+			else {
+				setErrorMsg(data);
 			}
 			setTimeout(() => {
 				setErrorMsg([]);
@@ -161,9 +155,13 @@ const Vitals = () => {
                 }
             }
 		});
-		
-		return () => mounted.current = false;
-	}, [ mounted, patientID, setAuth, setAuthed, location ]);
+	}, [ patientID, setAuth, setAuthed, location]);
+
+	useEffect(() => {
+		// mounted.current = true;
+		getVitals();
+		// return () => mounted.current = false;
+	}, [getVitals]);
 
 
 	const handleViewSwitch = () => {
@@ -206,6 +204,7 @@ const Vitals = () => {
 					const message = "Vitals with Temperature: " + response.temperature +
 					" and Blood Pressure: " + response.blood_pressure
 					setSuccessMsg(message + " was added Succcessfull");
+					getVitals();
 				}
 			}
             else if (data.errorData.error) {

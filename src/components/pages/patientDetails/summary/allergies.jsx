@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	Table,
 	TableBody,
@@ -36,6 +36,7 @@ import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
 import { postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
+import { useCallback } from "react";
 
 Chart.register(...registerables);
 
@@ -103,7 +104,6 @@ const Allergies = () => {
     const [errorMsg, setErrorMsg] = useState([]);
     const [successMsg, setSuccessMsg] = useState([]);
 
-	const mounted = useRef();
 	const patientID = localStorage.getItem("patientID");
 
 	const severityList = ["Mild", "Moderate", "Severe"];
@@ -170,8 +170,7 @@ const Allergies = () => {
 		.map(([key]) => key);
 
 
-	useEffect(() => {
-		mounted.current = true;
+	const getAllergies = useCallback(() => {
 
 		const api_endpoint = globalVariables.END_POINT_ALLERGIES;
 		const body = {
@@ -180,28 +179,23 @@ const Allergies = () => {
 		}
 
 		postDataToken(api_endpoint, body)
-		.then((data) => {
-			console.log('====================================');
-			console.log("Allergies Response:", data);
-			console.log('====================================');			
-			if (mounted) {
-				if (data?.length > 0) {
-					setAllergies(data);
-				}
-				else if (data.code === "token_not_valid") {
-					setErrorMsg(data.messages[0].message);
-					setAuthed(false);
-					setAuth("");
-					localStorage.clear();
-					<Navigate
-						to={"/sign_in"}
-						state={{ from: location.pathname }}
-						replace
-					/>;
-				}
-				else {
-					setErrorMsg(data);
-				}
+		.then((data) => {		
+			if (data?.length > 0) {
+				setAllergies(data);
+			}
+			else if (data.code === "token_not_valid") {
+				setErrorMsg(data.messages[0].message);
+				setAuthed(false);
+				setAuth("");
+				localStorage.clear();
+				<Navigate
+					to={"/sign_in"}
+					state={{ from: location.pathname }}
+					replace
+				/>;
+			}
+			else {
+				setErrorMsg(data);
 			}
 			setTimeout(() => {
 				setErrorMsg([]);
@@ -219,10 +213,11 @@ const Allergies = () => {
                 }
             }
 		});
+	}, [ location, setAuth, setAuthed, patientID ]);
 
-		return () => mounted.current = false;
-
-	}, [ mounted, location, setAuth, setAuthed, patientID ]);
+	useEffect(() => {
+		getAllergies();
+	}, [ getAllergies ]);
 
 	const toggleDrawer = (anchor, open) => (event) => {
 		if (
@@ -307,11 +302,13 @@ const Allergies = () => {
 
 		postDataTokens(api_endpoint, body)
 		.then((data) => {
-			console.log("Data:", data);
 			if (data.data) {
 				const response = data.data;
 				if (response?.message) {
 					setErrorMsg(response.message);
+				}
+				else {
+					getAllergies();
 				}
 			}
             else if (data.errorData.error) {
@@ -787,6 +784,7 @@ const Allergies = () => {
 						},
 						}}
 					>
+					{allergies.length > 0 || Object.keys(allergies).length ?
 						<Table>
 							<TableHead>
 								<TableRow>
@@ -799,8 +797,7 @@ const Allergies = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{allergies.length > 0 || Object.keys(allergies).length ?
-									allergies.map((allergy, index) => (
+									{allergies.map((allergy, index) => (
 										<TableRow key={index}>
 											<TableCell>{allergy.date}</TableCell>
 											<TableCell>{allergy.category}</TableCell>
@@ -809,10 +806,10 @@ const Allergies = () => {
 											<TableCell>{allergy.severity}</TableCell>
 											<TableCell>{allergy.comment}</TableCell>
 										</TableRow>
-									))
-								:null}
+									))}
 							</TableBody>
 						</Table>
+						:null}
 					</TableContainer>
 				</Box>
 			</Container>
