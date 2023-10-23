@@ -1,23 +1,16 @@
 import styled from "styled-components";
 import LeftSide from "./LeftSide";
 import Main from "./main";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // import { Box } from "@mui/material";
 const Homepage = (props) => {
-  const location = useLocation();
   const { id } = useParams();
-  console.log('====================================');
-  console.log("Location:", location);
-  console.log("Patient ID:", id);
-  console.log("Props:", props)
-  console.log('====================================');
   localStorage.setItem("patientID", id);
   return (
     <Container>
       <Box>
-        
         <Main />
-        <LeftSide />
+        <LeftSide patientID={ id } />
       </Box>
     </Container>
   );

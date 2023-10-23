@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	Table,
 	TableBody,
@@ -28,6 +28,7 @@ import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
 import { postDataToken, postDataTokens } from "../../../../utils/ApiCalls";
+import { useCallback } from "react";
 
 Chart.register(...registerables);
 
@@ -52,14 +53,9 @@ const Conditions = () => {
     const [successMsg, setSuccessMsg] = useState([]);
     const [errorMsg, setErrorMsg] = useState([]);
 
-	const mounted = useRef();
-
 	const patientID = localStorage.getItem("patientID");
 
-
-	useEffect(() => {
-		mounted.current = true;
-
+	const getConditions = useCallback(() => {
 		const api_endpoint = globalVariables.END_POINT_CONDITIONS;
 		const body = {
 			action: "get_condition",
@@ -67,28 +63,23 @@ const Conditions = () => {
 		}
 
 		postDataToken(api_endpoint, body)
-		.then((data) => {
-			console.log('====================================');
-			console.log("Conditions Response:", data);
-			console.log('====================================');			
-			if (mounted) {
-				if (data?.length > 0) {
-					setConditions(data);
-				}
-				else if (data.code === "token_not_valid") {
-					setErrorMsg(data.messages[0].message);
-					setAuthed(false);
-					setAuth("");
-					localStorage.clear();
-					<Navigate
-						to={"/sign_in"}
-						state={{ from: location.pathname }}
-						replace
-					/>;
-				}
-				else {
-					setErrorMsg(data);
-				}
+		.then((data) => {		
+			if (data?.length > 0) {
+				setConditions(data);
+			}
+			else if (data.code === "token_not_valid") {
+				setErrorMsg(data.messages[0].message);
+				setAuthed(false);
+				setAuth("");
+				localStorage.clear();
+				<Navigate
+					to={"/sign_in"}
+					state={{ from: location.pathname }}
+					replace
+				/>;
+			}
+			else {
+				setErrorMsg(data);
 			}
 			setTimeout(() => {
 				setErrorMsg([]);
@@ -106,10 +97,12 @@ const Conditions = () => {
                 }
             }
 		});
+	}, [ location, setAuth, setAuthed, patientID ]);
 
-		return () => mounted.current = false;
 
-	}, [ mounted, location, setAuth, setAuthed, patientID ]);
+	useEffect(() => {
+		getConditions();
+	}, [ getConditions ]);
 
 	const toggleDrawer = (anchor, open) => (event) => {
 		if (
@@ -144,6 +137,7 @@ const Conditions = () => {
 				}
 				else if (response?.id) {
 					setSuccessMsg("Condition was added Successfully");
+					getConditions();
 				}
 			}
             else if (data.errorData.error) {
@@ -464,6 +458,7 @@ const Conditions = () => {
 						},
 						}}
 					>
+					{conditions.length > 0 || Object.keys(conditions).length ?
 						<Table>
 							<TableHead>
 								<TableRow>
@@ -473,8 +468,7 @@ const Conditions = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{conditions.length > 0 || Object.keys(conditions).length ?
-									conditions.map((condition, index) => (
+									{conditions.map((condition, index) => (
 										<TableRow key={index}>
 											<TableCell>{condition.date}</TableCell>
 											<TableCell>{condition.condition}</TableCell>
@@ -484,10 +478,10 @@ const Conditions = () => {
 												<TableCell>{"Inactive"}</TableCell>
 											}
 										</TableRow>
-									))
-								:null}
+									))}
 							</TableBody>
 						</Table>
+					:null}
 					</TableContainer>
 				</Box>
 			</Container>

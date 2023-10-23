@@ -74,6 +74,7 @@ export default function Schedules() {
     const { setAuth, setAuthed } = useAuth();
     const location = useLocation();
     const [errorMsg, setErrorMsg] = useState([]);
+    const [successMsg, setSuccessMsg] = useState([]);
 
 	
 	const handleOpen = () => setOpen(true);
@@ -125,15 +126,16 @@ export default function Schedules() {
 
 		postDataToken(api_endpoint, body)
 		.then((data) => {
-			console.log('====================================');
-			console.log("Response:", data);
-			console.log('====================================');
+			// console.log('====================================');
+			// console.log("Response:", data);
+			// console.log('====================================');
 			if (data?.length > 0) {
 				setErrorMsg('');
 				handleClose();
 				setSchedule({});
 				setSelectedDay('');
 				setSelectedDays([]);
+				setSuccessMsg("Your Schedule was created Successfully");
 			}
 			else if (typeof data[0] === 'string'){
 				if (data[0].includes("Unauthorized")) {
@@ -156,6 +158,9 @@ export default function Schedules() {
                 })
                 setErrorMsg(error);
             }
+			setTimeout(() => {
+				setErrorMsg([]);
+			}, 10000);
 		})
 
 	};
@@ -234,6 +239,40 @@ export default function Schedules() {
 
 	return (
 		<div>
+			{successMsg.length > 0 || Object.keys(successMsg).length ?
+				<>
+					{typeof successMsg === 'object' ?
+						Object.entries(successMsg).map(([key, value]) => {
+							return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+								<Alert severity="success">
+									<AlertTitle>
+										<Typography variant='h1' fontSize="30px">
+											<strong>Success:</strong>
+										</Typography>
+									</AlertTitle>
+									<Typography variant='h1' fontSize="20px">
+										<strong>{ value }</strong>
+									</Typography>
+								</Alert>
+							</Stack>
+						})
+					:
+						<Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+							<Alert severity="success">
+								<AlertTitle>
+									<Typography variant='h1' fontSize="30px">
+										<strong>Success:</strong>
+									</Typography>
+								</AlertTitle>
+								<Typography variant='h1' fontSize="20px">
+									<strong>{ successMsg }</strong>
+								</Typography>
+							</Alert>
+						</Stack>
+					}
+				</>
+			:''}
+
 			<Button variant="contained" onClick={handleOpen} sx={{p:2, m:4}}>Create Schedule</Button>
 			<Modal
 				open={open}
@@ -279,6 +318,7 @@ export default function Schedules() {
 							}
 						</>
 					:''}
+					
 					<form onSubmit={handleSubmit}>
 						<FormControl fullWidth margin="normal">
 							<FormLabel component="legend">Schedule Name</FormLabel>

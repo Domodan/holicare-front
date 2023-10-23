@@ -51,15 +51,26 @@ const Calendar = () => {
         }
         postDataTokens(api_endpoint, body)
         .then((data) => {
-            console.log('====================================');
-            console.log("Doctor Response:", data);
-            console.log('====================================');
+            // console.log('====================================');
+            // console.log("Doctor Response:", data);
+            // console.log('====================================');
             if (data.data) {
                 const availableDoctors = data.data;
-                if (availableDoctors?.length > 0) {
+                if (availableDoctors[0].id && availableDoctors?.length > 0) {
                     setDoctors(availableDoctors);
                     setOpen(true);
                 }
+                else {
+                    if (availableDoctors[0].includes("Day matching")) {
+                        setErrorMsg("There are No Doctors available of this Day: " + day);
+                    }
+                    else {
+                        setErrorMsg(availableDoctors[0]);
+                    }
+                }
+                setTimeout(() => {
+                    setErrorMsg([]);
+                }, 10000);
             }
             else if (data.errorData.error) {
                 const status = data.errorData.status;
@@ -411,8 +422,8 @@ const Calendar = () => {
                                     >
                                         <MenuItem value={""}><em>None</em></MenuItem>
                                         {doctors?.length > 0 ?
-                                            doctors.map((doctor) => {
-                                                return <MenuItem value={doctor.id} key={doctor.id}>
+                                            doctors.map((doctor, index) => {
+                                                return <MenuItem value={doctor.id} key={index}>
                                                     {doctor.name}
                                                 </MenuItem>
                                             })

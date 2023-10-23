@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
 	Tabs, Tab, Box, Paper, Grid, Typography,
-	Stack, Alert, AlertTitle,
+	// Stack, Alert, AlertTitle,
 } from "@mui/material";
-import useAuth from "../../../../auth/useAuth/useAuth";
-import { useLocation, Navigate } from "react-router-dom";
-import { globalVariables } from "../../../../utils/GlobalVariables";
-import { getDataTokens } from "../../../../utils/ApiCalls";
+// import useAuth from "../../../../auth/useAuth/useAuth";
+// import { useLocation, Navigate } from "react-router-dom";
+// import { globalVariables } from "../../../../utils/GlobalVariables";
+// import { getDataTokens } from "../../../../utils/ApiCalls";
 
 
 const VisitsPage = () => {
 	const [selectedTab, setSelectedTab] = useState(0);
-    const [errorMsg, setErrorMsg] = useState([]);
-	const [visits, setVisits] = useState([]);
+    // const [errorMsg, setErrorMsg] = useState([]);
+	// const [visits, setVisits] = useState([]);
 
-    const { setAuth, setAuthed } = useAuth();
-    const location = useLocation();
+    // const { setAuth, setAuthed } = useAuth();
+    // const location = useLocation();
 
-	const mounted = useRef();
+	// const mounted = useRef();
 
 	const tabsData = [
 		[
@@ -69,63 +69,63 @@ const VisitsPage = () => {
 	];
 	
 
-	useEffect(() => {
-		clearFields();
-		mounted.current = true;
+	// useEffect(() => {
+	// 	clearFields();
+	// 	mounted.current = true;
 
-		const api_endpoint = globalVariables.END_POINT_VISITS;
+	// 	const api_endpoint = globalVariables.END_POINT_VISITS;
 
-		getDataTokens(api_endpoint)
-		.then((data) => {
-			console.log('====================================');
-			console.log("Visits Response:", data);
-			console.log('====================================');			
-			if (mounted) {
-				if (data?.length > 0) {
-					setVisits(data);
-				}
-				else if (data.code === "token_not_valid") {
-					setErrorMsg(data.messages[0].message);
-					setAuthed(false);
-					setAuth("");
-					localStorage.clear();
-					<Navigate
-						to={"/sign_in"}
-						state={{ from: location.pathname }}
-						replace
-					/>;
-				}
-				else {
-					setErrorMsg(data);
-				}
-			}
-		})
-		.catch((error) => {
-            if (error?.message) {
-                if (error.message.includes("Failed to fetch")) {
-                    const errorMessage = "ERR_CONNECTION_REFUSED: Please try again or reload the page";
-                    setErrorMsg(errorMessage);
-                }
-                else {
-                    setErrorMsg(error.message);
-                }
-            }
-		});
+	// 	getDataTokens(api_endpoint)
+	// 	.then((data) => {
+	// 		console.log('====================================');
+	// 		console.log("Visits Response:", data);
+	// 		console.log('====================================');			
+	// 		if (mounted) {
+	// 			if (data?.length > 0) {
+	// 				setVisits(data);
+	// 			}
+	// 			else if (data.code === "token_not_valid") {
+	// 				setErrorMsg(data.messages[0].message);
+	// 				setAuthed(false);
+	// 				setAuth("");
+	// 				localStorage.clear();
+	// 				<Navigate
+	// 					to={"/sign_in"}
+	// 					state={{ from: location.pathname }}
+	// 					replace
+	// 				/>;
+	// 			}
+	// 			else {
+	// 				setErrorMsg(data);
+	// 			}
+	// 		}
+	// 	})
+	// 	.catch((error) => {
+    //         if (error?.message) {
+    //             if (error.message.includes("Failed to fetch")) {
+    //                 const errorMessage = "ERR_CONNECTION_REFUSED: Please try again or reload the page";
+    //                 setErrorMsg(errorMessage);
+    //             }
+    //             else {
+    //                 setErrorMsg(error.message);
+    //             }
+    //         }
+	// 	});
 
-		return () => mounted.current = false;
+	// 	return () => mounted.current = false;
 
-	}, [ mounted, location, setAuth, setAuthed, ]);
+	// }, [ mounted, location, setAuth, setAuthed, ]);
 
 
-	const clearFields = () => {
-		setErrorMsg([]);
-	}
+	// const clearFields = () => {
+	// 	setErrorMsg([]);
+	// }
 
 	const handleTabChange = (event, newValue) => {
 		setSelectedTab(newValue);
 	};
 
-	console.log("Visits:", visits);
+	// console.log("Visits:", visits);
 	
 	return (
 		<Box display="flex" flexDirection={"column"} margin={5}>
@@ -140,7 +140,7 @@ const VisitsPage = () => {
 					<h3>Visits</h3>
 				</Box>
 			</div>
-
+{/* 
 			{errorMsg.length > 0 || Object.keys(errorMsg).length ?
 				<>
 					{typeof errorMsg === 'object' ?
@@ -173,24 +173,24 @@ const VisitsPage = () => {
 						</Stack>
 					}
 				</>
-			:''}
+			:''} */}
 
 			{tabsData.map((item, index) => (
-				<Box margin= "1% 0">
+				<Box key={index} margin= "1% 0">
 					<Paper sx={{backgroundColor:"rgba(0, 0, 0, 0.07)",  margin: "0 2%"}} >
 						<Grid item xs={12} >
-							<Typography textAlign={"left"} m={1}>
+							<Typography textalign={"left"} m={1}>
 								<strong>Day of the visit:</strong> {item[0].date}
 							</Typography>
 						</Grid>
-						<Grid display={ "flex"} xs={12}>
+						<Grid display={ "flex"}>
 							<Grid item xs={6}>
-								<Typography textAlign={"left"} m={1}>
+								<Typography textalign={"left"} m={1}>
 									<strong>Diagnosis:</strong>
 								</Typography>
 							</Grid>
 							<Grid item xs={6}>
-								<Typography textAlign={"left"} m={1}>
+								<Typography textalign={"left"} m={1}>
 									{item[0].diagnosis}
 								</Typography>
 							</Grid>
@@ -222,7 +222,7 @@ const VisitsPage = () => {
 								>
 								{selectedTab === index &&
 									tab.content.map((contentItem, contentIndex) => (
-										<div key={contentIndex} textAlign={"left !important"}>
+										<div key={contentIndex} textalign={"left !important"}>
 											{Object.values(contentItem)[0]}
 										</div>
 									))}

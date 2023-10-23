@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
 	Table,
@@ -26,6 +26,7 @@ import useAuth from "../../../../auth/useAuth/useAuth";
 import { useLocation, Navigate } from "react-router-dom";
 import { globalVariables } from "../../../../utils/GlobalVariables";
 import { postDataTokens } from "../../../../utils/ApiCalls";
+import { useCallback } from "react";
 
 Chart.register(...registerables);
 
@@ -74,14 +75,10 @@ const Biometrics = () => {
     const [errorMsg, setErrorMsg] = useState([]);
     const [successMsg, setSuccessMsg] = useState([]);
 
-	const mounted = useRef();
-
 	const patientID = localStorage.getItem("patientID");
 
 
-	useEffect(() => {
-		mounted.current = true;
-		clearFields();
+	const getBiometrics = useCallback(() => {
 		const api_endpoint = globalVariables.END_POINT_ANTHROPOMETRIC;
 		const body = {
 			action: "get_anthropometrics",
@@ -90,45 +87,43 @@ const Biometrics = () => {
 
 		postDataTokens(api_endpoint, body)
 		.then((data) => {
-			if (mounted) {
-				if (data.data) {
-					const response = data.data;
-					if (response?.message) {
-						setErrorMsg(response.message);
-					}
-					else {
-						setBiometrices(response);
-					}
+			if (data.data) {
+				const response = data.data;
+				if (response?.message) {
+					setErrorMsg(response.message);
 				}
-				else if (data.errorData.error) {
-					const status = data.errorData.status;
-					const message = data.errorData.message;
-					if (status === 401 && message === 'Unauthorized') {
-						setErrorMsg(message);
-						setAuthed(false);
-						setAuth("");
-						localStorage.clear();
-						<Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
-					}
-					else if (status === 500) {
-						setErrorMsg(message);
-					}
-					else if (status === 404) {
-						if (message.includes("Not Found")) {
-							const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
-							setErrorMsg(errorMessage)
-						}
-						else {
-							setErrorMsg(message);
-						}
+				else {
+					setBiometrices(response);
+				}
+			}
+			else if (data.errorData.error) {
+				const status = data.errorData.status;
+				const message = data.errorData.message;
+				if (status === 401 && message === 'Unauthorized') {
+					setErrorMsg(message);
+					setAuthed(false);
+					setAuth("");
+					localStorage.clear();
+					<Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+				}
+				else if (status === 500) {
+					setErrorMsg(message);
+				}
+				else if (status === 404) {
+					if (message.includes("Not Found")) {
+						const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
+						setErrorMsg(errorMessage)
 					}
 					else {
 						setErrorMsg(message);
 					}
 				}
 				else {
-					setErrorMsg(data);
+					setErrorMsg(message);
 				}
+			}
+			else {
+				setErrorMsg(data);
 			}
 		})
 		.catch((error) => {
@@ -142,9 +137,12 @@ const Biometrics = () => {
                 }
             }
 		});
-		
-		return () => mounted.current = false;
-	}, [ mounted, patientID, setAuth, setAuthed, location ]);
+	}, [ patientID, setAuth, setAuthed, location ]);
+
+	useEffect(() => {
+		clearFields();
+		getBiometrics();
+	}, [ getBiometrics ]);
 
 	useEffect(() => {
 		const intervalRef = setInterval(clearFields, 20000);
@@ -193,6 +191,7 @@ const Biometrics = () => {
 				else if (response?.id) {
 					const message = "Anthropometrics with Weight: " + response.weight + " and Height: " + response.height
 					setSuccessMsg(message + " was added Succcessfull");
+					getBiometrics();
 				}
 			}
             else if (data.errorData.error) {

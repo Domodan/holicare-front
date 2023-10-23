@@ -1,40 +1,192 @@
+import React, { useState, useEffect, useRef } from 'react';
 import styled from "styled-components";
 import Visits from "./visits";
+import {
+	Typography,
+	Stack, Alert, AlertTitle,
+} from "@mui/material";
 import MyVerticalTabs from "./visitsPage";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import { globalVariables } from "../../../../utils/GlobalVariables";
+import useAuth from "../../../../auth/useAuth/useAuth";
+import { getDataTokens } from '../../../../utils/ApiCalls';
 
 const LeftSide = (props) => {
+	const [patient, setPatient] = useState();
+    
+    const { setAuth, setAuthed } = useAuth();
+    const location = useLocation();
+    const [errorMsg, setErrorMsg] = useState([]);
+    const [successMsg, setSuccessMsg] = useState([]);
+
+    const patientID = props.patientID;
+
+	const mounted = useRef();
+
+	useEffect(() => {
+		mounted.current = true;
+		const api_endpoint = globalVariables.END_POINT_PATIENT + patientID;
+
+		getDataTokens(api_endpoint)
+		.then((data) => {
+			if (mounted) {                
+				if (data.id) {
+                    setPatient(data);
+				}
+				// else if (data.errorData.error) {
+				// 	const status = data.errorData.status;
+				// 	const message = data.errorData.message;
+				// 	if (status === 401 && message === 'Unauthorized') {
+				// 		setErrorMsg(message);
+				// 		setAuthed(false);
+				// 		setAuth("");
+				// 		localStorage.clear();
+				// 		<Navigate to={"/sign_in"} state={{ from: location.pathname }} replace />
+				// 	}
+				// 	else if (status === 500) {
+				// 		setErrorMsg(message);
+				// 	}
+				// 	else if (status === 404) {
+				// 		if (message.includes("Not Found")) {
+				// 			const errorMessage = "Errror: Resource Not Found, Check the URL Usage";
+				// 			setErrorMsg(errorMessage)
+				// 		}
+				// 		else {
+				// 			setErrorMsg(message);
+				// 		}
+				// 	}
+				// 	else {
+				// 		setErrorMsg(message);
+				// 	}
+				// }
+				else if (data.detail) {
+				}
+				else {
+					setErrorMsg(data);
+				}
+			}
+			setTimeout(() => {
+				setErrorMsg([]);
+				setSuccessMsg([]);
+			}, 10000);
+		})
+		.catch((error) => {
+            if (error?.message) {
+                if (error.message.includes("Failed to fetch")) {
+                    const errorMessage = "ERR_CONNECTION_REFUSED: Please try again or reload the page";
+                    setErrorMsg(errorMessage);
+                }
+                else {
+                    setErrorMsg(error.message);
+                }
+            }
+		});
+		
+		return () => mounted.current = false;
+	}, [ mounted, patientID, setAuth, setAuthed, location ]);
+
     return (
         <Container>
+				
+            {errorMsg.length > 0 || Object.keys(errorMsg).length ?
+                <>
+                    {typeof errorMsg === 'object' ?
+                        Object.entries(errorMsg).map(([key, value]) => {
+                            return <Stack sx={{ width: '100%', mb: 2, alignItems: "center" }} key={ key }>
+                                <Alert severity="error"  sx={{ mt: 1}}>
+                                    <AlertTitle>
+                                        <Typography variant='h1' fontSize="30px">
+                                            <strong>Error:</strong>
+                                        </Typography>
+                                    </AlertTitle>
+                                    <Typography variant='h1' fontSize="20px">
+                                        <strong>{ value }</strong>
+                                    </Typography>
+                                </Alert>
+                            </Stack>
+                        })
+                    :
+                        <Stack sx={{ width: '100%', mb: 2, alignItems: 'center'}} spacing={2}>
+                            <Alert severity="error"  sx={{ mt: 1}}>
+                                <AlertTitle>
+                                    <Typography variant='h1' fontSize="30px">
+                                        <strong>Error:</strong>
+                                    </Typography>
+                                </AlertTitle>
+                                <Typography variant='h1' fontSize="20px">
+                                    <strong>{ errorMsg }</strong>
+                                </Typography>
+                            </Alert>
+                        </Stack>
+                    }
+                </>
+            :''}
+            
+            {successMsg.length > 0 || Object.keys(successMsg).length ?
+                <>
+                    {typeof successMsg === 'object' ?
+                        Object.entries(successMsg).map(([key, value]) => {
+                            return <Stack sx={{ width: '100%', alignItems: "center"}} key={ key }>
+                                <Alert severity="success">
+                                    <AlertTitle>
+                                        <Typography variant='h1' fontSize="30px">
+                                            <strong>Success:</strong>
+                                        </Typography>
+                                    </AlertTitle>
+                                    <Typography variant='h1' fontSize="20px">
+                                        <strong>{ value }</strong>
+                                    </Typography>
+                                </Alert>
+                            </Stack>
+                        })
+                    :
+                        <Stack sx={{ width: '100%', alignItems: 'center'}} spacing={2}>
+                            <Alert severity="success">
+                                <AlertTitle>
+                                    <Typography variant='h1' fontSize="30px">
+                                        <strong>Success:</strong>
+                                    </Typography>
+                                </AlertTitle>
+                                <Typography variant='h1' fontSize="20px">
+                                    <strong>{ successMsg }</strong>
+                                </Typography>
+                            </Alert>
+                        </Stack>
+                    }
+                </>
+            :''}
+
+            { patient &&
             <ArtCard>
                 <UserInfo>
                     <h1>
-                        <NameCard>Ainekirabo Mbabazi</NameCard>
+                        <NameCard>{ patient.name }</NameCard>
                     </h1>
                     <Link to={""}>
-                        <LinkCard>@ainekirabo</LinkCard>
+                        <LinkCard>{ patient.email }</LinkCard>
                     </Link>
-                    <p>
-                        <TitleCardPro>Patient</TitleCardPro>
-                    </p>
+                    <h6>
+                        <TitleCardPro>{ patient.role }</TitleCardPro>
+                    </h6>
                 </UserInfo>
                 <Widget>
                     <Link to={""}>
                         <div>
                             {/* <img src="/images/adress-icon.png" alt="" /> */}
-                            <span>Nansana/Wakiso</span>
+                            <span>{ patient.location.parish }/{ patient.location.subcounty }</span>
                         </div>
                     </Link>
                     <StatusCard>
                         <div>
                             {/* <img src="/images/university-icon.png" alt="" /> */}
-                            <span>Kampala district</span>
+                            <span>{ patient.location.district } District</span>
                         </div>
                         
                     </StatusCard>
                     
                 </Widget>
             </ArtCard>
+            }
             <ArtCard>
                 <MyVerticalTabs/>
             </ArtCard>
