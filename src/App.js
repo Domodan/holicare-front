@@ -47,7 +47,6 @@ import Visits from "./components/pages/patientDetails/summary/visits";
 import VisitsPage from "./components/pages/patientDetails/summary/visitsPage";
 import Allergies from "./components/pages/patientDetails/summary/allergies";
 import Medical from "./components/pages/patientDetails/summary/medical";
-import Navbar from "./components/includes/Navbar";
 import DoctorDashboard from "./components/pages/dashboard/Doctors";
 
 const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
