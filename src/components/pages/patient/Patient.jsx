@@ -116,7 +116,9 @@ const Patient = () => {
 	const handleRowClick = (params) => {
 		// Handle row click event here
 		console.log('Clicked row:', params.row);
+
 		const { id } = params.row;
+		console.log('id is ', id);
 		//   navigate("/dashboard", { replace: true })
 		history(`/details/${id}`);
 	};

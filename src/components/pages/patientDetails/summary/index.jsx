@@ -4,8 +4,10 @@ import Main from "./main";
 import { useParams } from "react-router-dom";
 // import { Box } from "@mui/material";
 const Homepage = (props) => {
+  console.log("i got in");
   const { id } = useParams();
   localStorage.setItem("patientID", id);
+  console.log("patientID", id);
   return (
     <Container>
       <Box>

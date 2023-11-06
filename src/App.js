@@ -47,6 +47,8 @@ import Visits from "./components/pages/patientDetails/summary/visits";
 import VisitsPage from "./components/pages/patientDetails/summary/visitsPage";
 import Allergies from "./components/pages/patientDetails/summary/allergies";
 import Medical from "./components/pages/patientDetails/summary/medical";
+import Navbar from "./components/includes/Navbar";
+import DoctorDashboard from "./components/pages/dashboard/Doctors";
 
 const ROUTES = [ "/", "/sign_in", "/sign_up", "/sign_out", "/otp", "/verify_email"];
 const PATIENTROUTES = [
@@ -85,9 +87,12 @@ function App() {
     return (
         <>{(landing && ROUTES.includes(pathname))
             ?
-                <Routes>
+            
+            <Routes>
+                {/* <Navbar/> */}
                     <Route path="/" element={<Layout />}>
                         <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<Home />} />
                         <Route path="/sign_in" element={<SignIn />} />
                         <Route path="/sign_up" element={<SignUp />} />
                         <Route path="/sign_out" element={<SignOut />} />
@@ -102,9 +107,10 @@ function App() {
                         <div className="app">
                             <Sidebar isSidebar={isSidebar} role={userRole} />
                             <main className="content">
-                                <Topbar setIsSidebar={setIsSidebar} />
+                            <Topbar setIsSidebar={setIsSidebar} />
+                            
                                 <Routes>
-                                    <Route element={<RequireAuth roles={[ A, SA, HA, D, N, PR, R ]} />}>
+                                    <Route element={<RequireAuth roles={[ A, SA, HA,PR, R ]} />}>
                                         <Route path="/dashboard" element={<Dashboard />} />
                                         <Route path="/admin" element={<Team />} />
                                         <Route path="/doctor" element={<Doctor />} />
@@ -116,6 +122,10 @@ function App() {
                                         <Route path="/hospital" element={<Hospital />} />
                                         <Route path="/appointment" element={<Calendar />} />
                                         <Route path="/schedule" element={<Schedules />} />
+                                    </Route>
+                                    <Route element={<RequireAuth roles={[  D, N ]} />}>
+                                    <Route path="/doctor_dashboard" element={<DoctorDashboard />} />
+                                    <Route path="/details/:id" element={<Homepage />} />
                                     </Route>
                                     <Route element={<RequireAuth roles={[ A, SA, HA, D, N, LA, PR ]} />}>
                                         <Route path="/test" element={<Tests />} />

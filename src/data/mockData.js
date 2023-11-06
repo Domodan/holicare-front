@@ -365,6 +365,45 @@ export const mockTransactions = [
   },
 ];
 
+export const mockAppointmentRequests = [
+  {
+    txId: "1",
+    user: "Kato Samuel",
+    date: "2021-09-01",
+    time: "12:00 noon",
+  },
+  {
+    txId: "2",
+    user: "Kato Jack",
+    date: "2022-04-01",
+    time: "13:45 pm",
+  },
+  {
+    txId: "3",
+    user: "Kato Jack",
+    date: "2022-04-01",
+    time: "13:45 pm",
+  },
+  {
+    txId: "4",
+    user: "Kato Jack",
+    date: "2022-04-01",
+    time: "13:45 pm",
+  },
+  {
+    txId: "5",
+    user: "Kato Jack",
+    date: "2022-04-01",
+    time: "13:45 pm",
+  },
+  {
+    txId: "6",
+    user: "Kato Jack",
+    date: "2022-04-01",
+    time: "13:45 pm",
+  },
+];
+
 export const mockBarData = [
   {
     country: "AD",
