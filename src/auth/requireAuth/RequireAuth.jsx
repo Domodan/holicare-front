@@ -6,6 +6,16 @@ const RequireAuth = ({ roles }) => {
     const { auth, authed } = useAuth();
     const location = useLocation();
 
+    // console.log('====================================');
+    // console.log("Logged In Role:", auth.role);
+    // console.log("Passed Role:", roles)
+    // console.log("Location:", location);
+    // console.log("Username:", auth.username);
+    // console.log('====================================');
+    // if (authed && (roles.includes(auth.role))) {
+        
+    // }
+
     return (
         (authed && (roles.includes(auth.role)))
             ? <Outlet />

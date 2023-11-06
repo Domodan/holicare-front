@@ -110,12 +110,11 @@ function App() {
                             <Topbar setIsSidebar={setIsSidebar} />
                             
                                 <Routes>
-                                    <Route element={<RequireAuth roles={[ A, SA, HA,PR, R ]} />}>
+                                    <Route element={<RequireAuth roles={[ A, SA, HA, PR, R ]} />}>
                                         <Route path="/dashboard" element={<Dashboard />} />
                                         <Route path="/admin" element={<Team />} />
                                         <Route path="/doctor" element={<Doctor />} />
                                         <Route path="/user_profile" element={<UserProfile />} />
-                                        <Route path="/details/:id" element={<Homepage />} />
                                         <Route path="/risk_factor" element={<RiskFactor />} />
                                         <Route path="/infection" element={<Infection />} />
                                         <Route path="/district" element={<District />} />
@@ -123,9 +122,8 @@ function App() {
                                         <Route path="/appointment" element={<Calendar />} />
                                         <Route path="/schedule" element={<Schedules />} />
                                     </Route>
-                                    <Route element={<RequireAuth roles={[  D, N ]} />}>
+                                    <Route element={<RequireAuth roles={[ SA, D, N ]} />}>
                                     <Route path="/doctor_dashboard" element={<DoctorDashboard />} />
-                                    <Route path="/details/:id" element={<Homepage />} />
                                     </Route>
                                     <Route element={<RequireAuth roles={[ A, SA, HA, D, N, LA, PR ]} />}>
                                         <Route path="/test" element={<Tests />} />
@@ -142,6 +140,7 @@ function App() {
                                         <Route path="/allergies" element={<Allergies/>}/>
                                         <Route path="/visits_page" element={<VisitsPage/>}/>
                                         <Route path="/medical" element={<Medical/>}/>
+                                        <Route path="/details/:id" element={<Homepage />} />
                                     </Route>
                                     <Route element={<RequireAuth roles={[ SA ]} />}>
                                         <Route path="/add_hospital" element={<AddHospital />} />
