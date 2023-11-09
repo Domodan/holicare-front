@@ -1,22 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Button, Typography, useTheme,
-	Stack,
-	Alert,
-    AlertTitle,
-    Avatar} from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  Stack,
+  Alert,
+  AlertTitle,
+  Avatar,
+} from "@mui/material";
+import {
+  Timeline,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineConnector,
+  TimelineContent,
+  TimelineOppositeContent,
+  TimelineDot,
+} from "@mui/lab";
+import { PieChart } from "@mui/x-charts/PieChart";
+import { Container } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../includes/Header";
 import { DownloadOutlined } from "@mui/icons-material";
 import { mockAppointmentRequests } from "../../../data/mockData";
-import BarChart from "../../includes/BarChart";
-import GeographyChart from "../../includes/GeographyChart";
-import ProgressCircle from "../../includes/ProgressCircle";
 import useAuth from "../../../auth/useAuth/useAuth";
 import logo from "../../../assets/img/user.png";
 import { getDataTokens } from "../../../utils/ApiCalls";
 import { globalVariables } from "../../../utils/GlobalVariables";
-import { Navigate, useLocation , useNavigate} from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 const A = process.env.REACT_APP_ROLE_A;
 const SA = process.env.REACT_APP_ROLE_SA;
@@ -26,8 +39,6 @@ const N = process.env.REACT_APP_ROLE_N;
 const role = [A, SA, D, N];
 console.log("the role is", role);
 
-
-
 const DoctorDashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -35,95 +46,93 @@ const DoctorDashboard = () => {
   const [patients, setPatients] = useState([]);
   const [errorMsg, setErrorMsg] = useState([]);
   const { auth, setAuth, setAuthed } = useAuth();
-	const location = useLocation();
+  const location = useLocation();
   const history = useNavigate();
-  console.log("Current role is",auth.role);
+  console.log("Current auth is", auth);
 
-	useEffect(() => {
-		mounted.current = true;
-		const endpoint = globalVariables.END_POINT_PATIENT;
-		getDataTokens(endpoint)
-		.then((data) => {
-			if (mounted) {
-				if (data?.length > 0) {
-					setPatients(data);
-				}
-				else if (data.code === "token_not_valid") {
-					setErrorMsg(data.messages[0].message);
-					setAuthed(false);
-					setAuth("");
-					localStorage.clear();
-					<Navigate
-						to={"/sign_in"}
-						state={{ from: location.pathname }}
-						replace
-					/>;
-				}
-				else {
-					setErrorMsg(data);
-				}
-			}
-			return () => (mounted.current = false);
-		})
-		.catch((error) => console.log("Error:", error));
-	}, [mounted, location, setAuth, setAuthed]);
+  useEffect(() => {
+    mounted.current = true;
+    const endpoint = globalVariables.END_POINT_PATIENT;
+    getDataTokens(endpoint)
+      .then((data) => {
+        if (mounted) {
+          if (data?.length > 0) {
+            setPatients(data);
+          } else if (data.code === "token_not_valid") {
+            setErrorMsg(data.messages[0].message);
+            setAuthed(false);
+            setAuth("");
+            localStorage.clear();
+            <Navigate
+              to={"/sign_in"}
+              state={{ from: location.pathname }}
+              replace
+            />;
+          } else {
+            setErrorMsg(data);
+          }
+        }
+        return () => (mounted.current = false);
+      })
+      .catch((error) => console.log("Error:", error));
+  }, [mounted, location, setAuth, setAuthed]);
 
-	const column = [
-		{
-		field: "avatar",
-		headerName: "Avatar",
-		renderCell: (params) => (
-			<Avatar
-			src={params.value}
-			sx={{ width: 40, height: 40 }}
-			alt={params.row.name}
-			/>
-		),
-		flex: 0.5,
-		},
-		{
-		field: "name",
-		headerName: "Name",
-		flex: 1,
-		cellClassName: "name-column--cell",
-		},
-		{
-		field: "occupation",
-		headerName: "Occupation",
-		flex: 0.7,
-		},
-		{
-		field: "age",
-		headerName: "Age",
-		type: "number",
-		headerAlign: "left",
-		align: "left",
-		flex: 0.4,
-		},
-		{
-		field: "phone",
-		headerName: "Phone Number",
-		flex: 0.8,
-		},
-		{
-		field: "location",
-		headerName: "Location",
-		flex: 0.8,
-		},
-		{
-		field: "hospital",
-		headerName: "Hospital",
-		flex: 1,
-		},
-	];
+  const column = [
+    {
+      field: "avatar",
+      headerName: "Avatar",
+      renderCell: (params) => (
+        <Avatar
+          src={params.value}
+          sx={{ width: 40, height: 40 }}
+          alt={params.row.name}
+        />
+      ),
+      flex: 0.5,
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "occupation",
+      headerName: "Occupation",
+      flex: 0.7,
+    },
+    {
+      field: "age",
+      headerName: "Age",
+      type: "number",
+      headerAlign: "left",
+      align: "left",
+      flex: 0.4,
+    },
+    {
+      field: "phone",
+      headerName: "Phone Number",
+      flex: 0.8,
+    },
+    {
+      field: "location",
+      headerName: "Location",
+      flex: 0.8,
+    },
+    {
+      field: "hospital",
+      headerName: "Hospital",
+      flex: 1,
+    },
+  ];
 
-    const handleRowClick = (params) => {
-		// Handle row click event here
-		console.log('Clicked row:', params.row);
-		const { id } = params.row;
-		//   navigate("/dashboard", { replace: true })
-		history(`/details/${id}`);
-	};
+  const handleRowClick = (params) => {
+    // Handle row click event here
+    console.log("Clicked row:", params.row);
+    const { id } = params.row;
+    //   navigate("/dashboard", { replace: true })
+    history(`/details/${id}`);
+  };
 
   return (
     <Box m="20px">
@@ -131,7 +140,9 @@ const DoctorDashboard = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header
           title="DOCTORS'/ NURSE DASHBOARD"
-          subtitle="Welcome to Holicare"
+          subtitle="Welcome back "
+          role={auth.role}
+          username={auth.username}
           sx={{ color: colors.blueAccent[800] }}
         />
         {role.includes(auth.role) ? (
@@ -146,7 +157,7 @@ const DoctorDashboard = () => {
               }}
             >
               <DownloadOutlined sx={{ mr: "10px" }} />
-              Download Reports
+              Download 
             </Button>
           </Box>
         ) : null}
@@ -165,64 +176,6 @@ const DoctorDashboard = () => {
         <Box
           gridColumn="span 8"
           gridRow="span 3"
-          backgroundColor={colors.primary[400]}
-          overflow="auto"
-        >
-          <Box
-            mt="25px"
-            p="0 30px"
-            display="flex "
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box paddingBottom={3}>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-                
-              >
-                Upcoming Appointments
-              </Typography>
-            </Box>
-            
-          </Box>
-          <Box >
-          {mockAppointmentRequests.map((transaction, i) => (
-            <Box
-              key={`${transaction.txId}-${i}`}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              borderBottom={`2px  ${colors.primary[400]}`}
-              p="15px"
-            >
-              <Box display="flex" justifyContent="space-between" gap="10px" alignContent="center">
-                <Box>
-                  <img
-                    alt="holicare-logo"
-                    width="30px"
-                    height="30px"
-                    src={logo}
-                    style={{ cursor: "pointer", my: 2 }}
-                  />
-                </Box>
-                <Box>
-                  <Typography alignItems="center" color={colors.grey[100]}>
-                    {transaction.user}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box display={"flex"} gap={3} >
-                {transaction.date} <Typography>{transaction.time}</Typography>
-              </Box>
-            </Box>
-          ))}
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
           backgroundColor={colors.primary[400]}
           overflow="auto"
         >
@@ -247,7 +200,12 @@ const DoctorDashboard = () => {
               borderBottom={`2px  ${colors.primary[400]}`}
               p="15px"
             >
-              <Box display="flex" justifyContent="space-between" gap="10px" alignContent="center">
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                gap="10px"
+                alignContent="center"
+              >
                 <Box>
                   <img
                     alt="holicare-logo"
@@ -287,78 +245,185 @@ const DoctorDashboard = () => {
             </Box>
           ))}
         </Box>
-
-        {/* ROW 3 */}
         <Box
-          gridColumn="span 8"
+          gridColumn="span 4"
           gridRow="span 3"
           backgroundColor={colors.primary[400]}
           overflow="auto"
         >
+          <Typography
+            variant="h5"
+            fontWeight="600"
+            mt="25px"
+            p="0 30px"
+            color={colors.grey[100]}
+          >
+            Upcoming Appointments
+          </Typography>
+          <Box
+            mt="25px"
+            p="0 30px"
+            display="flex "
+            justifyContent="center"
+            alignItems="center"
+          >
             <Box
-				m="40px 0 0 0"
-				height="75vh"
-				sx={{
-				"& .MuiDataGrid-root": {
-					border: "none",
-				},
-				"& .MuiDataGrid-cell": {
-					borderBottom: "none",
-				},
-				"& .name-column--cell": {
-					color: colors.greenAccent[300],
-				},
-				"& .MuiDataGrid-columnHeaders": {
-					backgroundColor: colors.grey[900],
-					borderBottom: "none",
-					color: colors.primary[200],
-				},
-				"& .MuiDataGrid-virtualScroller": {
-					backgroundColor: colors.primary[400],
-				},
-				"& .MuiDataGrid-footerContainer": {
-					borderTop: "none",
-					backgroundColor: colors.grey[900],
-				},
-				"& .MuiCheckbox-root": {
-					color: `${colors.primary[200]} !important`,
-				},
-				}}
-			>
-				{errorMsg.length > 0 || Object.keys(errorMsg).length ? (
-				<>
-					{typeof errorMsg === "object" ? (
-					Object.entries(errorMsg).map(([key, value]) => {
-						return (
-						<Stack sx={{ width: "100%" }} key={key}>
-							<Alert severity="error" sx={{ mt: 1 }}>
-							<AlertTitle>Error</AlertTitle>
-							<strong>{value}</strong>
-							</Alert>
-						</Stack>
-						);
-					})
-					) : (
-					<Stack sx={{ width: "100%" }} spacing={2}>
-						<Alert severity="error" sx={{ mt: 1 }}>
-						<AlertTitle>Error</AlertTitle>
-						<strong>{errorMsg}</strong>
-						</Alert>
-					</Stack>
-					)}
-				</>
-				) : (
-				<DataGrid
-					rows={patients}
-					columns={column}
-					onRowClick={handleRowClick}
-					pageSize={10}
-					rowsPerPageOptions={[10, 25, 50]}
-				/>
-				)}
-			</Box>
+              paddingBottom={3}
+              sx={{
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              {mockAppointmentRequests.map((appointment, i) => (
+                <Container key={`${appointment.txId}-${i}`}>
+                  <Timeline>
+                    <TimelineItem>
+                      <TimelineOppositeContent
+                        sx={{ m: "auto 0" }}
+                        align="right"
+                        variant="body2"
+                        color="text.secondary"
+                      >
+                        {appointment.time}
+                      </TimelineOppositeContent>
+                      <TimelineSeparator>
+                        <TimelineConnector />
+                        <TimelineDot></TimelineDot>
+                        {/* <TimelineConnector /> */}
+                      </TimelineSeparator>
+                      <TimelineContent sx={{ py: "12px", px: 2 }}>
+                        <Typography variant="h6" component="span">
+                          {appointment.user}
+                        </Typography>
+                        {/* <Typography>Flu</Typography> */}
+                      </TimelineContent>
+                    </TimelineItem>
+                  </Timeline>
+                </Container>
+              ))}
+            </Box>
+          </Box>
         </Box>
-        {/* ROW 4 */}
+
+        {/* ROW 3 */}
+        <Box
+          gridColumn="span 8"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          // overflow="auto"
+        >
+          <Box
+            m="20px 0 0 0"
+            sx={{
+              "& .MuiDataGrid-root": {
+                border: "none",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .name-column--cell": {
+                color: colors.greenAccent[300],
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: colors.grey[900],
+                borderBottom: "none",
+                color: colors.primary[200],
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: colors.primary[400],
+              },
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "none",
+                backgroundColor: colors.grey[900],
+              },
+              "& .MuiCheckbox-root": {
+                color: `${colors.primary[200]} !important`,
+              },
+            }}
+          >
+            {errorMsg.length > 0 || Object.keys(errorMsg).length ? (
+              <>
+                {typeof errorMsg === "object" ? (
+                  Object.entries(errorMsg).map(([key, value]) => {
+                    return (
+                      <Stack sx={{ width: "100%" }} key={key}>
+                        <Alert severity="error" sx={{ mt: 1 }}>
+                          <AlertTitle>Error</AlertTitle>
+                          <strong>{value}</strong>
+                        </Alert>
+                      </Stack>
+                    );
+                  })
+                ) : (
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert severity="error" sx={{ mt: 1 }}>
+                      <AlertTitle>Error</AlertTitle>
+                      <strong>{errorMsg}</strong>
+                    </Alert>
+                  </Stack>
+                )}
+              </>
+            ) : (
+              <div>
+                <Box
+                  m="0px 0 0 0"
+                  height="25vh"
+                  sx={{
+                    "& .MuiDataGrid-root": {
+                      border: "none",
+                    },
+                    "& .MuiDataGrid-cell": {
+                      borderBottom: "none",
+                    },
+                    "& .name-column--cell": {
+                      color: colors.greenAccent[300],
+                    },
+                    "& .MuiDataGrid-columnHeaders": {
+                      backgroundColor: colors.grey[900],
+                      borderBottom: "none",
+                      color: colors.primary[200],
+                    },
+                    "& .MuiDataGrid-virtualScroller": {
+                      backgroundColor: colors.primary[400],
+                    },
+                    "& .MuiDataGrid-footerContainer": {
+                      borderTop: "none",
+                      backgroundColor: colors.grey[900],
+                    },
+                    "& .MuiCheckbox-root": {
+                      color: `${colors.primary[200]} !important`,
+                    },
+                  }}
+                >
+                  <Box
+                    p="0 30px"
+                    display="flex "
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Box paddingBottom={3}>
+                      <Typography
+                        variant="h5"
+                        fontWeight="600"
+                        color={colors.grey[100]}
+                      >
+                        Patients
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <DataGrid
+                    rows={patients}
+                    columns={column}
+                    onRowClick={handleRowClick}
+                    pageSize={10}
+                    // components={{ Toolbar: GridToolbar }}
+                  />
+                </Box>
+              </div>
+            )}
+          </Box>
+        </Box>
+        
         <Box
           gridColumn="span 4"
           gridRow="span 2"
@@ -366,7 +431,7 @@ const DoctorDashboard = () => {
           p="30px"
         >
           <Typography variant="h5" fontWeight="600">
-            Patients by Gender
+            Patients Served by Gender
           </Typography>
           <Box
             display="flex"
@@ -374,50 +439,21 @@ const DoctorDashboard = () => {
             alignItems="center"
             mt="25px"
           >
-            <ProgressCircle size="125" />
-            <Typography
-              variant="h5"
-              color={colors.blueAccent[400]}
-              sx={{ mt: "15px" }}
-            >
-              $48,352 revenue generated
-            </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
+            <PieChart
+              series={[
+                {
+                  data: [
+                    { id: 0, value: 10, label: "Male" },
+                    { id: 1, value: 15, label: "Female" },
+                  ],
+                },
+              ]}
+              width={400}
+              height={200}
+            />
           </Box>
         </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ padding: "30px 30px 0 30px" }}
-          >
-            Patients by group
-          </Typography>
-          <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          padding="30px"
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ marginBottom: "15px" }}
-          >
-            Diagnosis by Infection
-          </Typography>
-          <Box height="200px">
-            <GeographyChart isDashboard={true} />
-          </Box>
-        </Box>
+        {/* ROW 4 */}
       </Box>
     </Box>
   );

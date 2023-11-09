@@ -177,13 +177,6 @@ const AdminSidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
-                {/* <Item
-                                title="Appointments"
-                                to="/appointment"
-                                icon={<CalendarTodayOutlined />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> */}
                 <Item
                   title="Schedules"
                   to="/schedule"
@@ -193,6 +186,33 @@ const AdminSidebar = () => {
                 />
               </>
             ) : null}
+
+            {cat3.includes(auth.role) ? (
+              <>
+                <Item
+                  title="Dashboard"
+                  to="/doctor_dashboard"
+                  icon={<PeopleOutlined />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
+            ) : null}
+
+            {cat2.includes(auth.role) ? (
+              <>
+                <SubMenu title="Patients" icon={<PeopleOutlined />}>
+                  <MenuItem icon={<PeopleOutlined />}>
+                    <Link to="/patient" />
+                    Patient List
+                  </MenuItem>
+                  <MenuItem icon={<PeopleOutlined />}>
+                    <Link to="/add_patient" /> Add Patient
+                  </MenuItem>
+                </SubMenu>
+              </>
+            ) : null}
+
             {cat1.includes(auth.role) ? (
               <>
                 <Item
@@ -202,30 +222,11 @@ const AdminSidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
-                
-              </>
-            ) : null}
-            {cat2.includes(auth.role) ? (
-              <>
-                <SubMenu title="Patients" icon={<PeopleOutlined />}>
-                  <MenuItem icon={<PeopleOutlined />}><Link to="/patient" />Patient List</MenuItem>
-                  <MenuItem  icon={<PeopleOutlined />}><Link to="/add_patient" /> Add Patient</MenuItem>
-                </SubMenu>
-                {/* <Item
-                  title="Patients"
-                  to="/patient"
-                  icon={<PeopleOutlined />}
-                  selected={selected}
-                  setSelected={setSelected}
-                /> */}
-              </>
-            ) : null}
-            {cat3.includes(auth.role) ? (
-              <>
+
                 <Item
-                  title="Dashboard"
-                  to="/doctor_dashboard"
-                  icon={<PeopleOutlined />}
+                  title="Test Results"
+                  to="/test"
+                  icon={<ContactsOutlined />}
                   selected={selected}
                   setSelected={setSelected}
                 />
@@ -330,13 +331,6 @@ const PatientSidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
-                {/* <Item
-                                title="Patient Summary"
-                                to="/details/:id"
-                                icon={<HomeOutlined />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            /> */}
                 <Item
                   title="Vitals"
                   to="/vitals"
@@ -362,13 +356,6 @@ const PatientSidebar = () => {
                   title="Medications"
                   to="/medical"
                   icon={<ReceiptOutlined />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Test Results"
-                  to="/test"
-                  icon={<ContactsOutlined />}
                   selected={selected}
                   setSelected={setSelected}
                 />

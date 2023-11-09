@@ -260,12 +260,12 @@ const Tests = () => {
         <Header title={"TESTS"} subtitle={"Diagnosis tests reports"} />
         {role.includes(auth.role) ? (
           <Box>
-            {/* <Link to={"/add_test"}>
+            <Link to={"/add_test"}>
               <Button variant="contained" component="label">
                 <AddOutlined sx={{ mr: "10px" }} />
                 New Test
               </Button>
-            </Link> */}
+            </Link>
           </Box>
         ) : null}
       </Box>

@@ -135,11 +135,11 @@ const Patient = () => {
 								Add Patient
 							</Button>
 						</Link>
-						&nbsp;&nbsp;&nbsp;
+						{/* &nbsp;&nbsp;&nbsp;
 						<Button variant="contained" component="label">
 							Upload data
 							<input hidden accept="image/*" multiple type="file" />
-						</Button>
+						</Button> */}
 					</Box>
 				) : null}
 			</Box>
