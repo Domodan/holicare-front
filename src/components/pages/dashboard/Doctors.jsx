@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
-  Button,
   Typography,
   useTheme,
   Stack,
@@ -18,18 +17,17 @@ import {
   TimelineOppositeContent,
   TimelineDot,
 } from "@mui/lab";
-import { PieChart } from "@mui/x-charts/PieChart";
 import { Container } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../includes/Header";
-import { DownloadOutlined } from "@mui/icons-material";
 import { mockAppointmentRequests } from "../../../data/mockData";
 import useAuth from "../../../auth/useAuth/useAuth";
 import logo from "../../../assets/img/user.png";
 import { getDataTokens } from "../../../utils/ApiCalls";
 import { globalVariables } from "../../../utils/GlobalVariables";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import StatBox from "../../includes/StatBox";
 
 const A = process.env.REACT_APP_ROLE_A;
 const SA = process.env.REACT_APP_ROLE_SA;
@@ -140,27 +138,8 @@ const DoctorDashboard = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header
           title="DOCTORS'/ NURSE DASHBOARD"
-          subtitle="Welcome back "
-          role={auth.role}
-          username={auth.username}
           sx={{ color: colors.blueAccent[800] }}
         />
-        {role.includes(auth.role) ? (
-          <Box>
-            <Button
-              sx={{
-                backgroundColor: colors.primary[500],
-                color: "#fff",
-                fontSize: "14px",
-                fontWeight: "bold",
-                padding: "10px 20px",
-              }}
-            >
-              <DownloadOutlined sx={{ mr: "10px" }} />
-              Download 
-            </Button>
-          </Box>
-        ) : null}
       </Box>
 
       {/* GRID & CHARTS */}
@@ -174,7 +153,7 @@ const DoctorDashboard = () => {
 
         {/* ROW 2 */}
         <Box
-          gridColumn="span 8"
+          gridColumn="span 6"
           gridRow="span 3"
           backgroundColor={colors.primary[400]}
           overflow="auto"
@@ -246,7 +225,7 @@ const DoctorDashboard = () => {
           ))}
         </Box>
         <Box
-          gridColumn="span 4"
+          gridColumn="span 3"
           gridRow="span 3"
           backgroundColor={colors.primary[400]}
           overflow="auto"
@@ -258,7 +237,7 @@ const DoctorDashboard = () => {
             p="0 30px"
             color={colors.grey[100]}
           >
-            Upcoming Appointments
+            Today's Appointments
           </Typography>
           <Box
             mt="25px"
@@ -304,7 +283,102 @@ const DoctorDashboard = () => {
             </Box>
           </Box>
         </Box>
+        <Box
+          gridColumn="span 3"
+          gridRow="span 3"
+          backgroundColor={colors.primary[400]}
+          // overflow="auto"
+        >
+          <Box>
+            <img
+              alt="doctors-img"
+              width="200px"
+              height="180px"
+              src={logo}
+              style={{
+                cursor: "pointer",
+                padding: 25,
+                display: "block",
+                marginLeft: "auto",
+                marginRight: "auto",
+                width: "50%",
+              }}
+            />
+          </Box>
+          <Box
+            style={{
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "50%",
+              paddingLeft: 25,
+              paddingRight: 25,
+            }}
+          >
+            <Typography color={colors.grey[100]}>
+              {auth.role} - {auth.username}
+            </Typography>
+          </Box>
+          {/* Stats */}
+          <br />
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(12, 1fr)"
+            gridAutoRows="60px"
+            gap="10px"
+          >
+            {/* ROW 1 */}
 
+            {/* Total Patients */}
+            <Box
+              gridColumn="span 6"
+              height="50px"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <StatBox title="32" subtitle="Total Patients" />
+            </Box>
+
+            {/* Total staff */}
+            <Box
+              gridColumn="span 6"
+              height="50px"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <StatBox title="325" subtitle="Appointments" />
+            </Box>
+
+            {/* Total Infections */}
+            <Box
+              gridColumn="span 6"
+              height="50px"
+              backgroundColor={colors.primary[400]}
+              color={colors.grey[100]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <StatBox title="15" subtitle="Consultations" />
+            </Box>
+
+            {/* Messages */}
+            <Box
+              gridColumn="span 6"
+              height="50px"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <StatBox title="15" subtitle="Return patients" />
+            </Box>
+          </Box>
+        </Box>
         {/* ROW 3 */}
         <Box
           gridColumn="span 8"
@@ -407,7 +481,7 @@ const DoctorDashboard = () => {
                         fontWeight="600"
                         color={colors.grey[100]}
                       >
-                        Patients
+                        Recent Patients
                       </Typography>
                     </Box>
                   </Box>
@@ -423,34 +497,101 @@ const DoctorDashboard = () => {
             )}
           </Box>
         </Box>
-        
+
         <Box
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           p="30px"
+          overflow="auto"
         >
           <Typography variant="h5" fontWeight="600">
-            Patients Served by Gender
+            Next Patient details
           </Typography>
           <Box
             display="flex"
-            flexDirection="column"
+            flexDirection="row"
+            // gap="3"
             alignItems="center"
             mt="25px"
           >
-            <PieChart
-              series={[
-                {
-                  data: [
-                    { id: 0, value: 10, label: "Male" },
-                    { id: 1, value: 15, label: "Female" },
-                  ],
-                },
-              ]}
-              width={400}
-              height={200}
+            <img
+              alt="doctors-img"
+              width="90px"
+              height="90px"
+              src={logo}
+              style={{
+                cursor: "pointer",
+                // padding: 2,
+              }}
             />
+            <StatBox subtitle="Kiwanuka Fred" title="Patient" />
+            <StatBox subtitle="Medical checkup" title="Reason" />
+            <StatBox subtitle="0002200045" title="Patient ID" />
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap="5"
+            alignItems="center"
+            mt="25px"
+          >
+            <StatBox subtitle="12/11/2000" title="D.O.B" />
+            <StatBox subtitle="Male" title="Sex" />
+            <StatBox subtitle="30kgs" title="Weight" />
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap="5"
+            alignItems="center"
+            mt="25px"
+          >
+            <StatBox subtitle="12/11/2000 " title="Last appointment" />
+            <StatBox subtitle="60cm" title="Height" />
+            <StatBox subtitle="Patient ID" title="002006002" />
+          </Box>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            sx={{ color: colors.blueAccent[400] }}
+            margin={5}
+          >
+            Patient History
+          </Typography>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            gap="2px"
+            // px="30px"
+          >
+            <Box
+              backgroundColor="green"
+              color={colors.grey[900]}
+              p="5px 10px"
+              width="100%"
+              borderRadius="4px"
+            >
+              Anemia
+            </Box>
+            <Box
+              backgroundColor="red"
+              color={colors.grey[900]}
+              width="100%"
+              p="5px 10px"
+              borderRadius="4px"
+            >
+              Asthma
+            </Box>
+            <Box
+              backgroundColor="yellow"
+              color="black"
+              p="5px 10px"
+              width="100%"
+              borderRadius="4px"
+            >
+              Fever
+            </Box>
           </Box>
         </Box>
         {/* ROW 4 */}
