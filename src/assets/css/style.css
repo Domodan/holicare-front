@@ -80,7 +80,7 @@ h6 {
 #header {
   z-index: 997;
   transition: all 0.5s;
-  padding: 22px 0;
+  /* padding: 22px 0; */
   background: rgb(237, 240, 240);
 }
 

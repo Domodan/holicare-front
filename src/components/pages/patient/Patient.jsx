@@ -116,7 +116,9 @@ const Patient = () => {
 	const handleRowClick = (params) => {
 		// Handle row click event here
 		console.log('Clicked row:', params.row);
+
 		const { id } = params.row;
+		console.log('id is ', id);
 		//   navigate("/dashboard", { replace: true })
 		history(`/details/${id}`);
 	};
@@ -133,11 +135,11 @@ const Patient = () => {
 								Add Patient
 							</Button>
 						</Link>
-						&nbsp;&nbsp;&nbsp;
+						{/* &nbsp;&nbsp;&nbsp;
 						<Button variant="contained" component="label">
 							Upload data
 							<input hidden accept="image/*" multiple type="file" />
-						</Button>
+						</Button> */}
 					</Box>
 				) : null}
 			</Box>

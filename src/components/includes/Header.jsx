@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { tokens } from '../../theme';
 
-const Header = ({ title, subtitle}) => {
+const Header = ({ title, subtitle, username, role}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     
@@ -21,7 +21,7 @@ const Header = ({ title, subtitle}) => {
                 {title}
             </Typography>
             <Typography variant="h5" color={colors.grey[500]}>
-                {subtitle}
+                {subtitle} {role} {username}
             </Typography>
         </Box>
     )
