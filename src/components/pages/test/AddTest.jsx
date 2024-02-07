@@ -37,6 +37,7 @@ const AddTest = () => {
 
 	const location = useLocation();
 	const propsData = location.state?.data;
+	console.log('propsData', propsData);
 
 	const options = ["Lancet Laboratory", "MBN Clical Lab", "Crane Medical Lab"];
 	const urgencyList = ["High", "Normal"];
@@ -68,12 +69,12 @@ const AddTest = () => {
 			patient_email: propsData.patient_email,
 			exhibited_symptoms: propsData.exhibited_symptoms,
 			tentative_diagnosis: propsData.tentative_diagnosis,
-			recommend_lab: propsData.recommed_lab,
+			recommend_lab: true,
 			acknowledgement: propsData.acknowledgement,
 			clinical_notes: notes,
 			laboratory: lab,
 			priority: priority,
-			samples: samples
+			samples: samples,
 		}
 
 		postDataTokens(api_endpoint, body)

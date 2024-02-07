@@ -118,13 +118,13 @@ function App() {
                                         <Route path="/infection" element={<Infection />} />
                                         <Route path="/district" element={<District />} />
                                         <Route path="/hospital" element={<Hospital />} />
-                                        <Route path="/appointment" element={<Calendar />} />
+                                        
                                         <Route path="/schedule" element={<Schedules />} />
                                     </Route>
                                     <Route element={<RequireAuth roles={[ SA, D, N ]} />}>
                                     <Route path="/doctor_dashboard" element={<DoctorDashboard />} />
                                     </Route>
-                                    <Route element={<RequireAuth roles={[ A, SA, HA, D, N, LA, PR ]} />}>
+                                    <Route element={<RequireAuth roles={[ A, SA, HA, D, N, LA, PR, P ]} />}>
                                         <Route path="/test" element={<Tests />} />
                                         <Route path="/lab" element={<Laboratory />} />
                                     </Route>
@@ -138,6 +138,7 @@ function App() {
                                         <Route path="/visits" element={<Visits/>}/>
                                         <Route path="/allergies" element={<Allergies/>}/>
                                         <Route path="/visits_page" element={<VisitsPage/>}/>
+                                        <Route path="/appointment" element={<Calendar />} />
                                         <Route path="/medical" element={<Medical/>}/>
                                         <Route path="/details/:id" element={<Homepage />} />
                                     </Route>

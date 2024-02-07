@@ -20,7 +20,7 @@ const SignIn = () => {
     const navigate = useNavigate();
     const [errorMsg, setErrorMsg] = useState([]);
 
-    const from = location.state?.from?.pathname || "/dashboard";
+    let from = location.state?.from?.pathname || "/dashboard";
 
     const handleFormSubmit = (data) => {
         const url = globalVariables.END_POINT_SIGN_IN;
@@ -46,6 +46,13 @@ const SignIn = () => {
                     refresh_token: refresh_token,
                     role: role,
                 })
+                
+
+                if (data.role === "PATIENT") {
+                    localStorage.setItem("patientID", data.id);
+                    from = `/details/${data.id}`;
+                }
+
                 navigate(from, {replace: true});
             }
             else if (data.code === "token_not_valid") {

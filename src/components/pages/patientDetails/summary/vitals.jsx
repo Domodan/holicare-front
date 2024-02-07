@@ -483,9 +483,10 @@ const Vitals = () => {
 					<Box>
 						<div>
 							<React.Fragment key={"right"}>
-							<Button onClick={toggleDrawer("right", true)} variant="contained">
-								Add Vitals
-							</Button>
+								{!patientID && (
+									<Button onClick={toggleDrawer("right", true)} variant="contained">
+										Add Vitals
+									</Button>)}
 							<Drawer
 								anchor={"right"}
 								open={state["right"]}
