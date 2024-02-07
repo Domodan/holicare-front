@@ -617,18 +617,19 @@ const Medical = () => {
 						color: "#5ab2da",
 						}}
 					>
-						<h3>Conditions</h3>
+						<h3>Medication</h3>
 					</Box>
 					<Box></Box>
 					<Box>
 						<div>
 							<React.Fragment key={"right"}>
-								<Button
-								variant="contained"
-								onClick={toggleDrawer("right", true)}
-								>
-								Add Condition
-								</Button>
+								{!patientID && (
+									<Button
+										variant="contained"
+										onClick={toggleDrawer("right", true)}
+									>
+										Add Medication
+									</Button>)}
 								<Drawer
 								anchor={"right"}
 								open={state["right"]}

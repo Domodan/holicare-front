@@ -433,9 +433,10 @@ const Biometrics = () => {
 					<Box>
 						<div>
 							<React.Fragment key={"right"}>
-								<Button onClick={toggleDrawer("right", true)} variant="contained">
-									Add Biometrics
-								</Button>
+								{!patientID && (
+									<Button onClick={toggleDrawer("right", true)} variant="contained">
+										Add Biometrics
+									</Button>)}
 								<Drawer
 									anchor={"right"}
 									open={state["right"]}

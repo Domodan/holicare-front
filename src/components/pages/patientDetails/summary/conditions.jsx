@@ -362,9 +362,10 @@ const Conditions = () => {
 					<Box>
 						<div>
 							<React.Fragment key={"right"}>
-								<Button variant="contained" onClick={toggleDrawer("right", true)}>
-									Add Condition
-								</Button>
+								{!patientID && (
+									<Button variant="contained" onClick={toggleDrawer("right", true)}>
+										Add Condition
+									</Button>)}
 								<Drawer
 									anchor={"right"}
 									open={state["right"]}

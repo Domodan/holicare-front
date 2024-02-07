@@ -29,7 +29,7 @@ const N = process.env.REACT_APP_ROLE_N;
 const LA = process.env.REACT_APP_ROLE_LA;
 const PR = process.env.REACT_APP_ROLE_PR;
 const SA = process.env.REACT_APP_ROLE_SA;
-
+const patientID = localStorage.getItem("patientID");
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -246,7 +246,7 @@ const PatientSidebar = () => {
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-
+  console.log("auth.role", auth.role);
   return (
     <Box
       sx={{
@@ -320,10 +320,7 @@ const PatientSidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
-              </>
-            ) : null}
-            {cat2.includes(auth.role) ? (
-              <>
+
                 <Item
                   title="Patients"
                   to="/patient"
@@ -331,6 +328,35 @@ const PatientSidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
+                <Item
+                  title="Provisional Diagnosis"
+                  to="/notes"
+                  icon={<CalendarTodayOutlined />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
+            ) : null}
+            {cat2.includes(auth.role) ? (
+              <>
+                {auth.role === "PATIENT" ? (
+                  <Item
+                    title="Dashboard"
+                    to={`/details/${patientID}`}
+                    icon={<HomeOutlined />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                ) : (
+                  <Item
+                    title="Dashboard"
+                    to="/dashboard"
+                    icon={<HomeOutlined />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                )}
+
                 <Item
                   title="Vitals"
                   to="/vitals"
@@ -388,12 +414,21 @@ const PatientSidebar = () => {
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Provisional Diagnosis"
-                  to="/notes"
-                  icon={<CalendarTodayOutlined />}
+                  title="Test Results"
+                  to="/test"
+                  icon={<HomeOutlined />}
                   selected={selected}
                   setSelected={setSelected}
                 />
+                {auth.role !== "PATIENT" && (
+                  <Item
+                    title="Provisional Diagnosis"
+                    to="/notes"
+                    icon={<CalendarTodayOutlined />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                )}
               </>
             ) : null}
           </Box>

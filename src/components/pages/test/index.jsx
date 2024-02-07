@@ -31,6 +31,7 @@ const Tests = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { auth } = useAuth();
+  const patientID = localStorage.getItem("patientID");
   const [state, setState] = useState({ right: false });
   const [selectedTab, setSelectedTab] = useState(0);
   const tabsData = [
@@ -127,11 +128,12 @@ const Tests = () => {
             onKeyDown={toggleDrawer(anchor, false)}
           />
         </Button>
-              <Paper elevation={3} sx={{ marginTop: "5%", marginX: "15%" }}>
+        <Paper elevation={3} sx={{ marginTop: "5%", marginX: "15%" }}>
+        {!patientID && (
               <Button variant="contained" component="label">
               Upload data
               <input hidden accept="image/*" multiple type="file" />
-            </Button>
+            </Button>)}
           <Box sx={{ padding: 5 }}>
             <Typography
               variant="h3"
@@ -242,13 +244,14 @@ const Tests = () => {
                 </Paper>
               </Box>
             ))}
-            <Link to={"/add_test"}>
-              <Button variant="contained" component="label">
-                <AddOutlined sx={{ mr: "10px" }} />
-                Run a confirmatory Test
-              </Button>
+            {!patientID && (
+              <Link to={"/add_test"}>
+                <Button variant="contained" component="label">
+                  <AddOutlined sx={{ mr: "10px" }} />
+                  Run a confirmatory Test
+                </Button>
               
-            </Link>
+              </Link>)}
           </Box>
         </Paper>
       </React.Fragment>
@@ -258,7 +261,7 @@ const Tests = () => {
     <Box m="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title={"TESTS"} subtitle={"Diagnosis tests reports"} />
-        {role.includes(auth.role) ? (
+        {/* {role.includes(auth.role) ? (
           <Box>
             <Link to={"/add_test"}>
               <Button variant="contained" component="label">
@@ -267,7 +270,7 @@ const Tests = () => {
               </Button>
             </Link>
           </Box>
-        ) : null}
+        ) : null} */}
       </Box>
 
       <Box
